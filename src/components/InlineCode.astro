@@ -1,0 +1,10 @@
+---
+/**
+ * Renders `backtick` spans in plain prose as <code>. Keeps the data files
+ * readable as markdown-ish text without pulling in a full markdown parser.
+ */
+const { text } = Astro.props;
+const parts = text.split(/`([^`]+)`/g);
+---
+
+{parts.map((part, i) => (i % 2 === 1 ? <code>{part}</code> : part))}

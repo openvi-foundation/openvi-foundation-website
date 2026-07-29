@@ -1,0 +1,182 @@
+---
+import Base from '../../layouts/Base.astro';
+import InlineCode from '../../components/InlineCode.astro';
+import { projects, statusLabels } from '../../data/projects.js';
+import { site } from '../../data/site.js';
+
+export function getStaticPaths() {
+    return projects.map((project) => ({
+        params: { slug: project.slug },
+        props: { project }
+    }));
+}
+
+const { project } = Astro.props;
+const status = statusLabels[project.status];
+const others = projects.filter((p) => p.slug !== project.slug);
+
+const schema = [
+    {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareSourceCode',
+        name: project.name,
+        description: project.summary,
+        codeRepository: project.repo,
+        programmingLanguage: project.language,
+        license: 'https://opensource.org/licenses/MIT',
+        url: `${site.url}/projects/${project.slug}`,
+        maintainer: { '@type': 'Organization', name: site.name, url: site.url }
+    },
+    {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Projects', item: `${site.url}/projects` },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: project.name,
+                item: `${site.url}/projects/${project.slug}`
+            }
+        ]
+    }
+];
+---
+
+<Base title={project.name} description={project.summary} schema={schema}>
+    <div class="prose">
+        <p class="breadcrumb"><a href="/projects">Projects</a> / {project.name}</p>
+
+        <div class="project-head">
+            <h1>{project.name}</h1>
+            <span class:list={['badge', project.status === 'beta' && 'badge-beta']}>
+                {status.label}
+            </span>
+        </div>
+        <p class="lede">{project.tagline}</p>
+        <p>{project.summary}</p>
+    </div>
+
+    <section>
+        <h2>At a glance</h2>
+        <div class="table-scroll">
+            <table>
+                <tbody>
+                    <tr>
+                        <th scope="row">Status</th>
+                        <td>{status.label}. {status.note}.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Continues</th>
+                        <td>{project.continues}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Language</th>
+                        <td>{project.language}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">License</th>
+                        <td>{project.license}, permanently</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Source</th>
+                        <td><a href={project.repo} rel="noopener">{project.repo}</a></td>
+                    </tr>
+                    {
+                        project.docs && (
+                            <tr>
+                                <th scope="row">Documentation</th>
+                                <td>
+                                    <a href={project.docs} rel="noopener">
+                                        {project.docs}
+                                    </a>
+                                </td>
+                            </tr>
+                        )
+                    }
+                    {
+                        project.npm && (
+                            <tr>
+                                <th scope="row">Registry</th>
+                                <td>
+                                    <a href={project.npm} rel="noopener">
+                                        npm
+                                    </a>
+                                </td>
+                            </tr>
+                        )
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        {
+            project.install && (
+                <>
+                    <h3>Install</h3>
+                    <pre><code>{project.install}</code></pre>
+                </>
+            )
+        }
+    </section>
+
+    <section class="prose">
+        <h2>Why this project exists</h2>
+        {project.why.map((para) => <p>{para}</p>)}
+    </section>
+
+    <section class="prose">
+        <h2>What you get</h2>
+        {
+            project.highlights.map((h) => (
+                <>
+                    <h3>{h.title}</h3>
+                    <p>
+                        <InlineCode text={h.body} />
+                    </p>
+                </>
+            ))
+        }
+    </section>
+
+    {
+        project.packages.length > 0 && (
+            <section>
+                <h2>Packages</h2>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th scope="col">Package</th>
+                                <th scope="col">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {project.packages.map((pkg) => (
+                                <tr>
+                                    <td>
+                                        <code>{pkg.name}</code>
+                                    </td>
+                                    <td>{pkg.desc}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        )
+    }
+
+    <section class="prose">
+        <h2>Other projects</h2>
+        <ul>
+            {
+                others.map((p) => (
+                    <li>
+                        <a href={`/projects/${p.slug}`}>{p.name}</a>. {p.tagline}
+                    </li>
+                ))
+            }
+        </ul>
+    </section>
+</Base>

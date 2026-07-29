@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site.js';
+
+const description =
+    'How to contribute to OpenVue and the OpenVi Foundation projects: development setup, where help is most needed, the Discord server and how to join the maintainer team.';
+---
+
+<Base title="Contribute" description={description}>
+    <div class="prose">
+        <h1>Contribute</h1>
+        <p class="lede">
+            We are building out the maintainer team now. If you know Vue and these libraries well,
+            you are the person we are looking for.
+        </p>
+        <p>
+            The quickest way in is the <a href={site.discord} rel="noopener">Discord server</a>. Ask
+            questions, propose changes, or say hello before picking up an issue.
+        </p>
+
+        <h2>Where help is most needed</h2>
+        <ul>
+            <li>
+                <strong>Issue backlog.</strong> Reproducing, triaging and fixing inherited issues is
+                the highest-value work right now.
+            </li>
+            <li>
+                <strong>Migration reports.</strong> If <code>npx @openvue/migrate</code> misses something
+                in your codebase, file it. That makes the path easier for everyone behind you.
+            </li>
+            <li>
+                <strong>Accessibility.</strong> Real assistive-technology testing on components,
+                reported against specific screen readers and versions.
+            </li>
+            <li>
+                <strong>Documentation.</strong> Gaps and inaccuracies on <a
+                    href="https://openvue.dev"
+                    rel="noopener">openvue.dev</a
+                >, especially around theming and unstyled mode.
+            </li>
+        </ul>
+
+        <h2>Development setup</h2>
+        <p>The monorepo uses pnpm workspaces.</p>
+        <pre><code>git clone https://github.com/openvi-foundation/openvue.git
+cd openvue
+pnpm install
+pnpm run dev</code></pre>
+        <p>
+            The full setup, project layout and review process are in the <a
+                href="https://github.com/openvi-foundation/openvue/blob/main/CONTRIBUTING.md"
+                rel="noopener">contributing guide</a
+            >.
+        </p>
+
+        <h2>Before you open a pull request</h2>
+        <ul>
+            <li>
+                Open an issue first for anything bigger than a bug fix, so the approach can be agreed
+                on.
+            </li>
+            <li>
+                Keep the component API compatible with PrimeVue 4.x unless there is a documented
+                migration path.
+            </li>
+            <li>Include a test where the change is testable, and run the existing suites.</li>
+            <li>One logical change per pull request. Reviewable diffs get merged faster.</li>
+        </ul>
+
+        <h2>Becoming a maintainer</h2>
+        <p>
+            Commit access follows sustained, review-quality contribution rather than affiliation.
+            Start by picking up issues, then reach out on <a href={site.discord} rel="noopener"
+                >Discord</a
+            > or at <a href={`mailto:${site.email}`}>{site.email}</a>. See <a href="/governance"
+                >governance</a
+            > for how decisions get made.
+        </p>
+
+        <h2>Reporting a security issue</h2>
+        <p>
+            Do not open a public issue. Follow the <a
+                href="https://github.com/openvi-foundation/openvue/blob/main/SECURITY.md"
+                rel="noopener">security policy</a
+            >.
+        </p>
+    </div>
+</Base>

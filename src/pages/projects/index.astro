@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectList from '../../components/ProjectList.astro';
+import { projects } from '../../data/projects.js';
+
+const description =
+    'All open source projects maintained by the OpenVi Foundation: OpenVue (PrimeVue continued), OpenUXKit (PrimeUIX continued) and OpenIcons (PrimeIcons continued).';
+---
+
+<Base title="Projects" description={description}>
+    <div class="prose">
+        <h1>Projects</h1>
+        <p class="lede">
+            Three repositories, each one a maintained continuation of an archived upstream library.
+            All MIT licensed, all versioned independently.
+        </p>
+    </div>
+
+    <ProjectList items={projects} />
+
+    <section class="prose">
+        <h2>How the pieces fit</h2>
+        <p>
+            <strong>OpenVue</strong> is the component library you install. It renders using the
+            theming engine from <strong>OpenUXKit</strong> and the webfont from
+            <strong>OpenIcons</strong>.
+        </p>
+        <p>
+            Most applications only ever install OpenVue and a theme preset. The rest either comes in
+            as a dependency or gets left out entirely.
+        </p>
+    </section>
+</Base>

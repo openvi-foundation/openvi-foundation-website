@@ -1,0 +1,39 @@
+---
+import { statusLabels } from '../data/projects.js';
+
+/** `heading` controls whether each project title renders as h2 or h3. */
+const { items, heading = 'h2' } = Astro.props;
+const Title = heading;
+---
+
+<ul class="projects">
+    {
+        items.map((p) => (
+            <li>
+                <div class="project-head">
+                    <Title>
+                        <a href={`/projects/${p.slug}`}>{p.name}</a>
+                    </Title>
+                    <span
+                        class:list={['badge', p.status === 'beta' && 'badge-beta']}
+                        title={statusLabels[p.status].note}
+                    >
+                        {statusLabels[p.status].label}
+                    </span>
+                    <span class="muted small">{p.tagline}</span>
+                </div>
+
+                <p class="project-summary">{p.summary}</p>
+
+                <div class="project-meta">
+                    <span>Continues <strong>{p.continues}</strong></span>
+                    <span>{p.language}</span>
+                    <span>{p.license}</span>
+                    <a href={p.repo} rel="noopener">Source</a>
+                    {p.docs && <a href={p.docs} rel="noopener">Documentation</a>}
+                    {p.npm && <a href={p.npm} rel="noopener">npm</a>}
+                </div>
+            </li>
+        ))
+    }
+</ul>

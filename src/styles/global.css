@@ -1,0 +1,507 @@
+/* OpenVi Foundation. Plain by design: system fonts, no webfonts, no JS. */
+
+:root {
+    color-scheme: light dark;
+
+    --bg: #ffffff;
+    --bg-subtle: #f6f7f8;
+    --text: #1a1d21;
+    --text-muted: #5c636b;
+    --border: #dfe3e7;
+    --link: #0d51b8;
+    --link-hover: #08397f;
+    --code-bg: #f2f4f6;
+    --accent: #1a7f4b;
+
+    --font-sans:
+        -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+    /* Kept close together on purpose: the outer column is only a little wider
+       than the text measure, so prose, project rows and tables share a left
+       edge and the whole site reads as one centred column. */
+    --measure: 46rem;
+    --wide: 52rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #14171a;
+        --bg-subtle: #1b1f23;
+        --text: #e6e8ea;
+        --text-muted: #9aa3ac;
+        --border: #2c3238;
+        --link: #7fb2ff;
+        --link-hover: #aacdff;
+        --code-bg: #1e2328;
+        --accent: #4ac48a;
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.65;
+}
+
+::selection {
+    background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+/* ---------- Layout ---------- */
+
+.wrap {
+    max-width: var(--wide);
+    margin: 0 auto;
+    padding: 0 1.25rem;
+}
+
+main {
+    padding: 2.5rem 0 4rem;
+}
+
+main > * + * {
+    margin-top: 2.5rem;
+}
+
+.prose {
+    max-width: var(--measure);
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-subtle);
+}
+
+.site-header .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+}
+
+.site-header .brand {
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    margin-right: auto;
+}
+
+.site-header .brand:hover {
+    color: var(--link);
+}
+
+.site-header nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.15rem;
+    font-size: 0.9375rem;
+}
+
+.site-header nav a[aria-current='page'] {
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
+}
+
+/* Hamburger toggle. Hidden on desktop, where the nav is always visible. */
+
+.nav-toggle-input,
+.nav-toggle {
+    display: none;
+}
+
+.nav-toggle-bars,
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+    display: block;
+    width: 1.05rem;
+    height: 2px;
+    background: currentColor;
+    border-radius: 1px;
+}
+
+.nav-toggle-bars {
+    position: relative;
+}
+
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+    content: '';
+    position: absolute;
+    left: 0;
+}
+
+.nav-toggle-bars::before {
+    top: -5px;
+}
+
+.nav-toggle-bars::after {
+    top: 5px;
+}
+
+@media (max-width: 40rem) {
+    /* Offscreen but still focusable, so the toggle works from the keyboard. */
+    .nav-toggle-input {
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        margin: 0;
+    }
+
+    .nav-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9375rem;
+        line-height: 1;
+        padding: 0.5rem 0.7rem;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        background: var(--bg);
+        color: var(--text);
+        user-select: none;
+    }
+
+    .nav-toggle-input:focus-visible + .nav-toggle {
+        outline: 2px solid var(--link);
+        outline-offset: 2px;
+    }
+
+    .site-header nav {
+        display: none;
+        flex-basis: 100%;
+        flex-direction: column;
+        gap: 0;
+        margin-top: 0.6rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .nav-toggle-input:checked ~ nav {
+        display: flex;
+    }
+
+    .site-header nav a {
+        padding: 0.7rem 0.15rem;
+        border-bottom: 1px solid var(--border);
+        text-decoration: none;
+    }
+
+    .site-header nav a:hover {
+        text-decoration: underline;
+    }
+}
+
+/* ---------- Typography ---------- */
+
+h1,
+h2,
+h3 {
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    margin: 0;
+    text-wrap: balance;
+}
+
+h1 {
+    font-size: clamp(2rem, 1.55rem + 1.8vw, 2.5rem);
+    letter-spacing: -0.025em;
+}
+
+h2 {
+    font-size: 1.3125rem;
+    margin-top: 2.5rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+}
+
+h3 {
+    font-size: 1.0625rem;
+    margin-top: 1.75rem;
+}
+
+p {
+    margin: 0.85rem 0;
+}
+
+a {
+    color: var(--link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+a:hover {
+    color: var(--link-hover);
+}
+
+.lede {
+    font-size: 1.1875rem;
+    line-height: 1.55;
+    color: var(--text-muted);
+    max-width: var(--measure);
+    text-wrap: pretty;
+}
+
+.muted {
+    color: var(--text-muted);
+}
+
+small,
+.small {
+    font-size: 0.875rem;
+}
+
+ul,
+ol {
+    padding-left: 1.25rem;
+}
+
+li + li {
+    margin-top: 0.3rem;
+}
+
+code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.1em 0.35em;
+}
+
+pre {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.75rem 0.9rem;
+    overflow-x: auto;
+    margin: 0.85rem 0;
+}
+
+pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+    margin: 2.5rem 0;
+}
+
+/* ---------- Project list ---------- */
+
+.projects {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--border);
+}
+
+.projects > li {
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 1.4rem 0;
+}
+
+.project-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem;
+}
+
+.project-head h2,
+.project-head h3 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 1.1875rem;
+}
+
+.project-head a {
+    text-decoration: none;
+}
+
+.project-head a:hover {
+    text-decoration: underline;
+}
+
+.project-summary {
+    margin: 0.5rem 0 0.7rem;
+    max-width: var(--measure);
+}
+
+.project-meta {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+}
+
+.badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    padding: 0.05rem 0.45rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    white-space: nowrap;
+}
+
+.badge-beta {
+    color: var(--accent);
+    border-color: currentColor;
+}
+
+/* ---------- Tables ---------- */
+
+.table-scroll {
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9375rem;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 0.5rem 0.9rem 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+
+th {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+td code {
+    white-space: nowrap;
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-subtle);
+    padding: 1.75rem 0;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.site-footer .cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 3rem;
+    justify-content: space-between;
+}
+
+.site-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 1.15rem;
+}
+
+.site-footer li + li {
+    margin-top: 0;
+}
+
+@media (max-width: 40rem) {
+    .site-footer {
+        padding: 1.5rem 0;
+    }
+
+    /* Two columns of comfortable tap targets instead of a ragged wrapped row. */
+    .site-footer ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0;
+        width: 100%;
+        border-top: 1px solid var(--border);
+    }
+
+    .site-footer li {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .site-footer li:nth-child(odd) {
+        padding-right: 1rem;
+    }
+
+    .site-footer ul a {
+        display: block;
+        padding: 0.65rem 0;
+        text-decoration: none;
+    }
+
+    .site-footer ul a:hover {
+        text-decoration: underline;
+    }
+}
+
+/* ---------- Utilities ---------- */
+
+.skip-link {
+    position: absolute;
+    left: -9999px;
+}
+
+.skip-link:focus {
+    left: 1rem;
+    top: 0.5rem;
+    z-index: 10;
+    background: var(--bg);
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+}
+
+:focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 2px;
+}
+
+.breadcrumb {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+}

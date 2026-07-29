@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site.js';
+
+const description =
+    'The OpenVi Foundation is an independent organization that builds and maintains open source UI libraries for the web. What we do, who is behind it and how we work.';
+---
+
+<Base title="About" description={description}>
+    <div class="prose">
+        <h1>About the foundation</h1>
+        <p class="lede">
+            An independent organization that builds and maintains open source UI libraries for the
+            web.
+        </p>
+
+        <h2>What we do</h2>
+        <p>
+            We maintain the parts of the front-end stack that applications sit on top of: component
+            libraries, theming engines, icon sets and the tooling around them. Everything we publish
+            is MIT licensed and developed in public.
+        </p>
+        <p>
+            Maintenance is the actual product. Plenty of open source gets written; much less of it
+            gets kept working across framework releases, browser changes and security advisories for
+            years afterwards. That long tail is the work we take on.
+        </p>
+
+        <h2>How we got here</h2>
+        <p>
+            The foundation formed around PrimeVue after its original maintainers archived it. It is
+            one of the most widely adopted component libraries in the Vue ecosystem, and a very
+            large number of applications were left without a maintenance path.
+        </p>
+        <p>
+            When a dependency that central stops being maintained you have three options: freeze it
+            and accumulate risk, rewrite your UI layer, or pick up maintenance. We went with the
+            third, in the open rather than in a private fork. The same reasoning applies to anything
+            else we take on.
+        </p>
+
+        <h2>Who is behind it</h2>
+        <p>
+            Engineers who know these libraries well. There is no company behind this and no funding.
+        </p>
+        <p>
+            That changes what we care about. We are not chasing feature announcements or trying to
+            build a brand. The goal is to keep a widely used dependency stable for the people who
+            rely on it.
+        </p>
+
+        <h2>How we approach it</h2>
+        <ul>
+            <li>
+                <strong>Compatibility over novelty.</strong> The component API matches PrimeVue 4.x.
+                Migrating should be a dependency swap, not a rewrite.
+            </li>
+            <li>
+                <strong>Stability first, growth second.</strong> Backlog and dependency currency
+                come before new components.
+            </li>
+            <li>
+                <strong>Own the full stack.</strong> We forked the theming engine and icon set too,
+                so no critical piece resolves at runtime from a scope we do not control.
+            </li>
+            <li>
+                <strong>MIT, permanently.</strong> Every release stays MIT. That is why the fork
+                exists.
+            </li>
+            <li>
+                <strong>Boring release engineering.</strong> Predictable, versioned releases with a
+                changelog you can actually read.
+            </li>
+        </ul>
+
+        <h2>Where things stand</h2>
+        <p>
+            OpenVue is in <strong>beta</strong>. The API is stable and the packages are published to
+            npm. Current work is the existing issue backlog, keeping dependencies current, and
+            getting to a versioned stable release process. OpenUXKit and OpenIcons are published at
+            <strong>alpha</strong>.
+        </p>
+        <p>
+            The roadmap and its progress live in the <a
+                href="https://github.com/openvi-foundation/openvue#roadmap"
+                rel="noopener">OpenVue README</a
+            >.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+            Day-to-day conversation happens on <a href={site.discord} rel="noopener">Discord</a>. For
+            anything else, email <a href={`mailto:${site.email}`}>{site.email}</a> or open an issue on
+            the relevant repository under <a href={site.github} rel="noopener"
+                >github.com/openvi-foundation</a
+            >. Security reports should follow the <a
+                href="https://github.com/openvi-foundation/openvue/blob/main/SECURITY.md"
+                rel="noopener">security policy</a
+            > rather than a public issue.
+        </p>
+
+        <p class="small muted">
+            OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek
+            Informatics or PrimeUI. All upstream work is attributed under its original MIT license.
+        </p>
+    </div>
+</Base>

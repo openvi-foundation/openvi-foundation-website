@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://openvi.dev/sitemap-index.xml

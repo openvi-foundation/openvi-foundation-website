@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { projects } from '../data/projects.js';
+---
+
+<Base title="Page not found" description="That page does not exist.">
+    <div class="prose">
+        <h1>Page not found</h1>
+        <p class="lede">That page does not exist.</p>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/projects">All projects</a></li>
+            {projects.map((p) => <li><a href={`/projects/${p.slug}`}>{p.name}</a></li>)}
+        </ul>
+    </div>
+</Base>

@@ -1,0 +1,118 @@
+---
+import '../styles/global.css';
+import { site, nav } from '../data/site.js';
+
+const {
+    title,
+    description = site.description,
+    /** Extra JSON-LD objects to embed alongside the sitewide Organization graph. */
+    schema = []
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.tagline}`;
+
+// `build.format: 'file'` emits about.html, so pathname carries a .html suffix at
+// build time. Strip it (and any index) so canonical URLs match the sitemap and
+// the extensionless links used throughout the site.
+const path =
+    Astro.url.pathname
+        .replace(/\.html$/, '')
+        .replace(/\/index$/, '')
+        .replace(/\/$/, '') || '/';
+const canonical = new URL(path, site.url).href;
+
+const organization = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: site.name,
+    alternateName: 'OpenVi',
+    url: site.url,
+    email: site.email,
+    description: site.description,
+    sameAs: [site.github, site.npm]
+};
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{pageTitle}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={canonical} />
+        <link rel="sitemap" href="/sitemap-index.xml" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={site.name} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={description} />
+
+        <script type="application/ld+json" set:html={JSON.stringify(organization)} />
+        {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+    </head>
+
+    <body>
+        <a class="skip-link" href="#main">Skip to content</a>
+
+        <header class="site-header">
+            <div class="wrap">
+                <a class="brand" href="/">OpenVi Foundation</a>
+
+                {/* CSS-only disclosure. Keeps the site at zero JavaScript; the
+                    checkbox stays keyboard focusable and toggles with space. */}
+                <input class="nav-toggle-input" type="checkbox" id="nav-toggle" />
+                <label class="nav-toggle" for="nav-toggle">
+                    <span class="nav-toggle-bars" aria-hidden="true"></span>
+                    Menu
+                </label>
+
+                <nav id="primary-nav" aria-label="Primary">
+                    {
+                        nav.map((item) => (
+                            <a
+                                href={item.href}
+                                aria-current={
+                                    path === item.href || path.startsWith(item.href + '/')
+                                        ? 'page'
+                                        : undefined
+                                }
+                            >
+                                {item.label}
+                            </a>
+                        ))
+                    }
+                    <a href={site.github} rel="noopener">GitHub</a>
+                    <a href={site.discord} rel="noopener">Discord</a>
+                </nav>
+            </div>
+        </header>
+
+        <main id="main">
+            <div class="wrap">
+                <slot />
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            <div class="wrap cols">
+                <div>
+                    <strong>{site.name}</strong>. {site.tagline}<br />
+                    All projects MIT licensed. <a href={`mailto:${site.email}`}>{site.email}</a>
+                </div>
+                <ul>
+                    <li><a href="/projects">Projects</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/governance">Governance</a></li>
+                    <li><a href="/contribute">Contribute</a></li>
+                    <li><a href={site.github} rel="noopener">GitHub</a></li>
+                    <li><a href={site.discord} rel="noopener">Discord</a></li>
+                    <li><a href={site.npm} rel="noopener">npm</a></li>
+                </ul>
+            </div>
+        </footer>
+    </body>
+</html>

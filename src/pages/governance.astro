@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site.js';
+
+const description =
+    'How the OpenVi Foundation is governed: licensing guarantees, release process, maintainer model, and what happens to the projects if maintainers step away.';
+---
+
+<Base title="Governance" description={description}>
+    <div class="prose">
+        <h1>Governance</h1>
+        <p class="lede">
+            If you are weighing these libraries up for production, this is the page that matters. It
+            covers what we guarantee and how decisions get made.
+        </p>
+
+        <h2>Licensing</h2>
+        <p>
+            Every project is MIT licensed and stays MIT licensed. Releases already published cannot
+            be relicensed retroactively, and we have no intention of relicensing future ones.
+        </p>
+        <p>
+            This is structural, not just a promise. The styling engine (<a href="/projects/openux"
+                >OpenUXKit</a
+            >) was forked from the last MIT-licensed upstream source precisely so the projects do not
+            depend at runtime on a package scope controlled by anyone else. A licensing change
+            upstream cannot reach these packages.
+        </p>
+
+        <h2>Maintainers</h2>
+        <p>
+            Commit access is granted on sustained, review-quality contribution rather than employer
+            or affiliation. No single company controls the roadmap, and none funds it.
+        </p>
+        <p>
+            We are actively building out the maintainer team. If you know these libraries well, that
+            is exactly the background we want. See <a href="/contribute">contributing</a>.
+        </p>
+
+        <h2>How changes get made</h2>
+        <ul>
+            <li>All changes land through pull requests with review. No direct pushes to main.</li>
+            <li>
+                Breaking changes to a stable API need a documented migration path before they are
+                accepted.
+            </li>
+            <li>
+                Bug fixes and dependency updates take priority over new features while the project is
+                stabilizing.
+            </li>
+            <li>
+                Discussion happens in public on GitHub issues, so the reasoning behind a decision is
+                still readable later.
+            </li>
+        </ul>
+
+        <h2>Releases</h2>
+        <p>
+            Packages are published to npm under the <a href={site.npm} rel="noopener">@openvue</a> and
+            <a href="https://www.npmjs.com/org/openuxkit" rel="noopener">@openuxkit</a> scopes, with
+            semantic versioning and dist-tags (<code>alpha</code>, <code>beta</code>,
+            <code>latest</code>) marking maturity. Every release gets a changelog entry.
+        </p>
+
+        <h2>Security</h2>
+        <p>
+            Report vulnerabilities privately through the <a
+                href="https://github.com/openvi-foundation/openvue/blob/main/SECURITY.md"
+                rel="noopener">security policy</a
+            >, not as a public issue. We will coordinate disclosure with the reporter.
+        </p>
+
+        <h2>Continuity</h2>
+        <p>
+            The projects live under a GitHub organization with multiple owners rather than a personal
+            account, and everything needed to build and publish them is in the repositories. If the
+            current maintainers step away, anyone can fork the work under MIT, which is the same
+            guarantee that made this foundation possible in the first place.
+        </p>
+
+        <h2>Code of conduct</h2>
+        <p>
+            Participation across all repositories and in the <a href={site.discord} rel="noopener"
+                >Discord server</a
+            > is covered by the <a
+                href="https://github.com/openvi-foundation/openvue/blob/main/CODE_OF_CONDUCT.md"
+                rel="noopener">code of conduct</a
+            >.
+        </p>
+    </div>
+</Base>

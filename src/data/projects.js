@@ -2,6 +2,8 @@
  * Single source of truth for every project the foundation maintains.
  * Each entry generates a card on the home page, a row on /projects,
  * and its own indexable detail page at /projects/<slug>.
+ *
+ * `version` is the latest version published to npm; update it on release.
  */
 export const projects = [
     {
@@ -9,6 +11,7 @@ export const projects = [
         name: 'OpenVue',
         tagline: 'The Vue UI component library, continued.',
         status: 'beta',
+        version: '0.0.1-beta.1',
         repo: 'https://github.com/openvi-foundation/openvue',
         docs: 'https://openvue.dev',
         npm: 'https://www.npmjs.com/package/openvue',
@@ -58,6 +61,7 @@ export const projects = [
         name: 'OpenUXKit',
         tagline: 'The framework-agnostic UI foundation behind OpenVue.',
         status: 'alpha',
+        version: '0.0.1-alpha.1',
         repo: 'https://github.com/openvi-foundation/openux',
         docs: null,
         npm: 'https://www.npmjs.com/org/openuxkit',
@@ -103,6 +107,7 @@ export const projects = [
         name: 'OpenIcons',
         tagline: 'The icon library for OpenVue, continued.',
         status: 'alpha',
+        version: '0.0.1-alpha.1',
         repo: 'https://github.com/openvi-foundation/openicons',
         docs: null,
         npm: 'https://www.npmjs.com/package/@openvue/openicons',

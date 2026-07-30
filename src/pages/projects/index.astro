@@ -8,26 +8,37 @@ const description =
 ---
 
 <Base title="Projects" description={description}>
-    <div class="prose">
+    <section class="hero prose">
         <h1>Projects</h1>
         <p class="lede">
             Three repositories, each one a maintained continuation of an archived upstream library.
             All MIT licensed, all versioned independently.
         </p>
-    </div>
+    </section>
 
     <ProjectList items={projects} />
 
-    <section class="prose">
-        <h2>How the pieces fit</h2>
-        <p>
-            <strong>OpenVue</strong> is the component library you install. It renders using the
-            theming engine from <strong>OpenUXKit</strong> and the webfont from
-            <strong>OpenIcons</strong>.
-        </p>
-        <p>
-            Most applications only ever install OpenVue and a theme preset. The rest either comes in
-            as a dependency or gets left out entirely.
-        </p>
+    <section aria-labelledby="fit-heading">
+        <div class="section-head">
+            <h2 id="fit-heading">How the pieces fit</h2>
+            <p class="muted">
+                Most applications only ever install OpenVue and a theme preset. The rest either
+                comes in as a dependency or gets left out entirely.
+            </p>
+        </div>
+        <ul class="feature-grid">
+            <li>
+                <h3>OpenVue</h3>
+                <p>The component library you install. This is the only direct dependency most projects need.</p>
+            </li>
+            <li>
+                <h3>OpenUXKit</h3>
+                <p>The theming engine OpenVue renders with. Framework-agnostic, and usable on its own.</p>
+            </li>
+            <li>
+                <h3>OpenIcons</h3>
+                <p>The icon webfont. No dependencies, no build step: a font and a stylesheet.</p>
+            </li>
+        </ul>
     </section>
 </Base>

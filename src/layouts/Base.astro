@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import { site, nav } from '../data/site.js';
+import Icon from '../components/Icon.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 
 const {
     title,
@@ -31,9 +33,11 @@ const organization = {
     description: site.description,
     sameAs: [site.github, site.npm]
 };
+
+const year = new Date().getFullYear();
 ---
 
-<html lang="en">
+<html lang="en" data-theme="light">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -51,6 +55,17 @@ const organization = {
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={description} />
 
+        {/* Runs before first paint so a stored dark choice never flashes light.
+            Nothing is read from the OS: unset means light. */}
+        <script is:inline>
+            try {
+                var stored = localStorage.getItem('theme');
+                document.documentElement.dataset.theme = stored === 'dark' ? 'dark' : 'light';
+            } catch (e) {
+                document.documentElement.dataset.theme = 'light';
+            }
+        </script>
+
         <script type="application/ld+json" set:html={JSON.stringify(organization)} />
         {schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
     </head>
@@ -62,32 +77,50 @@ const organization = {
             <div class="wrap">
                 <a class="brand" href="/">OpenVi Foundation</a>
 
-                {/* CSS-only disclosure. Keeps the site at zero JavaScript; the
-                    checkbox stays keyboard focusable and toggles with space. */}
-                <input class="nav-toggle-input" type="checkbox" id="nav-toggle" />
+                {/* CSS-only disclosure, so the mobile menu works even if the
+                    theme script is the only JavaScript that ever runs. */}
+                <input
+                    class="nav-toggle-input"
+                    type="checkbox"
+                    id="nav-toggle"
+                    aria-label="Toggle navigation menu"
+                />
                 <label class="nav-toggle" for="nav-toggle">
                     <span class="nav-toggle-bars" aria-hidden="true"></span>
-                    Menu
+                    <span class="visually-hidden">Menu</span>
                 </label>
 
-                <nav id="primary-nav" aria-label="Primary">
-                    {
-                        nav.map((item) => (
-                            <a
-                                href={item.href}
-                                aria-current={
-                                    path === item.href || path.startsWith(item.href + '/')
-                                        ? 'page'
-                                        : undefined
-                                }
-                            >
-                                {item.label}
-                            </a>
-                        ))
-                    }
-                    <a href={site.github} rel="noopener">GitHub</a>
-                    <a href={site.discord} rel="noopener">Discord</a>
-                </nav>
+                <div class="primary-nav">
+                    <nav class="nav-links" aria-label="Primary">
+                        {
+                            nav.map((item) => (
+                                <a
+                                    href={item.href}
+                                    aria-current={
+                                        path === item.href || path.startsWith(item.href + '/')
+                                            ? 'page'
+                                            : undefined
+                                    }
+                                >
+                                    {item.label}
+                                </a>
+                            ))
+                        }
+                        <a href={site.docs} rel="noopener">Docs</a>
+                    </nav>
+
+                    <div class="nav-actions">
+                        <a class="icon-btn" href={site.github} rel="noopener" title="GitHub">
+                            <Icon name="github" />
+                            <span class="icon-btn-label visually-hidden">GitHub</span>
+                        </a>
+                        <a class="icon-btn" href={site.discord} rel="noopener" title="Discord">
+                            <Icon name="discord" />
+                            <span class="icon-btn-label visually-hidden">Discord</span>
+                        </a>
+                        <ThemeToggle />
+                    </div>
+                </div>
             </div>
         </header>
 
@@ -98,20 +131,53 @@ const organization = {
         </main>
 
         <footer class="site-footer">
-            <div class="wrap cols">
-                <div>
-                    <strong>{site.name}</strong>. {site.tagline}<br />
-                    All projects MIT licensed. <a href={`mailto:${site.email}`}>{site.email}</a>
+            <div class="wrap">
+                <div class="footer-top">
+                    <div class="footer-brand">
+                        <span class="brand">{site.name}</span>
+                        <p>{site.tagline} Every project is MIT licensed and community run.</p>
+                        <div class="footer-social">
+                            <a class="icon-btn" href={site.github} rel="noopener" title="GitHub">
+                                <Icon name="github" />
+                                <span class="visually-hidden">GitHub</span>
+                            </a>
+                            <a class="icon-btn" href={site.discord} rel="noopener" title="Discord">
+                                <Icon name="discord" />
+                                <span class="visually-hidden">Discord</span>
+                            </a>
+                            <a class="icon-btn" href={site.npm} rel="noopener" title="npm">
+                                <Icon name="npm" />
+                                <span class="visually-hidden">npm</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-col">
+                        <h2>Projects</h2>
+                        <ul>
+                            <li><a href="/projects/openvue">OpenVue</a></li>
+                            <li><a href="/projects/openux">OpenUXKit</a></li>
+                            <li><a href="/projects/openicons">OpenIcons</a></li>
+                            <li><a href="/projects">All projects</a></li>
+                            <li><a href={site.docs} rel="noopener">openvue.dev</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h2>Foundation</h2>
+                        <ul>
+                            <li><a href="/about">About</a></li>
+                            <li><a href="/governance">Governance</a></li>
+                            <li><a href="/contribute">Contribute</a></li>
+                            <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <ul>
-                    <li><a href="/projects">Projects</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/governance">Governance</a></li>
-                    <li><a href="/contribute">Contribute</a></li>
-                    <li><a href={site.github} rel="noopener">GitHub</a></li>
-                    <li><a href={site.discord} rel="noopener">Discord</a></li>
-                    <li><a href={site.npm} rel="noopener">npm</a></li>
-                </ul>
+
+                <div class="footer-bottom">
+                    <p>&copy; {year} {site.name}. MIT licensed.</p>
+                    <p>Not affiliated with PrimeTek Informatics or PrimeUI.</p>
+                </div>
             </div>
         </footer>
     </body>

@@ -1,0 +1,49 @@
+---
+import Icon from './Icon.astro';
+---
+
+{/* Light and dark only. There is no "system" option: the stored choice wins,
+    and light is the default when nothing has been chosen yet. */}
+<button
+    class="icon-btn theme-toggle"
+    type="button"
+    id="theme-toggle"
+    aria-label="Switch to dark theme"
+    title="Switch theme"
+>
+    <Icon name="sun" class="icon-sun" />
+    <Icon name="moon" class="icon-moon" />
+    <span class="icon-btn-label visually-hidden">Theme</span>
+</button>
+
+<script is:inline>
+    (function () {
+        const root = document.documentElement;
+        const buttons = document.querySelectorAll('#theme-toggle');
+
+        function sync() {
+            const dark = root.dataset.theme === 'dark';
+            buttons.forEach((b) => {
+                b.setAttribute(
+                    'aria-label',
+                    dark ? 'Switch to light theme' : 'Switch to dark theme'
+                );
+            });
+        }
+
+        buttons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+                root.dataset.theme = next;
+                try {
+                    localStorage.setItem('theme', next);
+                } catch (e) {
+                    /* private mode: the choice just does not persist */
+                }
+                sync();
+            });
+        });
+
+        sync();
+    })();
+</script>

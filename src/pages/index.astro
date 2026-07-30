@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ProjectList from '../components/ProjectList.astro';
+import Icon from '../components/Icon.astro';
 import { projects } from '../data/projects.js';
 import { site } from '../data/site.js';
 
@@ -24,46 +25,79 @@ const schema = [
 ---
 
 <Base title={null} description={description} schema={schema}>
-    <div class="prose">
-        <h1>OpenVi Foundation</h1>
+    <section class="hero prose">
+        <h1>UI libraries that outlive their maintainers</h1>
         <p class="lede">
             We build and maintain open source UI libraries for the web. Components, theming, icons
             and the tooling around them, all MIT licensed and community run.
         </p>
-        <p>
-            Our work covers the full stack a UI library needs: <a href="/projects/openvue">OpenVue</a
-            > for Vue and Nuxt components, <a href="/projects/openux">OpenUXKit</a> for theming and design
-            tokens, and <a href="/projects/openicons">OpenIcons</a> for iconography. Each piece is maintained
-            here, so nothing critical depends on a scope we do not control.
-        </p>
-        <p>
-            The foundation exists to keep widely used libraries maintained after their original
-            maintainers move on. We started with <strong>PrimeVue</strong>: its last release, 4.5.5,
-            shipped in April 2026, the repository is archived, and the package is still pulled from
-            npm over half a million times a week. We picked it up so the teams behind those installs
-            have somewhere to go.
-        </p>
-    </div>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="/projects">
+                Browse projects
+                <Icon name="arrow-right" />
+            </a>
+            <a class="btn" href={site.docs} rel="noopener">Read the docs</a>
+            <a class="btn" href={site.github} rel="noopener">
+                <Icon name="github" />
+                GitHub
+            </a>
+        </div>
+    </section>
 
     <section aria-labelledby="projects-heading">
-        <h2 id="projects-heading">Projects</h2>
-        <p class="muted">
-            Three repositories covering the full stack. Each one is versioned and published
-            independently.
-        </p>
+        <div class="section-head">
+            <h2 id="projects-heading">Projects</h2>
+            <p class="muted">
+                Three repositories covering the full stack a UI library needs. Each one is versioned
+                and published independently.
+            </p>
+        </div>
         <ProjectList items={projects} heading="h3" />
     </section>
 
-    <section class="prose" aria-labelledby="start-heading">
+    <section aria-labelledby="why-heading">
+        <div class="section-head">
+            <h2 id="why-heading">Why the foundation exists</h2>
+            <p class="muted">
+                To keep widely used libraries maintained after their original maintainers move on.
+            </p>
+        </div>
+        <ul class="feature-grid">
+            <li>
+                <h3>We started with PrimeVue</h3>
+                <p>
+                    Its last release, 4.5.5, shipped in April 2026 and the repository is archived.
+                    The package is still pulled from npm over half a million times a week.
+                </p>
+            </li>
+            <li>
+                <h3>The whole stack, in one place</h3>
+                <p>
+                    Components, theming engine and icon set are all maintained here, so nothing
+                    critical resolves at runtime from a scope we do not control.
+                </p>
+            </li>
+            <li>
+                <h3>MIT, permanently</h3>
+                <p>
+                    Every project here is MIT and stays MIT. A relicense upstream cannot reach these
+                    packages.
+                </p>
+            </li>
+        </ul>
+    </section>
+
+    <section class="callout" aria-labelledby="start-heading">
         <h2 id="start-heading">Migrating from PrimeVue</h2>
-        <p>
+        <p class="muted">
             If you have a PrimeVue v4 project, one command moves it across. It prints a plan first
             and asks before writing anything.
         </p>
         <pre><code>npx @openvue/migrate</code></pre>
-        <p>
+        <p class="muted">
             It renames dependencies, rewrites imports, adds a compatibility override so third-party
-            libraries keep resolving, and leaves a single reviewable diff. Run it with <code>--dry</code
+            libraries keep resolving, and leaves a single reviewable diff. Run it with <code
+                >--dry</code
             > for a preview that writes nothing. The full guide is at <a
                 href="https://openvue.dev/migrate"
                 rel="noopener">openvue.dev/migrate</a
@@ -71,16 +105,8 @@ const schema = [
         </p>
     </section>
 
-    <section class="prose" aria-labelledby="license-heading">
-        <h2 id="license-heading">On licensing</h2>
-        <p>
-            Every project here is MIT, and stays MIT. We forked the styling engine specifically so
-            that no part of the stack resolves at runtime from a package scope we do not control. A
-            relicense upstream cannot reach these packages.
-        </p>
-        <p class="small muted">
-            OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek
-            Informatics or PrimeUI.
-        </p>
-    </section>
+    <p class="small muted">
+        OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek Informatics
+        or PrimeUI.
+    </p>
 </Base>

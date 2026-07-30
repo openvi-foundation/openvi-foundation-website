@@ -1,41 +1,54 @@
-/* OpenVi Foundation. Plain by design: system fonts, no webfonts, no JS. */
+/* OpenVi Foundation. System fonts, no webfonts. The only JavaScript on the
+   site is the theme switch. */
 
 :root {
-    color-scheme: light dark;
+    /* Light is the default and the only scheme we fall back to: the theme is a
+       user choice stored in localStorage, never inherited from the OS. */
+    color-scheme: light;
 
     --bg: #ffffff;
-    --bg-subtle: #f6f7f8;
-    --text: #1a1d21;
-    --text-muted: #5c636b;
-    --border: #dfe3e7;
-    --link: #0d51b8;
-    --link-hover: #08397f;
-    --code-bg: #f2f4f6;
-    --accent: #1a7f4b;
+    --bg-subtle: #f7f8fa;
+    --surface: #ffffff;
+    --surface-hover: #fbfcfd;
+    --text: #14181d;
+    --text-muted: #5b636d;
+    --border: #e4e8ec;
+    --border-strong: #cfd6dd;
+    --link: #0b57d0;
+    --link-hover: #083f96;
+    --code-bg: #f3f5f7;
+    --accent: #12784d;
+    --accent-soft: #e8f4ee;
 
     --font-sans:
         -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
-    /* Kept close together on purpose: the outer column is only a little wider
-       than the text measure, so prose, project rows and tables share a left
-       edge and the whole site reads as one centred column. */
+    --radius: 12px;
+    --radius-sm: 8px;
+
+    /* Prose stays at a comfortable measure while the shell is wide enough for a
+       card grid, so text and cards share a left edge without cards feeling cramped. */
     --measure: 46rem;
-    --wide: 52rem;
+    --wide: 64rem;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #14171a;
-        --bg-subtle: #1b1f23;
-        --text: #e6e8ea;
-        --text-muted: #9aa3ac;
-        --border: #2c3238;
-        --link: #7fb2ff;
-        --link-hover: #aacdff;
-        --code-bg: #1e2328;
-        --accent: #4ac48a;
-    }
+:root[data-theme='dark'] {
+    color-scheme: dark;
+
+    --bg: #0f1215;
+    --bg-subtle: #14181c;
+    --surface: #171b20;
+    --surface-hover: #1c2127;
+    --text: #e7eaed;
+    --text-muted: #98a1ab;
+    --border: #262c33;
+    --border-strong: #39424b;
+    --link: #86b4ff;
+    --link-hover: #b3d1ff;
+    --code-bg: #1b2026;
+    --accent: #45c48c;
+    --accent-soft: #14261e;
 }
 
 *,
@@ -55,10 +68,20 @@ body {
     font-family: var(--font-sans);
     font-size: 16px;
     line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
     background: color-mix(in srgb, var(--accent) 24%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+    }
 }
 
 /* ---------- Layout ---------- */
@@ -70,11 +93,12 @@ body {
 }
 
 main {
-    padding: 2.5rem 0 4rem;
+    padding: 3rem 0 5rem;
 }
 
-main > * + * {
-    margin-top: 2.5rem;
+/* Sections live inside main's .wrap, so the rhythm is set one level down. */
+main > .wrap > * + * {
+    margin-top: 4rem;
 }
 
 .prose {
@@ -84,67 +108,147 @@ main > * + * {
 /* ---------- Header ---------- */
 
 .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
     border-bottom: 1px solid var(--border);
-    background: var(--bg-subtle);
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(1.6) blur(12px);
 }
 
 .site-header .wrap {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem 1.5rem;
-    padding-top: 0.9rem;
-    padding-bottom: 0.9rem;
+    gap: 2.5rem;
+    min-height: 4rem;
 }
 
-.site-header .brand {
-    font-weight: 700;
-    font-size: 1.0625rem;
+/* The wrapper only exists to group the nav for the mobile panel; on desktop it
+   dissolves so links and icons participate in the header's own flex row. */
+.primary-nav {
+    display: contents;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 650;
+    font-size: 1rem;
     color: var(--text);
     text-decoration: none;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+}
+
+.brand:hover {
+    color: var(--accent);
+}
+
+/* Nav links sit next to the brand on the left; icons get pushed to the right. */
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     margin-right: auto;
 }
 
-.site-header .brand:hover {
-    color: var(--link);
-}
-
-.site-header nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.15rem;
+.nav-links a {
+    padding: 0.4rem 0.7rem;
+    border-radius: var(--radius-sm);
     font-size: 0.9375rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.site-header nav a[aria-current='page'] {
+.nav-links a:hover {
+    background: var(--bg-subtle);
+    color: var(--text);
+}
+
+.nav-links a[aria-current='page'] {
     color: var(--text);
     font-weight: 600;
-    text-decoration: underline;
-    text-decoration-color: var(--accent);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 6px;
+    background: var(--bg-subtle);
 }
 
-/* Hamburger toggle. Hidden on desktop, where the nav is always visible. */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 
-.nav-toggle-input,
+/* Square icon buttons shared by the header and the footer. */
+
+.icon-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    background: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.icon-btn:hover {
+    background: var(--bg-subtle);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+.icon-btn svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    display: block;
+}
+
+/* One button, two glyphs: whichever matches the active theme is shown. */
+
+.theme-toggle .icon-moon {
+    display: none;
+}
+
+:root[data-theme='dark'] .theme-toggle .icon-sun {
+    display: none;
+}
+
+:root[data-theme='dark'] .theme-toggle .icon-moon {
+    display: block;
+}
+
+/* Hamburger. Hidden on desktop, where the nav is always visible. */
+
+.nav-toggle-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    margin: 0;
+    pointer-events: none;
+}
+
 .nav-toggle {
     display: none;
+}
+
+.nav-toggle-bars {
+    position: relative;
+    width: 1.0625rem;
+    height: 2px;
 }
 
 .nav-toggle-bars,
 .nav-toggle-bars::before,
 .nav-toggle-bars::after {
-    display: block;
-    width: 1.05rem;
-    height: 2px;
     background: currentColor;
-    border-radius: 1px;
-}
-
-.nav-toggle-bars {
-    position: relative;
+    border-radius: 2px;
 }
 
 .nav-toggle-bars::before,
@@ -152,6 +256,8 @@ main > * + * {
     content: '';
     position: absolute;
     left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .nav-toggle-bars::before {
@@ -162,30 +268,46 @@ main > * + * {
     top: 5px;
 }
 
-@media (max-width: 40rem) {
-    /* Offscreen but still focusable, so the toggle works from the keyboard. */
-    .nav-toggle-input {
-        display: block;
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        opacity: 0;
-        margin: 0;
+/* Bars fold into a cross while the panel is open. */
+.nav-toggle-input:checked + .nav-toggle .nav-toggle-bars {
+    background: transparent;
+}
+
+.nav-toggle-input:checked + .nav-toggle .nav-toggle-bars::before {
+    transform: translateY(5px) rotate(45deg);
+}
+
+.nav-toggle-input:checked + .nav-toggle .nav-toggle-bars::after {
+    transform: translateY(-5px) rotate(-45deg);
+}
+
+@media (max-width: 46rem) {
+    /* The open menu is part of the header, so a translucent header lets page
+       content show through the panel and sit behind the links. Opaque on
+       mobile, where the panel exists. */
+    .site-header {
+        background: var(--bg);
+        backdrop-filter: none;
+    }
+
+    .site-header .wrap {
+        gap: 0.75rem;
+    }
+
+    .brand {
+        margin-right: auto;
     }
 
     .nav-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-        font-size: 0.9375rem;
-        line-height: 1;
-        padding: 0.5rem 0.7rem;
+        display: inline-grid;
+        place-items: center;
+        width: 2.25rem;
+        height: 2.25rem;
         border: 1px solid var(--border);
-        border-radius: 4px;
-        background: var(--bg);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
         color: var(--text);
-        user-select: none;
+        cursor: pointer;
     }
 
     .nav-toggle-input:focus-visible + .nav-toggle {
@@ -193,27 +315,70 @@ main > * + * {
         outline-offset: 2px;
     }
 
-    .site-header nav {
+    /* The panel drops out of the bar's flow and hangs off the bottom edge of
+       the header instead. The bar keeps a fixed height whether the menu is
+       open or shut, so opening it never reflows or shifts the header. */
+    .primary-nav {
         display: none;
-        flex-basis: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
         flex-direction: column;
-        gap: 0;
-        margin-top: 0.6rem;
-        border-top: 1px solid var(--border);
+        gap: 0.25rem;
+        padding: 0 1.25rem 1rem;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        /* Long menus scroll inside the panel rather than off the screen. */
+        max-height: calc(100dvh - 4rem);
+        overflow-y: auto;
+        overscroll-behavior: contain;
     }
 
-    .nav-toggle-input:checked ~ nav {
+    .nav-toggle-input:checked ~ .primary-nav {
         display: flex;
     }
 
-    .site-header nav a {
-        padding: 0.7rem 0.15rem;
-        border-bottom: 1px solid var(--border);
-        text-decoration: none;
+    /* No divider here: the header's own bottom border already sits directly
+       above the first link. */
+    .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.25rem;
+        margin: 0;
+        padding-top: 0.75rem;
     }
 
-    .site-header nav a:hover {
-        text-decoration: underline;
+    .nav-links a {
+        padding: 0.7rem 0.75rem;
+        font-size: 1rem;
+    }
+
+    .nav-actions {
+        gap: 0.5rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--border);
+    }
+
+    /* Icons gain labels once they are in the stacked panel, where there is room. */
+    .nav-actions .icon-btn {
+        width: auto;
+        min-height: 2.5rem;
+        padding: 0 0.75rem;
+        gap: 0.6rem;
+        grid-auto-flow: column;
+        justify-content: start;
+        font-size: 0.9375rem;
+        flex: 1;
+    }
+
+    .icon-btn-label {
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        clip: auto !important;
+        clip-path: none !important;
+        white-space: nowrap;
     }
 }
 
@@ -223,20 +388,23 @@ h1,
 h2,
 h3 {
     line-height: 1.25;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
     margin: 0;
     text-wrap: balance;
 }
 
 h1 {
-    font-size: clamp(2rem, 1.55rem + 1.8vw, 2.5rem);
-    letter-spacing: -0.025em;
+    font-size: clamp(2.125rem, 1.6rem + 2.1vw, 2.75rem);
+    letter-spacing: -0.03em;
 }
 
 h2 {
-    font-size: 1.3125rem;
+    font-size: 1.375rem;
     margin-top: 2.5rem;
-    padding-bottom: 0.4rem;
+}
+
+.prose h2 {
+    padding-bottom: 0.45rem;
     border-bottom: 1px solid var(--border);
 }
 
@@ -252,6 +420,7 @@ p {
 a {
     color: var(--link);
     text-decoration: underline;
+    text-decoration-thickness: 1px;
     text-underline-offset: 2px;
 }
 
@@ -260,7 +429,7 @@ a:hover {
 }
 
 .lede {
-    font-size: 1.1875rem;
+    font-size: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
     line-height: 1.55;
     color: var(--text-muted);
     max-width: var(--measure);
@@ -290,7 +459,7 @@ code {
     font-size: 0.875em;
     background: var(--code-bg);
     border: 1px solid var(--border);
-    border-radius: 3px;
+    border-radius: 5px;
     padding: 0.1em 0.35em;
 }
 
@@ -299,10 +468,10 @@ pre {
     font-size: 0.875rem;
     background: var(--code-bg);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 0.75rem 0.9rem;
+    border-radius: var(--radius-sm);
+    padding: 0.9rem 1rem;
     overflow-x: auto;
-    margin: 0.85rem 0;
+    margin: 1rem 0;
 }
 
 pre code {
@@ -315,67 +484,247 @@ pre code {
 hr {
     border: 0;
     border-top: 1px solid var(--border);
-    margin: 2.5rem 0;
+    margin: 3rem 0;
 }
 
-/* ---------- Project list ---------- */
+/* Section headings that sit above a card grid rather than prose. */
 
-.projects {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border-top: 1px solid var(--border);
-}
-
-.projects > li {
-    margin: 0;
-    border-bottom: 1px solid var(--border);
-    padding: 1.4rem 0;
-}
-
-.project-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.6rem;
-}
-
-.project-head h2,
-.project-head h3 {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 1.1875rem;
-}
-
-.project-head a {
-    text-decoration: none;
-}
-
-.project-head a:hover {
-    text-decoration: underline;
-}
-
-.project-summary {
-    margin: 0.5rem 0 0.7rem;
+.section-head {
+    margin-bottom: 1.5rem;
     max-width: var(--measure);
 }
 
-.project-meta {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1rem;
+.section-head h2 {
+    margin-top: 0;
 }
 
-.badge {
-    font-family: var(--font-mono);
+.section-head p {
+    margin-bottom: 0;
+}
+
+.eyebrow {
+    display: block;
     font-size: 0.75rem;
-    line-height: 1.5;
-    padding: 0.05rem 0.45rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+}
+
+/* ---------- Home hero ---------- */
+
+.hero {
+    padding: 1rem 0 0.5rem;
+}
+
+.hero h1 {
+    margin-bottom: 1rem;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1.05rem;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 0.9375rem;
+    font-weight: 550;
+    color: var(--text);
+    background: var(--surface);
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.btn:hover {
+    color: var(--text);
+    background: var(--bg-subtle);
+    border-color: var(--text-muted);
+}
+
+.btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+:root[data-theme='dark'] .btn-primary {
+    color: #08150f;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background: color-mix(in srgb, var(--accent) 85%, #000);
+    border-color: color-mix(in srgb, var(--accent) 85%, #000);
+}
+
+:root[data-theme='dark'] .btn-primary:hover {
+    color: #08150f;
+    background: color-mix(in srgb, var(--accent) 85%, #fff);
+    border-color: color-mix(in srgb, var(--accent) 85%, #fff);
+}
+
+.btn svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* ---------- Project cards ---------- */
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17.5rem, 1fr));
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.project-grid > li {
+    margin: 0;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1.375rem;
+    background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 3px;
+    border-radius: var(--radius);
+    transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+/* Each card owns four rows: head, summary, facts, links. Subgrid shares those
+   rows across the whole row of cards, so summaries, chips and link bars all
+   start at the same height however long a title or summary runs. Browsers
+   without subgrid fall back to the flex column above. */
+@supports (grid-template-rows: subgrid) {
+    .project-grid > li,
+    .card {
+        display: grid;
+        grid-row: span 4;
+        grid-template-rows: subgrid;
+    }
+}
+
+.card:hover {
+    border-color: var(--border-strong);
+    background: var(--surface-hover);
+}
+
+.card:focus-within {
+    border-color: var(--accent);
+}
+
+.card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+}
+
+.card-head h2,
+.card-head h3 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 1.125rem;
+}
+
+/* Status pill sits hard right, away from the title. */
+.card-head .badge {
+    margin-left: auto;
+}
+
+/* The title stretches over the whole card, so the card is one big target.
+   Meta links sit above it via z-index and stay individually clickable. */
+.card-link {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.card-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+}
+
+.card:hover .card-link {
+    color: var(--accent);
+}
+
+.card-summary {
+    margin: 1rem 0 1.25rem;
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+}
+
+.card-facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    gap: 0.35rem;
+    margin-top: auto;
+}
+
+.card-links {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem;
+}
+
+.card-links a {
+    text-decoration: none;
+}
+
+.card-links a:hover {
+    text-decoration: underline;
+}
+
+/* Chips and badges */
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    padding: 0.1rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    white-space: nowrap;
+}
+
+/* The version pill. Release stage is carried by colour alone here; the label
+   itself lives in the tooltip and in screen-reader-only text. */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    line-height: 1.7;
+    border: 1px solid var(--border);
+    border-radius: 999px;
     color: var(--text-muted);
     background: var(--bg-subtle);
     white-space: nowrap;
@@ -383,7 +732,65 @@ hr {
 
 .badge-beta {
     color: var(--accent);
-    border-color: currentColor;
+    border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+    background: var(--accent-soft);
+}
+
+/* ---------- Callout ---------- */
+
+.callout {
+    padding: 1.5rem;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.callout > :first-child {
+    margin-top: 0;
+}
+
+.callout > :last-child {
+    margin-bottom: 0;
+}
+
+.callout h2 {
+    margin-top: 0;
+    border: 0;
+    padding: 0;
+}
+
+.callout pre {
+    background: var(--surface);
+}
+
+/* ---------- Feature list ---------- */
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-grid > li {
+    margin: 0;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.feature-grid h3 {
+    margin: 0 0 0.35rem;
+    font-size: 1rem;
+}
+
+.feature-grid p {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--text-muted);
 }
 
 /* ---------- Tables ---------- */
@@ -391,6 +798,9 @@ hr {
 .table-scroll {
     overflow-x: auto;
     margin: 1rem 0;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
 }
 
 table {
@@ -402,9 +812,19 @@ table {
 th,
 td {
     text-align: left;
-    padding: 0.5rem 0.9rem 0.5rem 0;
+    padding: 0.65rem 1rem;
     border-bottom: 1px solid var(--border);
     vertical-align: top;
+}
+
+thead th {
+    background: var(--bg-subtle);
+    font-weight: 600;
+}
+
+tbody tr:last-child th,
+tbody tr:last-child td {
+    border-bottom: 0;
 }
 
 th {
@@ -421,65 +841,118 @@ td code {
 .site-footer {
     border-top: 1px solid var(--border);
     background: var(--bg-subtle);
-    padding: 1.75rem 0;
-    font-size: 0.875rem;
+    padding: 3rem 0 2rem;
+    font-size: 0.9375rem;
     color: var(--text-muted);
 }
 
-.site-footer .cols {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem 3rem;
-    justify-content: space-between;
+.footer-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+    padding-bottom: 2rem;
 }
 
-.site-footer ul {
+.footer-brand .brand {
+    display: block;
+    margin-bottom: 0.75rem;
+}
+
+.footer-brand p {
+    margin: 0 0 1rem;
+    max-width: 26rem;
+    font-size: 0.875rem;
+}
+
+.footer-social {
+    display: flex;
+    gap: 0.25rem;
+    margin-left: -0.5rem;
+}
+
+.footer-social .icon-btn {
+    border-color: var(--border);
+}
+
+.footer-social .icon-btn:hover {
+    background: var(--surface);
+}
+
+.footer-col h2 {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    border: 0;
+    padding: 0;
+}
+
+.footer-col ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem 1.15rem;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.site-footer li + li {
+.footer-col li + li {
     margin-top: 0;
 }
 
-@media (max-width: 40rem) {
+.footer-col a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+}
+
+.footer-col a:hover {
+    color: var(--text);
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8125rem;
+}
+
+.footer-bottom p {
+    margin: 0;
+}
+
+@media (max-width: 46rem) {
     .site-footer {
-        padding: 1.5rem 0;
+        padding: 2.5rem 0 1.5rem;
     }
 
-    /* Two columns of comfortable tap targets instead of a ragged wrapped row. */
-    .site-footer ul {
-        display: grid;
+    .footer-top {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0;
-        width: 100%;
-        border-top: 1px solid var(--border);
+        gap: 1.75rem;
     }
 
-    .site-footer li {
-        border-bottom: 1px solid var(--border);
-    }
-
-    .site-footer li:nth-child(odd) {
-        padding-right: 1rem;
-    }
-
-    .site-footer ul a {
-        display: block;
-        padding: 0.65rem 0;
-        text-decoration: none;
-    }
-
-    .site-footer ul a:hover {
-        text-decoration: underline;
+    .footer-brand {
+        grid-column: 1 / -1;
     }
 }
 
 /* ---------- Utilities ---------- */
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
 
 .skip-link {
     position: absolute;
@@ -489,19 +962,39 @@ td code {
 .skip-link:focus {
     left: 1rem;
     top: 0.5rem;
-    z-index: 10;
+    z-index: 30;
     background: var(--bg);
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
 }
 
 :focus-visible {
     outline: 2px solid var(--link);
     outline-offset: 2px;
+    border-radius: 2px;
 }
 
 .breadcrumb {
     font-size: 0.875rem;
     color: var(--text-muted);
     margin-bottom: 0.75rem;
+}
+
+.breadcrumb a {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    color: var(--text);
+    text-decoration: underline;
+}
+
+.page-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
 }

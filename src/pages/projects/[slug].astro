@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import InlineCode from '../../components/InlineCode.astro';
+import ProjectList from '../../components/ProjectList.astro';
 import { projects, statusLabels } from '../../data/projects.js';
 import { site } from '../../data/site.js';
 
@@ -47,10 +48,14 @@ const schema = [
     <div class="prose">
         <p class="breadcrumb"><a href="/projects">Projects</a> / {project.name}</p>
 
-        <div class="project-head">
+        <div class="page-head">
             <h1>{project.name}</h1>
-            <span class:list={['badge', project.status === 'beta' && 'badge-beta']}>
-                {status.label}
+            <span
+                class:list={['badge', project.status === 'beta' && 'badge-beta']}
+                title={`${status.label}. ${status.note}.`}
+            >
+                <span class="visually-hidden">{status.label}, version</span>
+                v{project.version}
             </span>
         </div>
         <p class="lede">{project.tagline}</p>
@@ -65,6 +70,10 @@ const schema = [
                     <tr>
                         <th scope="row">Status</th>
                         <td>{status.label}. {status.note}.</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Latest version</th>
+                        <td><code>{project.version}</code></td>
                     </tr>
                     <tr>
                         <th scope="row">Continues</th>
@@ -125,18 +134,22 @@ const schema = [
         {project.why.map((para) => <p>{para}</p>)}
     </section>
 
-    <section class="prose">
-        <h2>What you get</h2>
-        {
-            project.highlights.map((h) => (
-                <>
-                    <h3>{h.title}</h3>
-                    <p>
-                        <InlineCode text={h.body} />
-                    </p>
-                </>
-            ))
-        }
+    <section aria-labelledby="highlights-heading">
+        <div class="section-head">
+            <h2 id="highlights-heading">What you get</h2>
+        </div>
+        <ul class="feature-grid">
+            {
+                project.highlights.map((h) => (
+                    <li>
+                        <h3>{h.title}</h3>
+                        <p>
+                            <InlineCode text={h.body} />
+                        </p>
+                    </li>
+                ))
+            }
+        </ul>
     </section>
 
     {
@@ -167,16 +180,10 @@ const schema = [
         )
     }
 
-    <section class="prose">
-        <h2>Other projects</h2>
-        <ul>
-            {
-                others.map((p) => (
-                    <li>
-                        <a href={`/projects/${p.slug}`}>{p.name}</a>. {p.tagline}
-                    </li>
-                ))
-            }
-        </ul>
+    <section aria-labelledby="others-heading">
+        <div class="section-head">
+            <h2 id="others-heading">Other projects</h2>
+        </div>
+        <ProjectList items={others} heading="h3" />
     </section>
 </Base>

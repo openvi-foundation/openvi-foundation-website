@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { site, nav } from '../data/site.js';
 import Icon from '../components/Icon.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import Analytics from '@vercel/analytics/astro';
 
 const {
     title,
@@ -180,5 +181,7 @@ const year = new Date().getFullYear();
                 </div>
             </div>
         </footer>
+
+        <Analytics />
     </body>
 </html>

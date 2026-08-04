@@ -16,35 +16,43 @@ const { project } = Astro.props;
 const status = statusLabels[project.status];
 const others = projects.filter((p) => p.slug !== project.slug);
 
+const url = `${site.url}/projects/${project.slug}`;
+
 const schema = [
     {
         '@context': 'https://schema.org',
         '@type': 'SoftwareSourceCode',
         name: project.name,
-        description: project.summary,
+        alternateName: `${project.continues} continued`,
+        description: project.metaDescription,
         codeRepository: project.repo,
         programmingLanguage: project.language,
+        runtimePlatform: project.language === 'Vue' ? 'Vue 3' : undefined,
+        softwareVersion: project.version,
         license: 'https://opensource.org/licenses/MIT',
-        url: `${site.url}/projects/${project.slug}`,
-        maintainer: { '@type': 'Organization', name: site.name, url: site.url }
+        url,
+        isBasedOn: { '@type': 'SoftwareSourceCode', name: project.continues },
+        maintainer: { '@id': `${site.url}/#organization` },
+        isPartOf: { '@id': `${site.url}/#website` }
     },
     {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Projects', item: `${site.url}/projects` },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: project.name,
-                item: `${site.url}/projects/${project.slug}`
-            }
+            { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+            { '@type': 'ListItem', position: 2, name: 'Projects', item: `${site.url}/projects` },
+            { '@type': 'ListItem', position: 3, name: project.name, item: url }
         ]
     }
 ];
 ---
 
-<Base title={project.name} description={project.summary} schema={schema}>
+<Base
+    title={`${project.name}: ${project.continues} continued`}
+    description={project.metaDescription}
+    image={`/og/${project.slug}.png`}
+    schema={schema}
+>
     <div class="prose">
         <p class="breadcrumb"><a href="/projects">Projects</a> / {project.name}</p>
 

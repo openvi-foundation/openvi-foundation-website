@@ -2,12 +2,42 @@
 import Base from '../../layouts/Base.astro';
 import ProjectList from '../../components/ProjectList.astro';
 import { projects } from '../../data/projects.js';
+import { site } from '../../data/site.js';
 
 const description =
-    'All open source projects maintained by the OpenVi Foundation: OpenVue (PrimeVue continued), OpenUXKit (PrimeUIX continued) and OpenIcons (PrimeIcons continued).';
+    'The three libraries the foundation maintains: OpenVue (PrimeVue continued), OpenIcons (PrimeIcons continued) and OpenUXKit (PrimeUIX continued).';
+
+const schema = [
+    {
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'Projects',
+        description,
+        url: `${site.url}/projects`,
+        isPartOf: { '@id': `${site.url}/#website` },
+        mainEntity: {
+            '@type': 'ItemList',
+            itemListElement: projects.map((p, i) => ({
+                '@type': 'ListItem',
+                position: i + 1,
+                name: p.name,
+                description: p.metaDescription,
+                url: `${site.url}/projects/${p.slug}`
+            }))
+        }
+    },
+    {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+            { '@type': 'ListItem', position: 2, name: 'Projects', item: `${site.url}/projects` }
+        ]
+    }
+];
 ---
 
-<Base title="Projects" description={description}>
+<Base title="Projects: OpenVue, OpenIcons, OpenUXKit" description={description} schema={schema}>
     <section class="hero prose">
         <h1>Projects</h1>
         <p class="lede">
@@ -37,7 +67,7 @@ const description =
             </li>
             <li>
                 <h3>OpenIcons</h3>
-                <p>The icon webfont. No dependencies, no build step: a font and a stylesheet.</p>
+                <p>The icon set. A dependency-free webfont, or Vue components if you want tree-shaking.</p>
             </li>
         </ul>
     </section>

@@ -6,7 +6,7 @@ import { projects } from '../data/projects.js';
 import { site } from '../data/site.js';
 
 const description =
-    'The OpenVi Foundation builds and maintains open source UI libraries for the web: OpenVue components for Vue and Nuxt, the OpenUXKit theming engine and the OpenIcons icon set. Community run and MIT licensed.';
+    'OpenVue continues PrimeVue after its archive: 80+ accessible Vue and Nuxt components, a theming engine and an icon set. Community run and MIT licensed.';
 
 const schema = [
     {
@@ -17,7 +17,7 @@ const schema = [
             '@type': 'ListItem',
             position: i + 1,
             name: p.name,
-            description: p.summary,
+            description: p.metaDescription,
             url: `${site.url}/projects/${p.slug}`
         }))
     }

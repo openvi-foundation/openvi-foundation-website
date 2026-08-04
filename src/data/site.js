@@ -2,8 +2,11 @@ export const site = {
     name: 'OpenVi Foundation',
     url: 'https://openvi.dev',
     tagline: 'We maintain open source UI libraries for the web.',
+    /** Title-tag half of the tagline. Kept short so `Name | seoTagline` survives the ~60char SERP cut. */
+    seoTagline: 'The home of OpenVue, PrimeVue continued',
+    /** Fallback meta description. Kept under 160 characters so search results do not truncate it. */
     description:
-        'The OpenVi Foundation builds and maintains open source UI libraries for the web, including OpenVue, its theming engine and its icon set. Community run and MIT licensed.',
+        'The OpenVi Foundation maintains open source UI libraries for the web: OpenVue, OpenUXKit and OpenIcons. Community run and permanently MIT licensed.',
     email: 'contact@openvi.dev',
     github: 'https://github.com/openvi-foundation',
     /** OpenVue's documentation site, the main entry point for users of the libraries. */

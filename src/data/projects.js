@@ -4,6 +4,9 @@
  * and its own indexable detail page at /projects/<slug>.
  *
  * `version` is the latest version published to npm; update it on release.
+ *
+ * `summary` is page copy and runs long. `metaDescription` is the search-result
+ * version of the same claim, kept under 160 characters so Google does not cut it.
  */
 export const projects = [
     {
@@ -11,7 +14,7 @@ export const projects = [
         name: 'OpenVue',
         tagline: 'The Vue UI component library, continued.',
         status: 'beta',
-        version: '0.0.1-beta.1',
+        version: '0.7.0-beta.0',
         repo: 'https://github.com/openvi-foundation/openvue',
         docs: 'https://openvue.dev',
         npm: 'https://www.npmjs.com/package/openvue',
@@ -21,6 +24,8 @@ export const projects = [
         continues: 'PrimeVue',
         summary:
             'A community-maintained continuation of PrimeVue, one of the most widely adopted Vue.js component libraries, picked up after its original maintainers archived it. 80+ accessible, themeable components for Vue and Nuxt.',
+        metaDescription:
+            'OpenVue is the maintained continuation of PrimeVue: 80+ accessible Vue and Nuxt components, an unchanged API, MIT licensed. Migrate with one command.',
         why: [
             'PrimeVue was archived while a lot of production applications still depended on it. Teams running it were left choosing between freezing the dependency and rewriting their UI layer.',
             'OpenVue keeps the same component API, so existing code keeps working. The MIT license is unchanged and stays that way.',
@@ -57,6 +62,51 @@ export const projects = [
         ]
     },
     {
+        slug: 'openicons',
+        name: 'OpenIcons',
+        tagline: 'The icon library for OpenVue, continued.',
+        status: 'beta',
+        version: '1.0.0-beta.1',
+        repo: 'https://github.com/openvi-foundation/openicons',
+        docs: null,
+        npm: 'https://www.npmjs.com/package/@openvue/openicons',
+        install: 'npm install @openvue/openicons@beta',
+        language: 'CSS',
+        license: 'MIT',
+        continues: 'PrimeIcons',
+        summary:
+            'A community-maintained continuation of PrimeIcons, the icon font used by PrimeVue and the wider Prime ecosystem. 323 icons, shipped as a dependency-free webfont and as tree-shakeable Vue 3 components.',
+        metaDescription:
+            'OpenIcons is the maintained continuation of PrimeIcons: 323 icons as a dependency-free webfont or tree-shakeable Vue components. MIT licensed.',
+        why: [
+            'PrimeIcons was archived alongside PrimeVue, so every application using the `pi pi-*` classes needed a maintained replacement.',
+            'OpenIcons ships a compatibility stylesheet. Existing `pi-` class names keep rendering while a codebase moves to `oi-` at its own pace.',
+            'The webfont has no dependencies, no build step and no runtime: it is a font and a stylesheet. Projects that would rather ship only the icons they use can import the Vue components instead.'
+        ],
+        highlights: [
+            {
+                title: '323 icons',
+                body: 'The complete PrimeIcons set carried forward under an unchanged MIT license, plus ten icons drawn since the fork.'
+            },
+            {
+                title: 'Webfont or Vue components',
+                body: '`@openvue/openicons-vue` gives every icon as a tree-shakeable Vue 3 component with a `size` prop, for projects that want to ship only what they use.'
+            },
+            {
+                title: 'Drop-in compatibility layer',
+                body: '`openicons-compat.css` maps the legacy `pi pi-*` classes onto the new font, so migration can be incremental.'
+            },
+            {
+                title: 'Inherits text styling',
+                body: 'Icons take `font-size` and `color` from their parent, so they scale with surrounding text. `oi-spin` handles animation and `oi-fw` gives fixed-width alignment.'
+            }
+        ],
+        packages: [
+            { name: '@openvue/openicons', desc: 'Icon webfont and stylesheets' },
+            { name: '@openvue/openicons-vue', desc: 'Tree-shakeable Vue 3 components for every icon' }
+        ]
+    },
+    {
         slug: 'openux',
         name: 'OpenUXKit',
         tagline: 'The framework-agnostic UI foundation behind OpenVue.',
@@ -71,6 +121,8 @@ export const projects = [
         continues: 'PrimeUIX',
         summary:
             'The styling and theming engine underneath OpenVue, forked from the last MIT-licensed PrimeUIX source and maintained independently. Framework-agnostic.',
+        metaDescription:
+            'OpenUXKit is the maintained continuation of PrimeUIX: the framework-agnostic CSS-in-JS theming engine and design tokens behind OpenVue. MIT licensed.',
         why: [
             'OpenVue used to resolve its theming engine at runtime from a package scope we do not control. That put the styling layer at the mercy of somebody else\'s licensing decisions.',
             'OpenUXKit was taken from the last MIT-licensed PrimeUIX source, so the styling layer cannot be relicensed out from under the projects that depend on it.',
@@ -101,42 +153,6 @@ export const projects = [
             { name: '@openuxkit/headless', desc: 'Headless UI utilities' },
             { name: '@openuxkit/mcp', desc: 'Shared Model Context Protocol server core' }
         ]
-    },
-    {
-        slug: 'openicons',
-        name: 'OpenIcons',
-        tagline: 'The icon library for OpenVue, continued.',
-        status: 'alpha',
-        version: '0.0.1-alpha.1',
-        repo: 'https://github.com/openvi-foundation/openicons',
-        docs: null,
-        npm: 'https://www.npmjs.com/package/@openvue/openicons',
-        install: 'npm install @openvue/openicons@alpha',
-        language: 'CSS',
-        license: 'MIT',
-        continues: 'PrimeIcons',
-        summary:
-            'A community-maintained continuation of PrimeIcons, the icon font used by PrimeVue and the wider Prime ecosystem. 313 icons as a webfont, with no dependencies and no build step.',
-        why: [
-            'PrimeIcons was archived alongside PrimeVue, so every application using the `pi pi-*` classes needed a maintained replacement.',
-            'OpenIcons ships a compatibility stylesheet. Existing `pi-` class names keep rendering while a codebase moves to `oi-` at its own pace.',
-            'There are no dependencies, no build step and no runtime. It is a font and a stylesheet.'
-        ],
-        highlights: [
-            {
-                title: '313 icons',
-                body: 'The complete PrimeIcons set, carried forward under an unchanged MIT license.'
-            },
-            {
-                title: 'Drop-in compatibility layer',
-                body: '`openicons-compat.css` maps the legacy `pi pi-*` classes onto the new font, so migration can be incremental.'
-            },
-            {
-                title: 'Inherits text styling',
-                body: 'Icons take `font-size` and `color` from their parent, so they scale with surrounding text. `oi-spin` handles animation and `oi-fw` gives fixed-width alignment.'
-            }
-        ],
-        packages: [{ name: '@openvue/openicons', desc: 'Icon webfont and stylesheets' }]
     }
 ];
 

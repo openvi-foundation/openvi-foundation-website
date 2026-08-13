@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { site, nav } from '../data/site.js';
 import Icon from '../components/Icon.astro';
+import Logo from '../components/Logo.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import Analytics from '@vercel/analytics/astro';
 
@@ -39,7 +40,7 @@ const organization = {
     url: site.url,
     email: site.email,
     description: site.description,
-    logo: new URL('/og.png', site.url).href,
+    logo: new URL('/logo.svg', site.url).href,
     sameAs: [site.github, site.npm, site.discord]
 };
 
@@ -110,7 +111,10 @@ const year = new Date().getFullYear();
 
         <header class="site-header">
             <div class="wrap">
-                <a class="brand" href="/">OpenVi Foundation</a>
+                <a class="brand" href="/">
+                    <Logo />
+                    <span class="brand-name">OpenVi Foundation</span>
+                </a>
 
                 {/* CSS-only disclosure, so the mobile menu works even if the
                     theme script is the only JavaScript that ever runs. */}
@@ -169,7 +173,10 @@ const year = new Date().getFullYear();
             <div class="wrap">
                 <div class="footer-top">
                     <div class="footer-brand">
-                        <span class="brand">{site.name}</span>
+                        <span class="brand">
+                            <Logo />
+                            <span>{site.name}</span>
+                        </span>
                         <p>{site.tagline} Every project is MIT licensed and community run.</p>
                         <div class="footer-social">
                             <a class="icon-btn" href={site.github} rel="noopener" title="GitHub">

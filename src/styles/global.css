@@ -20,6 +20,10 @@
     --accent: #12784d;
     --accent-soft: #e8f4ee;
 
+    /* Brand mark. Two tones, so the V keeps its folded look at any size. */
+    --logo-ink: #252f45;
+    --logo-accent: #465782;
+
     --font-sans:
         -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
@@ -49,6 +53,11 @@
     --code-bg: #1b2026;
     --accent: #45c48c;
     --accent-soft: #14261e;
+
+    /* The navy disappears on a dark surface, so the mark lightens while keeping
+       the same two-tone relationship. */
+    --logo-ink: #dbe2f0;
+    --logo-accent: #8ba0d2;
 }
 
 *,
@@ -132,6 +141,7 @@ main > .wrap > * + * {
 .brand {
     display: inline-flex;
     align-items: center;
+    gap: 0.55rem;
     font-weight: 650;
     font-size: 1rem;
     color: var(--text);
@@ -142,6 +152,22 @@ main > .wrap > * + * {
 
 .brand:hover {
     color: var(--accent);
+}
+
+/* Sized off the line box so the mark tracks the wordmark at every breakpoint. */
+.logo {
+    display: block;
+    height: 1.15em;
+    width: auto;
+    flex: none;
+}
+
+.logo-ink {
+    fill: var(--logo-ink);
+}
+
+.logo-accent {
+    fill: var(--logo-accent);
 }
 
 /* Nav links sit next to the brand on the left; icons get pushed to the right. */
@@ -296,6 +322,22 @@ main > .wrap > * + * {
 
     .brand {
         margin-right: auto;
+    }
+
+    /* The mark alone carries the brand on narrow screens; the wordmark stays in
+       the accessibility tree so the link keeps its name. */
+    .site-header .brand-name {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .site-header .logo {
+        height: 1.5rem;
     }
 
     .nav-toggle {
@@ -854,7 +896,6 @@ td code {
 }
 
 .footer-brand .brand {
-    display: block;
     margin-bottom: 0.75rem;
 }
 

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --headless --disable-gpu --hide-scrollbars --screenshot=/private/tmp/claude-501/-Users-nikolajevric-Desktop-openvue-openvi-foundation-website/0d15dedd-0b6e-4c78-b9bf-686391b7094b/scratchpad/mobile2.png --window-size=390,200 http://localhost:8899/index.html)",
+      "Bash(sips -c 400 1100 --cropOffset 2000 0 footer.png --out footer-crop.png)",
+      "Bash(sips --cropToHeightWidth 400 1100 footer.png --out footer-crop.png)"
+    ]
+  }
+}

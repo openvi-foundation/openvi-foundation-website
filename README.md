@@ -44,23 +44,6 @@ with the theme config shared between the app and the generator so the two cannot
 `global.css` owns the shell, meaning layout, header, footer and typography. Its last section handles
 the seam where sitewide element styling would otherwise leak into OpenVue components.
 
-## Adding a project
-
-Append an entry to `projects` in [`src/data/projects.js`](src/data/projects.js). It automatically
-gets a card on the home page, a row on the projects page, a detail page, and a sitemap entry. No
-other file needs to change.
-
-## SEO
-
-Each page carries its own title, meta description, canonical URL, Open Graph tags and JSON-LD.
-`@astrojs/sitemap` generates the sitemap at build. If the domain changes, update `site` in
-`astro.config.mjs` and `public/robots.txt` together.
-
-## Deploying
-
-`pnpm run build` emits a fully static `dist/`, so any static host works. Build command
-`pnpm run build`, output directory `dist`.
-
 ## License
 
 MIT.

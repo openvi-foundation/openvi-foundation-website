@@ -2,6 +2,9 @@
 import Base from '../../layouts/Base.astro';
 import InlineCode from '../../components/InlineCode.astro';
 import ProjectList from '../../components/ProjectList.astro';
+import FeatureCard from '../../components/openvue/FeatureCard.vue';
+import StatusTag from '../../components/openvue/StatusTag.vue';
+import LinkButton from '../../components/openvue/LinkButton.vue';
 import { projects, statusLabels } from '../../data/projects.js';
 import { site } from '../../data/site.js';
 
@@ -58,13 +61,12 @@ const schema = [
 
         <div class="page-head">
             <h1>{project.name}</h1>
-            <span
-                class:list={['badge', project.status === 'beta' && 'badge-beta']}
-                title={`${status.label}. ${status.note}.`}
-            >
-                <span class="visually-hidden">{status.label}, version</span>
-                v{project.version}
-            </span>
+            <StatusTag
+                version={project.version}
+                status={project.status}
+                label={status.label}
+                note={status.note}
+            />
         </div>
         <p class="lede">{project.tagline}</p>
         <p>{project.summary}</p>
@@ -135,6 +137,28 @@ const schema = [
                 </>
             )
         }
+
+        <div class="button-row">
+            <LinkButton href={project.repo} label="Source" rel="noopener" />
+            {project.docs && (
+                <LinkButton
+                    href={project.docs}
+                    label="Documentation"
+                    severity="secondary"
+                    outlined
+                    rel="noopener"
+                />
+            )}
+            {project.npm && (
+                <LinkButton
+                    href={project.npm}
+                    label="npm"
+                    severity="secondary"
+                    outlined
+                    rel="noopener"
+                />
+            )}
+        </div>
     </section>
 
     <section class="prose">
@@ -150,10 +174,9 @@ const schema = [
             {
                 project.highlights.map((h) => (
                     <li>
-                        <h3>{h.title}</h3>
-                        <p>
+                        <FeatureCard title={h.title}>
                             <InlineCode text={h.body} />
-                        </p>
+                        </FeatureCard>
                     </li>
                 ))
             }

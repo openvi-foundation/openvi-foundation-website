@@ -2,6 +2,9 @@
 import Base from '../layouts/Base.astro';
 import ProjectList from '../components/ProjectList.astro';
 import Icon from '../components/Icon.astro';
+import LinkButton from '../components/openvue/LinkButton.vue';
+import FeatureCard from '../components/openvue/FeatureCard.vue';
+import Callout from '../components/openvue/Callout.vue';
 import { projects } from '../data/projects.js';
 import { site } from '../data/site.js';
 
@@ -32,15 +35,13 @@ const schema = [
             and the tooling around them, all MIT licensed and community run.
         </p>
         <div class="hero-actions">
-            <a class="btn btn-primary" href="/projects">
-                Browse projects
+            <LinkButton href="/projects" label="Browse projects">
                 <Icon name="arrow-right" />
-            </a>
-            <a class="btn" href={site.docs} rel="noopener">Read the docs</a>
-            <a class="btn" href={site.github} rel="noopener">
+            </LinkButton>
+            <LinkButton href={site.docs} label="Read the docs" severity="secondary" outlined rel="noopener" />
+            <LinkButton href={site.github} label="GitHub" severity="secondary" outlined rel="noopener">
                 <Icon name="github" />
-                GitHub
-            </a>
+            </LinkButton>
         </div>
     </section>
 
@@ -64,31 +65,27 @@ const schema = [
         </div>
         <ul class="feature-grid">
             <li>
-                <h3>We started with PrimeVue</h3>
-                <p>
+                <FeatureCard title="We started with PrimeVue">
                     Its last release, 4.5.5, shipped in April 2026 and the repository is archived.
                     The package is still pulled from npm over half a million times a week.
-                </p>
+                </FeatureCard>
             </li>
             <li>
-                <h3>The whole stack, in one place</h3>
-                <p>
+                <FeatureCard title="The whole stack, in one place">
                     Components, theming engine and icon set are all maintained here, so nothing
                     critical resolves at runtime from a scope we do not control.
-                </p>
+                </FeatureCard>
             </li>
             <li>
-                <h3>MIT, permanently</h3>
-                <p>
+                <FeatureCard title="MIT, permanently">
                     Every project here is MIT and stays MIT. A relicense upstream cannot reach these
                     packages.
-                </p>
+                </FeatureCard>
             </li>
         </ul>
     </section>
 
-    <section class="callout" aria-labelledby="start-heading">
-        <h2 id="start-heading">Migrating from PrimeVue</h2>
+    <Callout header="Migrating from PrimeVue" headingId="start-heading" aria-labelledby="start-heading">
         <p class="muted">
             If you have a PrimeVue v4 project, one command moves it across. It prints a plan first
             and asks before writing anything.
@@ -103,7 +100,7 @@ const schema = [
                 rel="noopener">openvue.dev/migrate</a
             >.
         </p>
-    </section>
+    </Callout>
 
     <p class="small muted">
         OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek Informatics

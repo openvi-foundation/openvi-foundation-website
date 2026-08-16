@@ -5,3 +5,6 @@ dist/
 .env
 .env.production
 *.log
+
+# Generated from the OpenVue theme by scripts/generate-openvue-css.mjs
+src/styles/openvue.generated.css

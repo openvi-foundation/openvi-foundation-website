@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ProjectList from '../../components/ProjectList.astro';
+import FeatureCard from '../../components/openvue/FeatureCard.vue';
 import { projects } from '../../data/projects.js';
 import { site } from '../../data/site.js';
 
@@ -58,16 +59,22 @@ const schema = [
         </div>
         <ul class="feature-grid">
             <li>
-                <h3>OpenVue</h3>
-                <p>The component library you install. This is the only direct dependency most projects need.</p>
+                <FeatureCard title="OpenVue">
+                    The component library you install. This is the only direct dependency most
+                    projects need.
+                </FeatureCard>
             </li>
             <li>
-                <h3>OpenUXKit</h3>
-                <p>The theming engine OpenVue renders with. Framework-agnostic, and usable on its own.</p>
+                <FeatureCard title="OpenUXKit">
+                    The theming engine OpenVue renders with. Framework-agnostic, and usable on its
+                    own.
+                </FeatureCard>
             </li>
             <li>
-                <h3>OpenIcons</h3>
-                <p>The icon set. A dependency-free webfont, or Vue components if you want tree-shaking.</p>
+                <FeatureCard title="OpenIcons">
+                    The icon set. A dependency-free webfont, or Vue components if you want
+                    tree-shaking.
+                </FeatureCard>
             </li>
         </ul>
     </section>

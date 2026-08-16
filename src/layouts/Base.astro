@@ -1,9 +1,14 @@
 ---
+// OpenVue first: global.css owns the shell and overrides component styling
+// where the two meet.
+import '../styles/openvue.generated.css';
 import '../styles/global.css';
 import { site, nav } from '../data/site.js';
 import Icon from '../components/Icon.astro';
 import Logo from '../components/Logo.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import IconLinkButton from '../components/openvue/IconLinkButton.vue';
+import LinkButton from '../components/openvue/LinkButton.vue';
 import Analytics from '@vercel/analytics/astro';
 
 const {
@@ -133,30 +138,29 @@ const year = new Date().getFullYear();
                     <nav class="nav-links" aria-label="Primary">
                         {
                             nav.map((item) => (
-                                <a
+                                <LinkButton
                                     href={item.href}
+                                    label={item.label}
+                                    severity="secondary"
+                                    text
                                     aria-current={
                                         path === item.href || path.startsWith(item.href + '/')
                                             ? 'page'
                                             : undefined
                                     }
-                                >
-                                    {item.label}
-                                </a>
+                                />
                             ))
                         }
-                        <a href={site.docs} rel="noopener">Docs</a>
+                        <LinkButton href={site.docs} label="Docs" severity="secondary" text rel="noopener" />
                     </nav>
 
                     <div class="nav-actions">
-                        <a class="icon-btn" href={site.github} rel="noopener" title="GitHub">
+                        <IconLinkButton href={site.github} label="GitHub" rel="noopener">
                             <Icon name="github" />
-                            <span class="icon-btn-label visually-hidden">GitHub</span>
-                        </a>
-                        <a class="icon-btn" href={site.discord} rel="noopener" title="Discord">
+                        </IconLinkButton>
+                        <IconLinkButton href={site.discord} label="Discord" rel="noopener">
                             <Icon name="discord" />
-                            <span class="icon-btn-label visually-hidden">Discord</span>
-                        </a>
+                        </IconLinkButton>
                         <ThemeToggle />
                     </div>
                 </div>
@@ -179,18 +183,15 @@ const year = new Date().getFullYear();
                         </span>
                         <p>{site.tagline} Every project is MIT licensed and community run.</p>
                         <div class="footer-social">
-                            <a class="icon-btn" href={site.github} rel="noopener" title="GitHub">
+                            <IconLinkButton href={site.github} label="GitHub" rel="noopener">
                                 <Icon name="github" />
-                                <span class="visually-hidden">GitHub</span>
-                            </a>
-                            <a class="icon-btn" href={site.discord} rel="noopener" title="Discord">
+                            </IconLinkButton>
+                            <IconLinkButton href={site.discord} label="Discord" rel="noopener">
                                 <Icon name="discord" />
-                                <span class="visually-hidden">Discord</span>
-                            </a>
-                            <a class="icon-btn" href={site.npm} rel="noopener" title="npm">
+                            </IconLinkButton>
+                            <IconLinkButton href={site.npm} label="npm" rel="noopener">
                                 <Icon name="npm" />
-                                <span class="visually-hidden">npm</span>
-                            </a>
+                            </IconLinkButton>
                         </div>
                     </div>
 

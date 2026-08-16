@@ -1,59 +1,18 @@
 ---
 import { statusLabels } from '../data/projects.js';
+import ProjectCard from './openvue/ProjectCard.vue';
 
 /** `heading` controls whether each project title renders as h2 or h3. */
 const { items, heading = 'h2' } = Astro.props;
-const Title = heading;
 ---
 
 <ul class="project-grid">
     {
         items.map((p) => (
             <li>
-                <article class="card">
-                    <div class="card-head">
-                        <Title>
-                            <a class="card-link" href={`/projects/${p.slug}`}>
-                                {p.name}
-                            </a>
-                        </Title>
-                        <span
-                            class:list={['badge', p.status === 'beta' && 'badge-beta']}
-                            title={`${statusLabels[p.status].label}. ${statusLabels[p.status].note}.`}
-                        >
-                            {/* Colour carries the status visually; spell it out for
-                                screen readers, which cannot see it. */}
-                            <span class="visually-hidden">
-                                {statusLabels[p.status].label}, version
-                            </span>
-                            v{p.version}
-                        </span>
-                    </div>
-
-                    <p class="card-summary">{p.summary}</p>
-
-                    <div class="card-facts">
-                        <span class="chip">Continues {p.continues}</span>
-                        <span class="chip">{p.language}</span>
-                        <span class="chip">{p.license}</span>
-                    </div>
-
-                    <div class="card-links">
-                        <a href={p.repo} rel="noopener">
-                            Source
-                        </a>
-                        {p.docs && (
-                            <a href={p.docs} rel="noopener">
-                                Documentation
-                            </a>
-                        )}
-                        {p.npm && (
-                            <a href={p.npm} rel="noopener">
-                                npm
-                            </a>
-                        )}
-                    </div>
-                </article>
+                {/* No client directive: the OpenVue card is rendered to HTML at
+                    build time and ships no JavaScript. */}
+                <ProjectCard project={p} status={statusLabels[p.status]} headingLevel={heading} />
             </li>
         ))
     }

@@ -1,20 +1,17 @@
 ---
 import Icon from './Icon.astro';
+import IconButton from './openvue/IconButton.vue';
 ---
 
 {/* Light and dark only. There is no "system" option: the stored choice wins,
-    and light is the default when nothing has been chosen yet. */}
-<button
-    class="icon-btn theme-toggle"
-    type="button"
-    id="theme-toggle"
-    aria-label="Switch to dark theme"
-    title="Switch theme"
->
+    and light is the default when nothing has been chosen yet.
+
+    The button is a statically rendered OpenVue Button — no hydration. The
+    inline script below drives it, which is why it is addressed by id. */}
+<IconButton id="theme-toggle" label="Switch theme" class="theme-toggle">
     <Icon name="sun" class="icon-sun" />
     <Icon name="moon" class="icon-moon" />
-    <span class="icon-btn-label visually-hidden">Theme</span>
-</button>
+</IconButton>
 
 <script is:inline>
     (function () {

@@ -1,16 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
+import LinkButton from '../components/openvue/LinkButton.vue';
+import Notice from '../components/openvue/Notice.vue';
 import { projects } from '../data/projects.js';
 ---
 
 <Base title="Page not found" description="That page does not exist." noindex>
     <div class="prose">
         <h1>Page not found</h1>
-        <p class="lede">That page does not exist.</p>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/projects">All projects</a></li>
-            {projects.map((p) => <li><a href={`/projects/${p.slug}`}>{p.name}</a></li>)}
-        </ul>
+        <Notice severity="warn">That page does not exist.</Notice>
+        <div class="button-row">
+            <LinkButton href="/" label="Home" />
+            <LinkButton href="/projects" label="All projects" severity="secondary" outlined />
+            {
+                projects.map((p) => (
+                    <LinkButton
+                        href={`/projects/${p.slug}`}
+                        label={p.name}
+                        severity="secondary"
+                        text
+                    />
+                ))
+            }
+        </div>
     </div>
 </Base>

@@ -1,7 +1,13 @@
 # openvi-foundation-website
 
 The website for the [OpenVi Foundation](https://openvi.dev), an organization index pointing at the
-projects we maintain. Plain by design: static HTML, no client-side JavaScript, no webfonts.
+projects we maintain. The interface is built with [OpenVue](https://openvue.dev), the component
+library the foundation maintains — every card, tag, chip, button and panel on the site is an OpenVue
+component. We ship what we maintain.
+
+None of it costs the visitor any JavaScript. Astro renders the components to HTML at build time and
+the theme is compiled to a stylesheet ahead of time, so the pages stay what they were before: static
+HTML, no webfonts, and the theme switch as the only script that runs.
 
 ## Development
 
@@ -20,7 +26,40 @@ pnpm run preview  # serve the built output
 | `src/data/site.js`         | Site name, URL, contact, primary nav.                             |
 | `src/layouts/Base.astro`   | Shell, meta tags, Open Graph, Organization JSON-LD.               |
 | `src/pages/`               | One file per route. `projects/[slug].astro` generates detail pages. |
-| `src/styles/global.css`    | All styling. System fonts, light and dark via `prefers-color-scheme`. |
+| `src/styles/global.css`    | The shell: layout, typography, and the seam with OpenVue.        |
+| `src/components/openvue/`  | The site's OpenVue components.                                    |
+| `src/openvue-theme.js`     | Theme preset and the list of components compiled into the CSS.   |
+| `src/vue-app.js`           | Configures OpenVue for the components Astro renders.              |
+| `scripts/generate-openvue-css.mjs` | Renders the theme to `src/styles/openvue.generated.css`.  |
+
+## How OpenVue is used
+
+The site depends on the released `openvue` and `@openvue/themes` packages from npm — not a workspace
+link — so it consumes the library exactly the way anyone else does. Upgrading is a normal dependency
+bump.
+
+**Components render at build time.** Astro renders a Vue component to HTML when it has no `client:*`
+directive, so `<ProjectCard />` and friends become plain markup with no JavaScript behind them.
+Nothing on the site hydrates; if you ever add a component that needs to respond to input, that one
+gets a `client:*` directive and it alone ships a runtime.
+
+**The theme is compiled, not injected.** In styled mode OpenVue injects its CSS from the browser at
+runtime, which never happens when nothing hydrates. So
+[`scripts/generate-openvue-css.mjs`](scripts/generate-openvue-css.mjs) calls the same string
+generators the Nuxt module uses for SSR and writes the whole theme to a stylesheet before the build.
+`pnpm run dev` and `pnpm run build` both run it; the output is generated and gitignored.
+
+Two consequences worth knowing:
+
+- **A component missing from `components` in [`src/openvue-theme.js`](src/openvue-theme.js) renders
+  unstyled.** Its CSS was never compiled in. Add the component to that list the first time you use
+  it, and rerun `pnpm run openvue:css`.
+- **Dark mode is one switch, not two.** `darkModeSelector` points OpenVue at the `data-theme`
+  attribute the site's own theme toggle writes, so the toggle drives OpenVue and `global.css`
+  together. The theme config is shared with the generator so the two cannot drift.
+
+`global.css` still owns the shell — header, footer, grids, typography — and its final section
+handles the seam where site-wide element styling would otherwise leak into OpenVue components.
 
 ### Adding a project
 

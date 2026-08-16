@@ -10,14 +10,19 @@
         "url": "git+https://github.com/openvi-foundation/openvi-foundation-website.git"
     },
     "scripts": {
-        "dev": "astro dev",
-        "build": "astro build",
+        "dev": "pnpm run openvue:css && astro dev",
+        "build": "pnpm run openvue:css && astro build",
+        "openvue:css": "node scripts/generate-openvue-css.mjs",
         "preview": "astro preview",
         "check": "astro check"
     },
     "dependencies": {
         "@astrojs/sitemap": "^3.7.0",
+        "@astrojs/vue": "^5.1.4",
+        "@openvue/themes": "0.7.0-beta.0",
         "@vercel/analytics": "^2.0.1",
-        "astro": "^5.16.0"
+        "astro": "^5.16.0",
+        "openvue": "0.7.0-beta.0",
+        "vue": "^3.5.41"
     }
 }

@@ -1,0 +1,35 @@
+---
+/**
+ * The shell for the foundation's prose pages: about, governance, contribute.
+ *
+ * A masthead band carrying the title, then the body set against the margin
+ * column that runs down the rest of the site. Here that column holds the page's
+ * own contents, so a long document says where you are in it.
+ *
+ * `contents` entries must match the `id` on the corresponding `h2` in the slot;
+ * they are written per page rather than derived, because Astro renders the slot
+ * as opaque markup and scraping it back would be worse than listing four
+ * headings.
+ */
+const { title, lede, label, contents = [] } = Astro.props;
+---
+
+<section class="band hero-doc">
+    <div class="wrap">
+        <h1>{title}</h1>
+        {lede && <p class="lede">{lede}</p>}
+    </div>
+</section>
+
+<section class="band">
+    <div class="wrap band-grid">
+        <nav class="doc-toc" aria-label="On this page">
+            <span class="label">{label ?? 'Contents'}</span>
+            {contents.map((item) => <a href={`#${item.id}`}>{item.text}</a>)}
+        </nav>
+
+        <div class="prose">
+            <slot />
+        </div>
+    </div>
+</section>

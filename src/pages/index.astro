@@ -6,12 +6,25 @@ import LinkButton from '../components/openvue/LinkButton.vue';
 import FeatureCard from '../components/openvue/FeatureCard.vue';
 import Callout from '../components/openvue/Callout.vue';
 import { projects } from '../data/projects.js';
+import { faq } from '../data/faq.js';
 import { site } from '../data/site.js';
 
 const description =
     'OpenVue continues PrimeVue after its archive: 80+ accessible Vue and Nuxt components, a theming engine and an icon set. Community run and MIT licensed.';
 
 const schema = [
+    // The questions are on the page and in the markup. Google matches one
+    // against the other, so the two must not drift apart.
+    {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        '@id': `${site.url}/#faq`,
+        mainEntity: faq.map((item) => ({
+            '@type': 'Question',
+            name: item.q,
+            acceptedAnswer: { '@type': 'Answer', text: item.a }
+        }))
+    },
     {
         '@context': 'https://schema.org',
         '@type': 'ItemList',
@@ -25,85 +38,192 @@ const schema = [
         }))
     }
 ];
+
+// The reasons the foundation exists, as numbered clauses rather than a card
+// grid: they are an argument in sequence, not three parallel features.
+const rationale = [
+    {
+        title: 'We started with PrimeVue',
+        body: 'Its last release, 4.5.5, shipped in April 2026 and the repository is archived. The package is still pulled from npm over half a million times a week.'
+    },
+    {
+        title: 'The whole stack, in one place',
+        body: 'Components, theming engine and icon set are all maintained here, so nothing critical resolves at runtime from a scope we do not control.'
+    },
+    {
+        title: 'MIT, permanently',
+        body: 'Every project here is MIT and stays MIT. A relicense upstream cannot reach these packages.'
+    }
+];
 ---
 
 <Base title={null} description={description} schema={schema}>
-    <section class="hero prose">
-        <h1>Maintained, not archived</h1>
-        <p class="lede">
-            We build and maintain open source UI libraries for the web. Components, theming, icons
-            and the tooling around them, all MIT licensed and community run.
-        </p>
-        <div class="hero-actions">
-            <LinkButton href="/projects" label="Browse projects">
-                <Icon name="arrow-right" />
-            </LinkButton>
-            <LinkButton href={site.docs} label="Read the docs" severity="secondary" outlined rel="noopener" />
-            <LinkButton href={site.github} label="GitHub" severity="secondary" outlined rel="noopener">
-                <Icon name="github" />
-            </LinkButton>
+    <section class="band hero">
+        <div class="wrap">
+            <h1>Maintained, not archived</h1>
+            <div class="hero-rule"></div>
+            <p class="lede">
+                We build and maintain open source UI libraries for the web. Components, theming,
+                icons and the tooling around them, all MIT licensed and community run.
+            </p>
+            <div class="hero-actions">
+                <LinkButton href="/projects" label="Browse projects">
+                    <Icon name="arrow-right" />
+                </LinkButton>
+                <LinkButton
+                    href={site.docs}
+                    label="Read the docs"
+                    severity="secondary"
+                    outlined
+                    rel="noopener"
+                />
+                <LinkButton href={site.github} label="GitHub" severity="secondary" text rel="noopener">
+                    <Icon name="github" />
+                </LinkButton>
+            </div>
+
         </div>
     </section>
 
-    <section aria-labelledby="projects-heading">
-        <div class="section-head">
-            <h2 id="projects-heading">Projects</h2>
-            <p class="muted">
-                Three repositories covering the full stack a UI library needs. Each one is versioned
-                and published independently.
+    <section class="band" aria-labelledby="succession-heading">
+        <div class="wrap">
+            <div>
+                <div class="section-head">
+                    <h2 id="succession-heading">What we picked up</h2>
+                    <p>
+                        Three archived upstream libraries, each with a maintained continuation
+                        published under a license that cannot be changed out from under it.
+                    </p>
+                </div>
+
+                <table class="transpose">
+                    <thead>
+                        <tr>
+                            <th scope="col">Upstream</th>
+                            <th scope="col" class="col-arrow"><span class="visually-hidden">becomes</span></th>
+                            <th scope="col">Maintained here</th>
+                            <th scope="col" class="col-state">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            projects.map((p) => (
+                                <tr>
+                                    <td class="col-from">
+                                        <span class="name">{p.continues}</span>
+                                    </td>
+                                    <td class="col-arrow" aria-hidden="true">
+                                        &rarr;
+                                    </td>
+                                    <td class="col-to">
+                                        <a href={`/projects/${p.slug}`}>{p.name}</a>
+                                        <span class="muted"> v{p.version}</span>
+                                    </td>
+                                    <td class="col-state">
+                                        <span class="state state-active">Maintained</span>
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="band" aria-labelledby="projects-heading">
+        <div class="wrap">
+            <div>
+                <div class="section-head">
+                    <h2 id="projects-heading">Projects</h2>
+                    <p>
+                        Three repositories covering the full stack a UI library needs. Each one is
+                        versioned and published independently.
+                    </p>
+                </div>
+                <ProjectList items={projects} heading="h3" />
+            </div>
+        </div>
+    </section>
+
+    <section class="band" aria-labelledby="why-heading">
+        <div class="wrap">
+            <div>
+                <div class="section-head">
+                    <h2 id="why-heading">Why the foundation exists</h2>
+                    <p>
+                        To keep widely used libraries maintained after their original maintainers
+                        move on.
+                    </p>
+                </div>
+                <ul class="notes">
+                    {
+                        rationale.map((item) => (
+                            <li>
+                                <FeatureCard title={item.title}>
+                                    {item.body}
+                                </FeatureCard>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="band" aria-labelledby="start-heading">
+        <div class="wrap">
+            <div>
+                <Callout header="Migrating from PrimeVue" headingId="start-heading">
+                    <p class="muted">
+                        If you have a PrimeVue v4 project, one command moves it across. It prints a
+                        plan first and asks before writing anything.
+                    </p>
+                    <pre><code>npx @openvue/migrate</code></pre>
+                    <p class="muted">
+                        It renames dependencies, rewrites imports, adds a compatibility override so
+                        third-party libraries keep resolving, and leaves a single reviewable diff.
+                        Run it with <code>--dry</code> for a preview that writes nothing. The full guide
+                        is at <a href="https://openvue.dev/migrate" rel="noopener">openvue.dev/migrate</a
+                        >.
+                    </p>
+                </Callout>
+            </div>
+        </div>
+    </section>
+
+    <section class="band" aria-labelledby="faq-heading">
+        <div class="wrap">
+            <div class="section-head">
+                <h2 id="faq-heading">Common questions</h2>
+                <p>
+                    What people ask most often about PrimeVue being archived and what running
+                    OpenVue instead involves.
+                </p>
+            </div>
+
+            {/* Plain headings and paragraphs rather than a disclosure widget:
+                the answers are the reason the page ranks for these questions,
+                so they are on the page rather than hidden behind a control. */}
+            <dl class="faq">
+                {
+                    faq.map((item) => (
+                        <div>
+                            <dt>{item.q}</dt>
+                            <dd>{item.a}</dd>
+                        </div>
+                    ))
+                }
+            </dl>
+        </div>
+    </section>
+
+    <section class="band band-tight">
+        <div class="wrap">
+            <p class="small muted" style="margin: 0; max-width: var(--measure);">
+                OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek
+                Informatics or PrimeUI.
             </p>
         </div>
-        <ProjectList items={projects} heading="h3" />
     </section>
-
-    <section aria-labelledby="why-heading">
-        <div class="section-head">
-            <h2 id="why-heading">Why the foundation exists</h2>
-            <p class="muted">
-                To keep widely used libraries maintained after their original maintainers move on.
-            </p>
-        </div>
-        <ul class="feature-grid">
-            <li>
-                <FeatureCard title="We started with PrimeVue">
-                    Its last release, 4.5.5, shipped in April 2026 and the repository is archived.
-                    The package is still pulled from npm over half a million times a week.
-                </FeatureCard>
-            </li>
-            <li>
-                <FeatureCard title="The whole stack, in one place">
-                    Components, theming engine and icon set are all maintained here, so nothing
-                    critical resolves at runtime from a scope we do not control.
-                </FeatureCard>
-            </li>
-            <li>
-                <FeatureCard title="MIT, permanently">
-                    Every project here is MIT and stays MIT. A relicense upstream cannot reach these
-                    packages.
-                </FeatureCard>
-            </li>
-        </ul>
-    </section>
-
-    <Callout header="Migrating from PrimeVue" headingId="start-heading" aria-labelledby="start-heading">
-        <p class="muted">
-            If you have a PrimeVue v4 project, one command moves it across. It prints a plan first
-            and asks before writing anything.
-        </p>
-        <pre><code>npx @openvue/migrate</code></pre>
-        <p class="muted">
-            It renames dependencies, rewrites imports, adds a compatibility override so third-party
-            libraries keep resolving, and leaves a single reviewable diff. Run it with <code
-                >--dry</code
-            > for a preview that writes nothing. The full guide is at <a
-                href="https://openvue.dev/migrate"
-                rel="noopener">openvue.dev/migrate</a
-            >.
-        </p>
-    </Callout>
-
-    <p class="small muted">
-        OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek Informatics
-        or PrimeUI.
-    </p>
 </Base>

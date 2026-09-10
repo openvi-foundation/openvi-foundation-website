@@ -11,71 +11,86 @@ const description =
 const schema = [
     {
         '@context': 'https://schema.org',
-        '@type': 'CollectionPage',
-        name: 'Projects',
-        description,
-        url: `${site.url}/projects`,
-        isPartOf: { '@id': `${site.url}/#website` },
-        mainEntity: {
-            '@type': 'ItemList',
-            itemListElement: projects.map((p, i) => ({
-                '@type': 'ListItem',
-                position: i + 1,
-                name: p.name,
-                description: p.metaDescription,
-                url: `${site.url}/projects/${p.slug}`
-            }))
-        }
+        '@type': 'ItemList',
+        name: 'Projects maintained by the OpenVi Foundation',
+        itemListOrder: 'https://schema.org/ItemListOrderAscending',
+        numberOfItems: projects.length,
+        itemListElement: projects.map((p, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: p.name,
+            description: p.metaDescription,
+            url: `${site.url}/projects/${p.slug}`
+        }))
+    }
+];
+
+// Read top down, this is the dependency stack: what you install, what it
+// renders with, and what draws the icons.
+const layers = [
+    {
+        title: 'OpenVue',
+        body: 'The component library you install. This is the only direct dependency most projects need.'
     },
     {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
-            { '@type': 'ListItem', position: 2, name: 'Projects', item: `${site.url}/projects` }
-        ]
+        title: 'OpenUXKit',
+        body: 'The theming engine OpenVue renders with. Framework-agnostic, and usable on its own.'
+    },
+    {
+        title: 'OpenIcons',
+        body: 'The icon set. A dependency-free webfont, or Vue components if you want tree-shaking.'
     }
 ];
 ---
 
-<Base title="Projects: OpenVue, OpenIcons, OpenUXKit" description={description} schema={schema}>
-    <section class="hero prose">
-        <h1>Projects</h1>
-        <p class="lede">
-            Three repositories, each one a maintained continuation of an archived upstream library.
-            All MIT licensed, all versioned independently.
-        </p>
-    </section>
-
-    <ProjectList items={projects} />
-
-    <section aria-labelledby="fit-heading">
-        <div class="section-head">
-            <h2 id="fit-heading">How the pieces fit</h2>
-            <p class="muted">
-                Most applications only ever install OpenVue and a theme preset. The rest either
-                comes in as a dependency or gets left out entirely.
+<Base
+    title="Projects: OpenVue, OpenIcons, OpenUXKit"
+    description={description}
+    schema={schema}
+    image="/og/projects.png"
+    pageType="CollectionPage"
+    breadcrumbs={[{ name: 'Projects', path: '/projects' }]}
+>
+    <section class="band hero-doc">
+        <div class="wrap">
+            <h1>Projects</h1>
+            <p class="lede">
+                Three repositories, each one a maintained continuation of an archived upstream
+                library. All MIT licensed, all versioned independently.
             </p>
         </div>
-        <ul class="feature-grid">
-            <li>
-                <FeatureCard title="OpenVue">
-                    The component library you install. This is the only direct dependency most
-                    projects need.
-                </FeatureCard>
-            </li>
-            <li>
-                <FeatureCard title="OpenUXKit">
-                    The theming engine OpenVue renders with. Framework-agnostic, and usable on its
-                    own.
-                </FeatureCard>
-            </li>
-            <li>
-                <FeatureCard title="OpenIcons">
-                    The icon set. A dependency-free webfont, or Vue components if you want
-                    tree-shaking.
-                </FeatureCard>
-            </li>
-        </ul>
+    </section>
+
+    <section class="band">
+        <div class="wrap">
+            <div>
+                <ProjectList items={projects} />
+            </div>
+        </div>
+    </section>
+
+    <section class="band" aria-labelledby="fit-heading">
+        <div class="wrap">
+            <div>
+                <div class="section-head">
+                    <h2 id="fit-heading">How the pieces fit</h2>
+                    <p>
+                        Most applications only ever install OpenVue and a theme preset. The rest
+                        either comes in as a dependency or gets left out entirely.
+                    </p>
+                </div>
+                <ul class="notes">
+                    {
+                        layers.map((layer) => (
+                            <li>
+                                <FeatureCard title={layer.title}>
+                                    {layer.body}
+                                </FeatureCard>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+        </div>
     </section>
 </Base>

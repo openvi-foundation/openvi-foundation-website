@@ -1,24 +1,33 @@
 ---
 import Base from '../layouts/Base.astro';
+import DocPage from '../components/DocPage.astro';
 import { site } from '../data/site.js';
 
 const description =
     'Help maintain OpenVue: triage the issue backlog, report migration gaps, or join the maintainer team. Start in Discord, no prior involvement needed.';
+
+/** Section headings, mirrored into the margin column by DocPage. */
+const contents = [
+    { id: 'where-help-is-most-needed', text: 'Where help is most needed' },
+    { id: 'development-setup', text: 'Development setup' },
+    { id: 'before-you-open-a-pull-request', text: 'Before you open a pull request' },
+    { id: 'becoming-a-maintainer', text: 'Becoming a maintainer' },
+    { id: 'reporting-a-security-issue', text: 'Reporting a security issue' }
+];
 ---
 
-<Base title="Contribute to OpenVue" description={description}>
-    <div class="prose">
-        <h1>Contribute</h1>
-        <p class="lede">
-            We are building out the maintainer team now. If you know Vue and these libraries well,
-            you are the person we are looking for.
-        </p>
-        <p>
-            The quickest way in is the <a href={site.discord} rel="noopener">Discord server</a>. Ask
-            questions, propose changes, or say hello before picking up an issue.
-        </p>
-
-        <h2>Where help is most needed</h2>
+<Base title="Contribute to OpenVue" description={description}
+    image="/og/contribute.png"
+    pageType="WebPage"
+    breadcrumbs={[{ name: 'Contribute', path: '/contribute' }]}
+>
+    <DocPage
+        title="Contribute"
+        lede="We are building out the maintainer team now. If you know Vue and these libraries well, you are the person we are looking for."
+        label="Contribute"
+        contents={contents}
+    >
+        <h2 id="where-help-is-most-needed">Where help is most needed</h2>
         <ul>
             <li>
                 <strong>Issue backlog.</strong> Reproducing, triaging and fixing inherited issues is
@@ -40,7 +49,7 @@ const description =
             </li>
         </ul>
 
-        <h2>Development setup</h2>
+        <h2 id="development-setup">Development setup</h2>
         <p>The monorepo uses pnpm workspaces.</p>
         <pre><code>git clone https://github.com/openvi-foundation/openvue.git
 cd openvue
@@ -53,7 +62,7 @@ pnpm run dev</code></pre>
             >.
         </p>
 
-        <h2>Before you open a pull request</h2>
+        <h2 id="before-you-open-a-pull-request">Before you open a pull request</h2>
         <ul>
             <li>
                 Open an issue first for anything bigger than a bug fix, so the approach can be agreed
@@ -67,7 +76,7 @@ pnpm run dev</code></pre>
             <li>One logical change per pull request. Reviewable diffs get merged faster.</li>
         </ul>
 
-        <h2>Becoming a maintainer</h2>
+        <h2 id="becoming-a-maintainer">Becoming a maintainer</h2>
         <p>
             Commit access follows sustained, review-quality contribution rather than affiliation.
             Start by picking up issues, then reach out on <a href={site.discord} rel="noopener"
@@ -77,12 +86,12 @@ pnpm run dev</code></pre>
             > for how decisions get made.
         </p>
 
-        <h2>Reporting a security issue</h2>
+        <h2 id="reporting-a-security-issue">Reporting a security issue</h2>
         <p>
             Do not open a public issue. Follow the <a
                 href="https://github.com/openvi-foundation/openvue/blob/main/SECURITY.md"
                 rel="noopener">security policy</a
             >.
         </p>
-    </div>
+    </DocPage>
 </Base>

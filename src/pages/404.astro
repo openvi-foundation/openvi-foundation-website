@@ -1,27 +1,34 @@
 ---
 import Base from '../layouts/Base.astro';
 import LinkButton from '../components/openvue/LinkButton.vue';
-import Notice from '../components/openvue/Notice.vue';
+import ProjectList from '../components/ProjectList.astro';
+import Icon from '../components/Icon.astro';
 import { projects } from '../data/projects.js';
 ---
 
 <Base title="Page not found" description="That page does not exist." noindex>
-    <div class="prose">
-        <h1>Page not found</h1>
-        <Notice severity="warn">That page does not exist.</Notice>
-        <div class="button-row">
-            <LinkButton href="/" label="Home" />
-            <LinkButton href="/projects" label="All projects" severity="secondary" outlined />
-            {
-                projects.map((p) => (
-                    <LinkButton
-                        href={`/projects/${p.slug}`}
-                        label={p.name}
-                        severity="secondary"
-                        text
-                    />
-                ))
-            }
+    <section class="band hero-doc">
+        <div class="wrap">
+            <p class="breadcrumb">404</p>
+            <h1>Page not found</h1>
+            <p class="lede">
+                That page does not exist. It may have moved, or the link that brought you here may
+                be out of date.
+            </p>
+            <div class="button-row">
+                <LinkButton href="/" label="Home">
+                    <Icon name="arrow-right" />
+                </LinkButton>
+                <LinkButton href="/projects" label="All projects" severity="secondary" outlined />
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="band">
+        <div class="wrap">
+            <div>
+                <ProjectList items={projects} heading="h2" />
+            </div>
+        </div>
+    </section>
 </Base>

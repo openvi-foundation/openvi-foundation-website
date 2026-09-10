@@ -1,20 +1,34 @@
 ---
 import Base from '../layouts/Base.astro';
+import DocPage from '../components/DocPage.astro';
 import { site } from '../data/site.js';
 
 const description =
     'Who maintains OpenVue and why. An independent, community-run foundation that keeps widely used front-end libraries working after upstream archives them.';
+
+/** Section headings, mirrored into the margin column by DocPage. */
+const contents = [
+    { id: 'what-we-do', text: 'What we do' },
+    { id: 'how-we-got-here', text: 'How we got here' },
+    { id: 'who-is-behind-it', text: 'Who is behind it' },
+    { id: 'how-we-approach-it', text: 'How we approach it' },
+    { id: 'where-things-stand', text: 'Where things stand' },
+    { id: 'contact', text: 'Contact' }
+];
 ---
 
-<Base title="About: who maintains OpenVue" description={description}>
-    <div class="prose">
-        <h1>About the foundation</h1>
-        <p class="lede">
-            An independent organization that builds and maintains open source UI libraries for the
-            web.
-        </p>
-
-        <h2>What we do</h2>
+<Base title="About: who maintains OpenVue" description={description}
+    image="/og/about.png"
+    pageType="AboutPage"
+    breadcrumbs={[{ name: 'About', path: '/about' }]}
+>
+    <DocPage
+        title="About the foundation"
+        lede="An independent organization that builds and maintains open source UI libraries for the web."
+        label="About"
+        contents={contents}
+    >
+        <h2 id="what-we-do">What we do</h2>
         <p>
             We maintain the parts of the front-end stack that applications sit on top of: component
             libraries, theming engines, icon sets and the tooling around them. Everything we publish
@@ -26,7 +40,7 @@ const description =
             years afterwards. That long tail is the work we take on.
         </p>
 
-        <h2>How we got here</h2>
+        <h2 id="how-we-got-here">How we got here</h2>
         <p>
             The foundation formed around PrimeVue after its original maintainers archived it. It is
             one of the most widely adopted component libraries in the Vue ecosystem, and a very
@@ -39,7 +53,7 @@ const description =
             else we take on.
         </p>
 
-        <h2>Who is behind it</h2>
+        <h2 id="who-is-behind-it">Who is behind it</h2>
         <p>
             Engineers who know these libraries well. There is no company behind this and no funding.
         </p>
@@ -49,7 +63,7 @@ const description =
             rely on it.
         </p>
 
-        <h2>How we approach it</h2>
+        <h2 id="how-we-approach-it">How we approach it</h2>
         <ul>
             <li>
                 <strong>Compatibility over novelty.</strong> The component API matches PrimeVue 4.x.
@@ -73,7 +87,7 @@ const description =
             </li>
         </ul>
 
-        <h2>Where things stand</h2>
+        <h2 id="where-things-stand">Where things stand</h2>
         <p>
             OpenVue has shipped <strong>1.0.0</strong>. The API is settled and the packages are on
             npm under the <code>latest</code> dist-tag; current work is the existing issue backlog.
@@ -87,7 +101,7 @@ const description =
             >.
         </p>
 
-        <h2>Contact</h2>
+        <h2 id="contact">Contact</h2>
         <p>
             Day-to-day conversation happens on <a href={site.discord} rel="noopener">Discord</a>. For
             anything else, email <a href={`mailto:${site.email}`}>{site.email}</a> or open an issue on
@@ -103,5 +117,5 @@ const description =
             OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek
             Informatics or PrimeUI. All upstream work is attributed under its original MIT license.
         </p>
-    </div>
+    </DocPage>
 </Base>

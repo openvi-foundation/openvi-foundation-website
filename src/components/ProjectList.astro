@@ -6,7 +6,16 @@ import ProjectCard from './openvue/ProjectCard.vue';
 const { items, heading = 'h2' } = Astro.props;
 ---
 
-<ul class="project-grid">
+{/* Column headings for the registry. Presentational rather than a real table
+    header — each row is a card, not a table row — so it is hidden from
+    assistive technology and from narrow screens, where the row stacks. */}
+<div class="registry-head" aria-hidden="true">
+    <span>Project</span>
+    <span>Description</span>
+    <span>Release</span>
+</div>
+
+<ul class="registry">
     {
         items.map((p) => (
             <li>

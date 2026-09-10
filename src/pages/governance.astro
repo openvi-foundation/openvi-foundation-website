@@ -1,17 +1,34 @@
 ---
 import Base from '../layouts/Base.astro';
+import DocPage from '../components/DocPage.astro';
 import { site } from '../data/site.js';
 
 const description =
     'How the foundation is run: permanent MIT licensing, semantic versioning, how maintainers earn commit access, and what happens if they step away.';
+
+/** Section headings, mirrored into the margin column by DocPage. */
+const contents = [
+    { id: 'licensing', text: 'Licensing' },
+    { id: 'maintainers', text: 'Maintainers' },
+    { id: 'how-changes-get-made', text: 'How changes get made' },
+    { id: 'releases', text: 'Releases' },
+    { id: 'security', text: 'Security' },
+    { id: 'continuity', text: 'Continuity' },
+    { id: 'code-of-conduct', text: 'Code of conduct' }
+];
 ---
 
-<Base title="Governance and licensing" description={description}>
-    <div class="prose">
-        <h1>Governance</h1>
-
-
-        <h2>Licensing</h2>
+<Base title="Governance and licensing" description={description}
+    image="/og/governance.png"
+    pageType="WebPage"
+    breadcrumbs={[{ name: 'Governance', path: '/governance' }]}
+>
+    <DocPage
+        title="Governance"
+        label="Governance"
+        contents={contents}
+    >
+        <h2 id="licensing">Licensing</h2>
         <p>
             Every project is MIT licensed and stays MIT licensed. Releases already published cannot
             be relicensed retroactively, and we have no intention of relicensing future ones.
@@ -24,7 +41,7 @@ const description =
             upstream cannot reach these packages.
         </p>
 
-        <h2>Maintainers</h2>
+        <h2 id="maintainers">Maintainers</h2>
         <p>
             Commit access is granted on sustained, review-quality contribution rather than employer
             or affiliation. No single company controls the roadmap, and none funds it.
@@ -34,7 +51,7 @@ const description =
             is exactly the background we want. See <a href="/contribute">contributing</a>.
         </p>
 
-        <h2>How changes get made</h2>
+        <h2 id="how-changes-get-made">How changes get made</h2>
         <ul>
             <li>All changes land through pull requests with review. No direct pushes to main.</li>
             <li>
@@ -51,7 +68,7 @@ const description =
             </li>
         </ul>
 
-        <h2>Releases</h2>
+        <h2 id="releases">Releases</h2>
         <p>
             Packages are published to npm under the <a href={site.npm} rel="noopener">@openvue</a> and
             <a href="https://www.npmjs.com/org/openuxkit" rel="noopener">@openuxkit</a> scopes, with
@@ -59,7 +76,7 @@ const description =
             <code>rc</code>, <code>latest</code>) marking maturity. Every release gets a changelog entry.
         </p>
 
-        <h2>Security</h2>
+        <h2 id="security">Security</h2>
         <p>
             Report vulnerabilities privately through the <a
                 href="https://github.com/openvi-foundation/openvue/blob/main/SECURITY.md"
@@ -67,7 +84,7 @@ const description =
             >, not as a public issue. We will coordinate disclosure with the reporter.
         </p>
 
-        <h2>Continuity</h2>
+        <h2 id="continuity">Continuity</h2>
         <p>
             The projects live under a GitHub organization with multiple owners rather than a personal
             account, and everything needed to build and publish them is in the repositories. If the
@@ -75,7 +92,7 @@ const description =
             guarantee that made this foundation possible in the first place.
         </p>
 
-        <h2>Code of conduct</h2>
+        <h2 id="code-of-conduct">Code of conduct</h2>
         <p>
             Participation across all repositories and in the <a href={site.discord} rel="noopener"
                 >Discord server</a
@@ -84,5 +101,5 @@ const description =
                 rel="noopener">code of conduct</a
             >.
         </p>
-    </div>
+    </DocPage>
 </Base>

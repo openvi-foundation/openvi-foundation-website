@@ -1089,6 +1089,110 @@ hr {
     }
 }
 
+/* ---------- Articles ---------- */
+
+/* Articles reuse the project registry: same three columns, same rules, so the
+   two lists read as one system. Only the pieces the projects have no equivalent
+   for are defined here. */
+
+/* The source is a fact about the row, not a link out of it: the whole row
+   already goes somewhere, and a second target inside the title block would
+   make it ambiguous which one the row is for. */
+.registry-source {
+    color: var(--text);
+}
+
+.registry-tags {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.35rem;
+}
+
+/* Date, byline and reading time under the lede. Separated by middots rather
+   than rules, because this is one line of metadata, not three fields. */
+.dateline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin: 1.25rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+}
+
+.dateline time {
+    color: var(--text-muted);
+}
+
+/* The margin column on an article carries the publication facts, then the
+   contents if the piece has headings. `.doc-toc` owns the column itself. */
+.article-aside .label + .article-fact {
+    margin: 0.35rem 0 1.5rem;
+}
+
+.article-fact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.8125rem;
+}
+
+.article-fact a {
+    text-decoration: none;
+}
+
+.article-fact a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.article-tag-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.75rem;
+    color: var(--text-muted);
+}
+
+/* The disclaimer at the foot of a piece, set as a Message so it reads as an
+   aside rather than as the last paragraph of the argument. */
+.article-note {
+    margin: 2rem 0;
+}
+
+/* The line that says where the piece first ran. Ruled off, because it is the
+   page talking about the article rather than the article itself. */
+.article-origin {
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+}
+
+/* A diff is the one code block where colour carries meaning, so the added and
+   removed lines are marked up and tinted instead of leaving the reader to spot
+   a leading + against a leading -. */
+.code-diff code {
+    display: block;
+}
+
+.code-diff .diff-add,
+.code-diff .diff-del {
+    display: block;
+    margin: 0 -1.1rem;
+    padding: 0 1.1rem;
+}
+
+.code-diff .diff-add {
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+}
+
+.code-diff .diff-del {
+    background: var(--archived-soft);
+    color: var(--archived);
+}
+
 /* ---------- Utilities ---------- */
 
 .visually-hidden {

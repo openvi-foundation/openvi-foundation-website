@@ -10,7 +10,7 @@ export default defineConfig({
     // every island, so components resolve their theme and config.
     integrations: [
         sitemap({
-            // Crawl budget is not a real constraint at nine pages, but priority
+            // Crawl budget is not a real constraint at a dozen pages, but priority
             // and changefreq still tell a crawler which URLs are the site's
             // entry points and which are reference material that rarely moves.
             serialize(item) {
@@ -22,6 +22,14 @@ export default defineConfig({
                 } else if (path === '/projects' || path.startsWith('/projects/')) {
                     item.priority = 0.9;
                     item.changefreq = 'weekly';
+                } else if (path === '/articles') {
+                    item.priority = 0.8;
+                    item.changefreq = 'weekly';
+                } else if (path.startsWith('/articles/')) {
+                    // A published post does not change after it runs, so a
+                    // crawler is told to stop coming back for it.
+                    item.priority = 0.7;
+                    item.changefreq = 'yearly';
                 } else {
                     item.priority = 0.6;
                     item.changefreq = 'monthly';

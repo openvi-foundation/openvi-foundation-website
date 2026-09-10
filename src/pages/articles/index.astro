@@ -1,0 +1,59 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { articlesByDate } from '../../data/articles.js';
+import { site } from '../../data/site.js';
+
+const description =
+    'Everything the OpenVi Foundation has published about the PrimeVue fork: release notes, migration guidance, and the posts that opened the discussion.';
+
+const schema = [
+    {
+        '@context': 'https://schema.org',
+        '@type': 'Blog',
+        '@id': `${site.url}/articles#blog`,
+        name: 'OpenVi Foundation articles',
+        description,
+        url: `${site.url}/articles`,
+        inLanguage: 'en',
+        publisher: { '@id': `${site.url}/#organization` },
+        isPartOf: { '@id': `${site.url}/#website` },
+        blogPost: articlesByDate.map((a) => ({
+            '@type': a.kind === 'article' ? 'BlogPosting' : 'DiscussionForumPosting',
+            headline: a.title,
+            description: a.metaDescription,
+            datePublished: a.date,
+            url: `${site.url}/articles/${a.slug}`,
+            author: { '@type': 'Person', name: a.author }
+        }))
+    }
+];
+---
+
+<Base
+    title="Articles"
+    description={description}
+    schema={schema}
+    image="/og/articles.png"
+    pageType="CollectionPage"
+    breadcrumbs={[{ name: 'Articles', path: '/articles' }]}
+>
+    <section class="band hero-doc">
+        <div class="wrap">
+            <h1>Articles</h1>
+            <p class="lede">
+                Release notes, migration guidance, and the posts that opened the discussion.
+                Everything here was written by the foundation and published elsewhere first; each
+                page links back to the original thread.
+            </p>
+        </div>
+    </section>
+
+    <section class="band">
+        <div class="wrap">
+            <div>
+                <ArticleList items={articlesByDate} />
+            </div>
+        </div>
+    </section>
+</Base>

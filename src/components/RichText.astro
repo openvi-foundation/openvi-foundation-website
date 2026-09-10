@@ -1,0 +1,50 @@
+---
+/**
+ * Renders the two bits of markdown the article bodies actually use: `backtick`
+ * code spans and [label](href) links. Everything else in the data files is
+ * plain text.
+ *
+ * This is deliberately not a markdown parser. The bodies are structured as
+ * blocks already, so the only thing left to handle is inline emphasis, and two
+ * patterns is cheaper to read than a dependency.
+ *
+ * `InlineCode` is the backtick-only version, kept for the project data.
+ */
+const { text } = Astro.props;
+
+const pattern = /`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)/g;
+
+const nodes = [];
+let last = 0;
+let match;
+
+while ((match = pattern.exec(text)) !== null) {
+    if (match.index > last) nodes.push({ type: 'text', value: text.slice(last, match.index) });
+
+    if (match[1] !== undefined) {
+        nodes.push({ type: 'code', value: match[1] });
+    } else {
+        nodes.push({ type: 'link', value: match[2], href: match[3] });
+    }
+
+    last = pattern.lastIndex;
+}
+
+if (last < text.length) nodes.push({ type: 'text', value: text.slice(last) });
+---
+
+{
+    nodes.map((node) => {
+        if (node.type === 'code') return <code>{node.value}</code>;
+        if (node.type === 'link') {
+            // Only off-site links need the rel; internal ones are same-origin.
+            const external = /^https?:/.test(node.href);
+            return (
+                <a href={node.href} rel={external ? 'noopener' : undefined}>
+                    {node.value}
+                </a>
+            );
+        }
+        return node.value;
+    })
+}

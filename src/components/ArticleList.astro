@@ -1,0 +1,34 @@
+---
+import { kindLabels, formatDate, readingTime } from '../data/articles.js';
+import ArticleCard from './openvue/ArticleCard.vue';
+
+/** `heading` controls whether each article title renders as h2 or h3. */
+const { items, heading = 'h2' } = Astro.props;
+---
+
+{/* Column headings for the registry. Presentational rather than a real table
+    header — each row is a card, not a table row — so it is hidden from
+    assistive technology and from narrow screens, where the row stacks. */}
+<div class="registry-head" aria-hidden="true">
+    <span>Title</span>
+    <span>Summary</span>
+    <span>Published</span>
+</div>
+
+<ul class="registry">
+    {
+        items.map((article) => (
+            <li>
+                {/* No client directive: the OpenVue card is rendered to HTML at
+                    build time and ships no JavaScript. */}
+                <ArticleCard
+                    article={article}
+                    kind={kindLabels[article.kind]}
+                    dateLabel={formatDate(article.date)}
+                    minutes={readingTime(article)}
+                    headingLevel={heading}
+                />
+            </li>
+        ))
+    }
+</ul>

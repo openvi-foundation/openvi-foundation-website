@@ -1,0 +1,81 @@
+---
+/**
+ * Renders an article's body blocks. The block vocabulary is documented at the
+ * top of src/data/articles.js.
+ *
+ * The blocks exist so the posts stay data rather than markup: the same entry
+ * feeds the row on /articles, the reading time, and the JSON-LD, and none of
+ * that works if the body is an opaque string of HTML.
+ */
+import RichText from './RichText.astro';
+import Notice from './openvue/Notice.vue';
+import { headingId } from '../data/articles.js';
+
+const { blocks } = Astro.props;
+---
+
+{
+    blocks.map((block) => {
+        if (block.t === 'h2') {
+            return <h2 id={headingId(block.text)}>{block.text}</h2>;
+        }
+
+        if (block.t === 'ul') {
+            return (
+                <ul>
+                    {block.items.map((item) =>
+                        typeof item === 'string' ? (
+                            <li>
+                                <RichText text={item} />
+                            </li>
+                        ) : (
+                            <li>
+                                <strong>{item.title}.</strong> <RichText text={item.text} />
+                            </li>
+                        )
+                    )}
+                </ul>
+            );
+        }
+
+        if (block.t === 'code') {
+            // A diff is marked up line by line so the accent can carry the
+            // sign, rather than leaving the reader to spot a - against a +.
+            if (block.lang === 'diff') {
+                return (
+                    <pre class="code-diff"><code>{block.code.split('\n').map((line, i) => (
+                        <span
+                            class={
+                                line.startsWith('+')
+                                    ? 'diff-add'
+                                    : line.startsWith('-')
+                                      ? 'diff-del'
+                                      : undefined
+                            }
+                        >
+                            {i > 0 && '\n'}{line}
+                        </span>
+                    ))}</code></pre>
+                );
+            }
+
+            return <pre><code>{block.code}</code></pre>;
+        }
+
+        if (block.t === 'note') {
+            return (
+                <div class="article-note">
+                    <Notice severity="secondary">
+                        <RichText text={block.text} />
+                    </Notice>
+                </div>
+            );
+        }
+
+        return (
+            <p>
+                <RichText text={block.text} />
+            </p>
+        );
+    })
+}

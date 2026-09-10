@@ -18,6 +18,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { projects } from '../src/data/projects.js';
+import { articles, kindLabels } from '../src/data/articles.js';
 import { site } from '../src/data/site.js';
 
 const run = promisify(execFile);
@@ -42,14 +43,16 @@ const card = ({ eyebrow, title, tagline, footer }) => `<!doctype html>
   }
   .rule { width: 72px; height: 3px; background: #12784d; margin: 28px 0 32px; }
   h1 {
-    font-size: ${title.length > 22 ? 88 : 112}px; font-weight: 700;
+    /* Three steps, so a project name and an article headline can share the
+       template without the long one running off the bottom of the card. */
+    font-size: ${title.length > 46 ? 60 : title.length > 22 ? 88 : 112}px; font-weight: 700;
     letter-spacing: -0.035em; line-height: 1.02;
   }
   p { font-size: 34px; line-height: 1.4; color: #5b636d; max-width: 880px; margin-top: 28px; }
   footer {
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
     font-size: 24px; color: #8b939d; border-top: 1px solid #e4e8ec; padding-top: 26px;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.02em; white-space: nowrap;
   }
   .mark { display: flex; align-items: center; gap: 12px; color: #14181d; font-weight: 650; }
   .dot { width: 9px; height: 9px; background: #12784d; }
@@ -106,7 +109,24 @@ const cards = [
             footer: `openvi.dev/projects/${p.slug}`
         })
     })),
+    // An article card leads with its title, so the eyebrow carries the register
+    // instead: whether the reader is opening a piece or a thread.
+    ...articles.map((a) => ({
+        out: path.join(root, `public/og/articles/${a.slug}.png`),
+        html: card({
+            eyebrow: kindLabels[a.kind].label,
+            title: a.title,
+            tagline: a.lede,
+            footer: 'openvi.dev/articles'
+        })
+    })),
     ...[
+        {
+            slug: 'articles',
+            eyebrow: 'Articles',
+            title: 'What we published',
+            tagline: 'Release notes, migration guidance, and the posts that opened the discussion. Every one of them links back to the original thread.'
+        },
         {
             slug: 'projects',
             eyebrow: 'Projects',

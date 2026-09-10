@@ -1,0 +1,169 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleBody from '../../components/ArticleBody.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import LinkButton from '../../components/openvue/LinkButton.vue';
+import {
+    articles,
+    articlesByDate,
+    kindLabels,
+    headingId,
+    readingTime,
+    formatDate
+} from '../../data/articles.js';
+import { site } from '../../data/site.js';
+
+export function getStaticPaths() {
+    return articles.map((article) => ({
+        params: { slug: article.slug },
+        props: { article }
+    }));
+}
+
+const { article } = Astro.props;
+const kind = kindLabels[article.kind];
+const minutes = readingTime(article);
+const others = articlesByDate.filter((a) => a.slug !== article.slug);
+
+const url = `${site.url}/articles/${article.slug}`;
+const image = `/og/articles/${article.slug}.png`;
+
+// Body headings, for the margin column. Derived rather than written out per
+// page, because unlike the prose pages the body here is already structured
+// data, so there is nothing to scrape.
+const contents = article.body
+    .filter((block) => block.t === 'h2')
+    .map((block) => ({ id: headingId(block.text), text: block.text }));
+
+// A reddit thread is a forum post and a dev.to piece is an article; saying so
+// is the difference between a result that shows a byline and one that shows a
+// comment count.
+const schema = [
+    {
+        '@context': 'https://schema.org',
+        '@type': article.kind === 'article' ? 'BlogPosting' : 'DiscussionForumPosting',
+        '@id': `${url}#post`,
+        headline: article.title,
+        description: article.metaDescription,
+        abstract: article.lede,
+        datePublished: article.date,
+        // Nothing has been revised since publication, so the two dates match.
+        dateModified: article.date,
+        inLanguage: 'en',
+        url,
+        mainEntityOfPage: { '@id': `${url}#webpage` },
+        image: new URL(image, site.url).href,
+        wordCount: minutes * 200,
+        keywords: article.tags,
+        articleSection: kind.label,
+        author: {
+            '@type': 'Person',
+            name: article.author,
+            affiliation: { '@id': `${site.url}/#organization` }
+        },
+        publisher: { '@id': `${site.url}/#organization` },
+        isPartOf: { '@id': `${site.url}/articles#blog` },
+        about: { '@id': `${site.url}/#organization` },
+        // The version that ran first, so a crawler can see the two are the same
+        // piece rather than reading one as a copy of the other.
+        sameAs: [article.source.url],
+        discussionUrl: article.kind === 'discussion' ? article.source.url : undefined
+    }
+];
+---
+
+<Base
+    title={article.title}
+    description={article.metaDescription}
+    image={image}
+    schema={schema}
+    pageType="ItemPage"
+    breadcrumbs={[
+        { name: 'Articles', path: '/articles' },
+        { name: article.title, path: `/articles/${article.slug}` }
+    ]}
+>
+    <section class="band hero-doc">
+        <div class="wrap">
+            <p class="breadcrumb"><a href="/articles">Articles</a> / {kind.label}</p>
+
+            <h1>{article.title}</h1>
+            <p class="lede">{article.lede}</p>
+
+            <p class="dateline">
+                <time datetime={article.date}>{formatDate(article.date)}</time>
+                <span aria-hidden="true">·</span>
+                <span>{article.author}</span>
+                <span aria-hidden="true">·</span>
+                <span>{minutes} min read</span>
+            </p>
+
+            <div class="button-row">
+                <LinkButton
+                    href={article.source.url}
+                    label={
+                        article.kind === 'discussion'
+                            ? `Join the thread on ${article.source.short}`
+                            : `Read on ${article.source.short}`
+                    }
+                    severity="secondary"
+                    outlined
+                    rel="noopener"
+                />
+            </div>
+        </div>
+    </section>
+
+    <section class="band">
+        <div class="wrap band-grid">
+            <nav class="doc-toc article-aside" aria-label="About this article">
+                <span class="label">Published</span>
+                <p class="article-fact">
+                    <a href={article.source.url} rel="noopener">{article.source.name}</a>
+                    <span class="muted small">{formatDate(article.date)}</span>
+                </p>
+
+                <span class="label">Tags</span>
+                <p class="article-fact article-tag-list">
+                    {article.tags.map((tag) => <span>{tag}</span>)}
+                </p>
+
+                {
+                    contents.length > 0 && (
+                        <>
+                            <span class="label">Contents</span>
+                            {contents.map((item) => (
+                                <a href={`#${item.id}`}>{item.text}</a>
+                            ))}
+                        </>
+                    )
+                }
+            </nav>
+
+            <article class="prose">
+                <ArticleBody blocks={article.body} />
+
+                <p class="article-origin small muted">
+                    {
+                        article.kind === 'discussion'
+                            ? 'Originally posted in '
+                            : 'Originally published on '
+                    }
+                    <a href={article.source.url} rel="noopener">{article.source.name}</a>
+                    {article.kind === 'discussion' ? ', where the replies are.' : '.'}
+                </p>
+            </article>
+        </div>
+    </section>
+
+    <section class="band" aria-labelledby="more-heading">
+        <div class="wrap">
+            <div>
+                <div class="section-head">
+                    <h2 id="more-heading">More articles</h2>
+                </div>
+                <ArticleList items={others} heading="h3" />
+            </div>
+        </div>
+    </section>
+</Base>

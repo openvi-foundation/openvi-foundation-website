@@ -2,14 +2,17 @@
 import Card from 'openvue/card';
 import Chip from 'openvue/chip';
 import Tag from 'openvue/tag';
+import LinkButton from './LinkButton.vue';
 
 /**
  * One row of the article registry, built from an OpenVue Card and rendered to
  * HTML at build time. No `client:*` directive, so this ships no JavaScript.
  *
- * Same three-column row as the project registry — identity left, description
- * middle, metadata right-aligned in the monospaced column — so a reader who has
- * seen /projects already knows how to read this list.
+ * Unlike the project registry, an article row is stacked rather than columned:
+ * the metadata runs as one line across the top, and the title, source and
+ * summary read straight down under it at full width. A headline and a summary
+ * squeezed into a third of the row is the thing that made this list hard to
+ * read, and prose is the whole point of this list.
  *
  * The formatted date and reading time are passed in rather than computed here:
  * the helpers live with the data, and the card should not own a second copy of
@@ -27,9 +30,29 @@ defineProps({
 </script>
 
 <template>
-    <Card class="registry-row">
+    <Card class="registry-row article-row">
         <template #title>
-            <component :is="headingLevel" class="registry-name">
+            <!-- Metadata first, as one line: what kind of piece this is, when
+                 it ran, how long it takes. The topic chips sit at the end of
+                 the same line and drop below it when there is no room. -->
+            <div class="article-meta">
+                <Tag
+                    :severity="article.kind === 'article' ? 'info' : 'secondary'"
+                    :title="kind.note"
+                >
+                    {{ kind.label }}
+                </Tag>
+                <span class="article-facts">
+                    <time :datetime="article.date">{{ dateLabel }}</time>
+                    <span aria-hidden="true">·</span>
+                    <span>{{ minutes }} min read</span>
+                </span>
+                <span class="article-tags">
+                    <Chip v-for="tag in article.tags.slice(0, 2)" :key="tag" :label="tag" />
+                </span>
+            </div>
+
+            <component :is="headingLevel" class="registry-name article-title">
                 <a :href="`/articles/${article.slug}`">{{ article.title }}</a>
             </component>
             <!-- Where it first ran. For the reddit posts that is also where the
@@ -42,29 +65,19 @@ defineProps({
 
         <template #content>
             <p class="registry-summary">{{ article.summary }}</p>
-            <div class="registry-links">
-                <a :href="`/articles/${article.slug}`">Read</a>
-                <a :href="article.source.url" rel="noopener">
-                    Original on {{ article.source.short }}
-                </a>
-            </div>
-        </template>
-
-        <template #footer>
-            <div class="registry-meta">
-                <Tag
-                    :severity="article.kind === 'article' ? 'info' : 'secondary'"
-                    :title="kind.note"
-                >
-                    {{ kind.label }}
-                </Tag>
-                <div class="registry-facts">
-                    <time :datetime="article.date">{{ dateLabel }}</time>
-                    <span>{{ minutes }} min read</span>
-                </div>
-                <div class="registry-facts registry-tags">
-                    <Chip v-for="tag in article.tags.slice(0, 2)" :key="tag" :label="tag" />
-                </div>
+            <!-- Two real buttons rather than two lines of small type: the row
+                 is the entry point to the piece, and the thing it wants you to
+                 do should look like something you can press. The filled one is
+                 the copy here; the outlined one leaves the site. -->
+            <div class="article-actions">
+                <LinkButton :href="`/articles/${article.slug}`" label="Read article" />
+                <LinkButton
+                    :href="article.source.url"
+                    :label="`Original on ${article.source.short}`"
+                    severity="secondary"
+                    outlined
+                    rel="noopener"
+                />
             </div>
         </template>
     </Card>

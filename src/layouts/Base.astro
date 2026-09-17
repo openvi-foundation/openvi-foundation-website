@@ -125,6 +125,11 @@ const breadcrumbList =
         : null;
 
 const year = new Date().getFullYear();
+
+// The home page opens on a dark masthead panel that runs up behind the header,
+// so the header there starts transparent and takes the panel's palette. Every
+// other page puts it straight onto the sheet.
+const overHero = Astro.url.pathname.replace(/\/$/, '') === '';
 ---
 
 <html lang="en" data-theme="light">
@@ -176,6 +181,29 @@ const year = new Date().getFullYear();
             }
         </script>
 
+        {/* The header starts transparent on the dark home panel and takes a
+            ground the moment the page moves. Emitted on every page and a no-op
+            where that header is absent: inside an `is:inline` script the
+            children are written out verbatim, so a wrapping expression would
+            put its own braces and backticks into the page and the body would
+            never run. */}
+        <script is:inline>
+            (function () {
+                function sync() {
+                    var header = document.querySelector('.site-header-over');
+                    if (!header) return;
+                    var y = window.scrollY || document.documentElement.scrollTop || 0;
+                    header.classList.toggle('is-scrolled', y > 8);
+                }
+
+                addEventListener('scroll', sync, { passive: true });
+                addEventListener('resize', sync);
+                addEventListener('DOMContentLoaded', sync);
+                addEventListener('load', sync);
+                sync();
+            })();
+        </script>
+
         <script type="application/ld+json" set:html={JSON.stringify(organization)} />
         <script type="application/ld+json" set:html={JSON.stringify(website)} />
         <script type="application/ld+json" set:html={JSON.stringify(webPage)} />
@@ -190,7 +218,7 @@ const year = new Date().getFullYear();
     <body>
         <a class="skip-link" href="#main">Skip to content</a>
 
-        <header class="site-header">
+        <header class:list={['site-header', overHero && 'site-header-over']}>
             <div class="wrap">
                 <a class="brand" href="/">
                     <Logo />
@@ -227,7 +255,6 @@ const year = new Date().getFullYear();
                                 />
                             ))
                         }
-                        <LinkButton href={site.docs} label="Docs" severity="secondary" text rel="noopener" />
                     </nav>
 
                     <div class="nav-actions">
@@ -238,6 +265,19 @@ const year = new Date().getFullYear();
                             <Icon name="discord" />
                         </IconLinkButton>
                         <ThemeToggle />
+
+                        {/* The only call to action in the bar: everything else
+                            here is navigation within the site, this leaves it. */}
+                        <LinkButton
+                            class="nav-cta"
+                            href={site.docs}
+                            label="Docs"
+                            severity="secondary"
+                            outlined
+                            rel="noopener"
+                        >
+                            <Icon name="arrow-right" />
+                        </LinkButton>
                     </div>
                 </div>
             </div>

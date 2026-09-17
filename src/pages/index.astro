@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ProjectList from '../components/ProjectList.astro';
 import Icon from '../components/Icon.astro';
+import PixelBlast from '../components/vendor/PixelBlast.vue';
 import LinkButton from '../components/openvue/LinkButton.vue';
 import FeatureCard from '../components/openvue/FeatureCard.vue';
 import Callout from '../components/openvue/Callout.vue';
@@ -59,6 +60,24 @@ const rationale = [
 
 <Base title={null} description={description} schema={schema}>
     <section class="band hero">
+        {/* Decoration and nothing else: it carries no text, it is hydrated
+            late, and the masthead reads the same without it. */}
+        <div class="hero-field" aria-hidden="true">
+            <PixelBlast
+                client:idle
+                variant="square"
+                color="#45c48c"
+                pixelSize={4}
+                patternScale={2.6}
+                patternDensity={1.1}
+                pixelSizeJitter={0.4}
+                edgeFade={0.6}
+                speed={0.35}
+                enableRipples={false}
+                transparent
+            />
+        </div>
+
         <div class="wrap">
             <h1>Maintained, not archived</h1>
             <div class="hero-rule"></div>
@@ -81,7 +100,6 @@ const rationale = [
                     <Icon name="github" />
                 </LinkButton>
             </div>
-
         </div>
     </section>
 
@@ -96,37 +114,22 @@ const rationale = [
                     </p>
                 </div>
 
-                <table class="transpose">
-                    <thead>
-                        <tr>
-                            <th scope="col">Upstream</th>
-                            <th scope="col" class="col-arrow"><span class="visually-hidden">becomes</span></th>
-                            <th scope="col">Maintained here</th>
-                            <th scope="col" class="col-state">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            projects.map((p) => (
-                                <tr>
-                                    <td class="col-from">
-                                        <span class="name">{p.continues}</span>
-                                    </td>
-                                    <td class="col-arrow" aria-hidden="true">
-                                        &rarr;
-                                    </td>
-                                    <td class="col-to">
-                                        <a href={`/projects/${p.slug}`}>{p.name}</a>
-                                        <span class="muted"> v{p.version}</span>
-                                    </td>
-                                    <td class="col-state">
-                                        <span class="state state-active">Maintained</span>
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
+                <ul class="succession">
+                    {
+                        projects.map((p) => (
+                            <li>
+                                <span class="from">{p.continues}</span>
+                                <span class="arrow" aria-hidden="true">
+                                    &rarr;
+                                </span>
+                                <span class="to">
+                                    <a href={`/projects/${p.slug}`}>{p.name}</a>
+                                    <span class="version">v{p.version}</span>
+                                </span>
+                            </li>
+                        ))
+                    }
+                </ul>
             </div>
         </div>
     </section>

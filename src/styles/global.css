@@ -59,6 +59,12 @@
     --label-gap: 3rem;
 
     --header-h: 3.75rem;
+
+    /* Card surfaces. Depth comes from tone, not shadow: a filled panel sits on
+       the page because it is a different value, and the corners stay square
+       like everything else here. */
+    --surface: #f4f6f8;
+    --surface-hover: #eceff3;
 }
 
 :root[data-theme='dark'] {
@@ -79,6 +85,11 @@
     --accent-soft: #13271f;
     --archived: #d3866b;
     --archived-soft: #261914;
+
+    /* Dark raises the surface above the page instead of lowering it: on a dark
+       ground, lighter reads as nearer. */
+    --surface: #191d22;
+    --surface-hover: #1f242a;
 }
 
 *,
@@ -177,6 +188,15 @@ body {
     backdrop-filter: saturate(1.4) blur(10px);
 }
 
+/* The translucent bar relies on the blur behind it to stay readable. Where
+   backdrop-filter is unavailable the tint alone is not enough, so the bar takes
+   a solid ground instead of letting the document show through it. */
+@supports not (backdrop-filter: blur(1px)) {
+    .site-header {
+        background: var(--bg);
+    }
+}
+
 .site-header .wrap {
     display: flex;
     align-items: center;
@@ -234,6 +254,21 @@ body {
     display: flex;
     align-items: center;
     gap: 0.125rem;
+}
+
+/* Docs is the one link in the bar that leaves the site, so it is the one
+   control in it that looks like a button. It sits after the icons, at the end
+   of the row, with a little air in front of it. */
+.nav-cta {
+    margin-left: 0.5rem;
+    font-size: 0.8125rem;
+}
+
+.nav-cta .p-button-icon,
+.nav-cta svg {
+    order: 1;
+    width: 0.8em;
+    height: 0.8em;
 }
 
 /* Hamburger. Hidden on desktop, where the nav is always visible. */
@@ -310,11 +345,12 @@ body {
         margin-right: auto;
     }
 
+    /* A touch target, so it is sized like one. */
     .nav-toggle {
         display: inline-grid;
         place-items: center;
-        width: 2rem;
-        height: 2rem;
+        width: 2.5rem;
+        height: 2.5rem;
         border: 1px solid var(--rule-strong);
         background: transparent;
         color: var(--text);
@@ -326,22 +362,26 @@ body {
         outline-offset: 2px;
     }
 
-    /* The panel drops out of the bar's flow and hangs off the bottom edge of
-       the header instead. The bar keeps a fixed height whether the menu is
-       open or shut, so opening it never reflows or shifts the header. */
+    /* The open menu is a sheet over the page rather than a flap hanging off
+       the bar: below the header there is not enough room for the panel and the
+       document both, and a panel that stops halfway leaves page content sitting
+       under the links. It fills everything below the bar instead.
+
+       The header drops its backdrop-filter at this width, so nothing here
+       establishes a containing block and the panel pins to the viewport. */
     .primary-nav {
         display: none;
-        position: absolute;
-        top: 100%;
+        position: fixed;
+        top: var(--header-h);
         left: 0;
         right: 0;
+        bottom: 0;
         flex-direction: column;
         gap: 0;
-        padding: 0 var(--gutter) 1rem;
+        padding: 0.5rem var(--gutter) calc(1.25rem + env(safe-area-inset-bottom));
         background: var(--bg);
-        border-bottom: 1px solid var(--rule-strong);
-        /* Long menus scroll inside the panel rather than off the screen. */
-        max-height: calc(100dvh - var(--header-h));
+        /* Long menus scroll inside the sheet, and the scroll stops there
+           rather than carrying on into the page underneath. */
         overflow-y: auto;
         overscroll-behavior: contain;
     }
@@ -350,19 +390,39 @@ body {
         display: flex;
     }
 
+    /* Nothing moves behind the open sheet. */
+    html:has(.nav-toggle-input:checked) {
+        overflow: hidden;
+    }
+
     .nav-links {
         flex-direction: column;
         align-items: stretch;
         gap: 0;
         margin: 0;
-        padding-top: 0.5rem;
     }
 
+    /* Each entry is a full-width row on a hairline, sized for a thumb rather
+       than a cursor. */
+    .nav-links .p-button {
+        justify-content: flex-start;
+        min-height: 3.25rem;
+        padding-left: 0;
+        padding-right: 0;
+        font-size: 1rem;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    /* The actions sit at the foot of the sheet, not directly under the last
+       link, so the two groups cannot be mistaken for one list. */
     .nav-actions {
         gap: 0.25rem;
-        padding-top: 0.75rem;
-        margin-top: 0.5rem;
-        border-top: 1px solid var(--rule);
+        margin-top: auto;
+        padding-top: 1.25rem;
+    }
+
+    .nav-cta {
+        margin-left: auto;
     }
 }
 
@@ -517,8 +577,118 @@ hr {
 
 /* ---------- Hero ---------- */
 
+/* The masthead and the footer are dark panels in both themes: the document is
+   a white sheet held between them, and on the home page the header sits on the
+   top panel rather than on a sheet of its own. The glow the page opens on only
+   exists against a dark ground — on white the same effect is a grey smear — so
+   rather than weaken it, the band carries its own sheet and the document
+   resumes on white underneath.
+
+   Both surfaces take the same palette. The document's own tokens are enough for
+   everything this file styles, but OpenVue's are not: its `--p-*` values are
+   declared on :root as `var(--text)` and friends, and a custom property
+   resolves its own var()s where it is declared, so redeclaring --text here
+   never reaches them. The handful the masthead actually uses are therefore
+   restated with literal values. */
+.hero,
+.site-footer,
+.site-header-over:not(.is-scrolled):not(:has(.nav-toggle-input:checked)) {
+    --bg: #0b0f13;
+    --bg-subtle: #141a20;
+    --bg-inset: #1c2127;
+    --text: #f3f6f8;
+    --text-muted: #b3bdc7;
+    --text-faint: #7d8792;
+
+    --rule: #1d252c;
+    --rule-strong: #3a464f;
+
+    --accent: #45c48c;
+    --accent-hover: #6fd8a8;
+    --accent-soft: #13271f;
+
+    --p-primary-color: #45c48c;
+    --p-primary-hover-color: #6fd8a8;
+    --p-primary-active-color: #6fd8a8;
+    --p-primary-contrast-color: #0b0f13;
+    --p-text-color: #f3f6f8;
+    --p-text-muted-color: #b3bdc7;
+    --p-content-hover-background: rgba(255, 255, 255, 0.07);
+
+    /* The leaf tokens, not just --p-primary-*: OpenVue's own :root resolves
+       those into the button's before this rule is ever consulted. */
+    --p-button-primary-background: #45c48c;
+    --p-button-primary-border-color: #45c48c;
+    --p-button-primary-color: #06231a;
+    --p-button-primary-hover-background: #6fd8a8;
+    --p-button-primary-hover-border-color: #6fd8a8;
+    --p-button-primary-hover-color: #06231a;
+    --p-button-primary-active-background: #6fd8a8;
+    --p-button-primary-active-border-color: #6fd8a8;
+    --p-button-primary-active-color: #06231a;
+
+    --p-button-secondary-color: #b3bdc7;
+    --p-button-secondary-hover-background: rgba(255, 255, 255, 0.07);
+    --p-button-secondary-hover-color: #f3f6f8;
+    --p-button-secondary-active-background: rgba(255, 255, 255, 0.12);
+    --p-button-secondary-active-color: #f3f6f8;
+    --p-button-outlined-secondary-border-color: #3a464f;
+    --p-button-outlined-secondary-color: #f3f6f8;
+    --p-button-outlined-secondary-hover-background: rgba(255, 255, 255, 0.07);
+    --p-button-text-secondary-color: #b3bdc7;
+    --p-button-text-secondary-hover-background: rgba(255, 255, 255, 0.07);
+    --p-button-text-secondary-hover-color: #f3f6f8;
+
+    color: var(--text);
+}
+
+/* Over the panel the header has no ground of its own; it takes one back the
+   moment the panel is scrolled past — or the moment the mobile menu opens,
+   since the sheet below it carries the document's own palette and the bar has
+   to match it. */
+.site-header-over:not(.is-scrolled):not(:has(.nav-toggle-input:checked)) {
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom-color: transparent;
+}
+
+/* Once the page has moved, the bar is opaque rather than tinted: the document
+   scrolling under it must not read through it at all. */
+.site-header-over.is-scrolled {
+    background: var(--bg);
+}
+
 .hero {
-    padding: clamp(3rem, 1rem + 8vw, 6rem) 0 3rem;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--bg);
+    border-bottom: 1px solid var(--rule);
+    /* Pulled up under the sticky header so the panel runs to the top of the
+       window; the padding puts it back, so the copy still clears the nav. */
+    margin-top: calc((var(--header-h) + 1px) * -1);
+    padding: calc(var(--header-h) + 1px + clamp(3rem, 1rem + 7vw, 5.5rem)) 0
+        clamp(3.5rem, 1rem + 6vw, 5.5rem);
+}
+
+/* A static wash under the canvas, so the panel already reads right in the first
+   frame — and still reads right if the canvas never arrives. */
+.hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+        radial-gradient(
+            ellipse 50% 60% at 78% 0%,
+            color-mix(in srgb, var(--accent) 18%, transparent) 0%,
+            transparent 70%
+        ),
+        radial-gradient(
+            ellipse 60% 50% at 10% 0%,
+            color-mix(in srgb, var(--accent) 7%, transparent) 0%,
+            transparent 72%
+        );
 }
 
 /* Inner pages get a shorter masthead than the home page: a title, a lede and
@@ -553,6 +723,31 @@ hr {
 
 .hero .lede {
     max-width: 34rem;
+    color: var(--text-muted);
+}
+
+/* The pixel field. It covers the panel and is masked back before the copy, so
+   the copy sits on clear ground, and it is sized in CSS so nothing reflows
+   when it hydrates. The static wash above stays underneath: it is what the
+   panel looks like in the first frame, and if WebGL never arrives. */
+.hero-field {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.85;
+    -webkit-mask-image: radial-gradient(
+        ellipse 62% 105% at 76% 0%,
+        #000 0%,
+        rgba(0, 0, 0, 0.55) 50%,
+        transparent 92%
+    );
+    mask-image: radial-gradient(
+        ellipse 62% 105% at 76% 0%,
+        #000 0%,
+        rgba(0, 0, 0, 0.55) 50%,
+        transparent 92%
+    );
 }
 
 .hero-actions {
@@ -562,180 +757,76 @@ hr {
     margin-top: 2rem;
 }
 
-/* ---------- Transposition table ---------- */
+/* ---------- Succession list ---------- */
 
-/* The site's whole thesis in one figure: what was archived on the left, what
-   maintains it on the right. It is data, so it is a table. */
-.transpose {
-    width: 100%;
-    border-collapse: collapse;
-    font-variant-numeric: tabular-nums;
-    font-size: 0.875rem;
+/* The site's whole thesis in one figure: what was archived, and what maintains
+   it now. A plain list on rules — no headers, no badges. Every line has the
+   same status, so stating it per row would say nothing. */
+.succession {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.9375rem;
 }
 
-.transpose th {
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-    text-align: left;
-    padding: 0 0 0.65rem;
-    border-bottom: 1px solid var(--rule-strong);
-    white-space: nowrap;
-}
-
-.transpose td {
-    padding: 0.75rem 0;
+.succession li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.7rem 0;
     border-bottom: 1px solid var(--rule);
-    vertical-align: baseline;
 }
 
-.transpose tr:last-child td {
+.succession li:last-child {
     border-bottom: 0;
 }
 
-.transpose .col-from {
-    color: var(--text-muted);
-}
-
 /* Struck through, because the upstream release is the end of that line. */
-.transpose .col-from .name {
+.succession .from {
+    color: var(--text-muted);
     text-decoration: line-through;
     text-decoration-color: var(--archived);
     text-decoration-thickness: 1px;
 }
 
-.transpose .col-arrow,
-.transpose th.col-arrow {
-    width: 3rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+.succession .arrow {
     color: var(--text-faint);
-    text-align: center;
 }
 
-.transpose .col-to a {
+.succession .to a {
     font-weight: 500;
     text-decoration: none;
 }
 
-.transpose .col-to a:hover {
+.succession .to a:hover {
     text-decoration: underline;
     text-underline-offset: 3px;
 }
 
-.transpose .col-state {
-    text-align: right;
-    white-space: nowrap;
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-}
-
-/* A status marker: a small square, the way an indicator reads on an instrument
-   panel. Round would read as a bullet. */
-.state {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    white-space: nowrap;
-}
-
-.state::before {
-    content: '';
-    width: 0.4rem;
-    height: 0.4rem;
-    flex: none;
-    background: currentColor;
-}
-
-.state-active {
-    color: var(--accent);
-}
-
-.state-archived {
-    color: var(--archived);
-}
-
-@media (max-width: 46rem) {
-    /* The four-column comparison does not survive a phone. Each pair becomes
-       two stacked lines with the arrow turned down the page. */
-    .transpose,
-    .transpose tbody,
-    .transpose tr,
-    .transpose td {
-        display: block;
-        width: auto;
-    }
-
-    .transpose thead {
-        display: none;
-    }
-
-    .transpose tr {
-        padding: 0.9rem 0;
-        border-bottom: 1px solid var(--rule);
-    }
-
-    .transpose td {
-        padding: 0;
-        border: 0;
-    }
-
-    .transpose .col-arrow {
-        text-align: left;
-        padding: 0.15rem 0;
-    }
-
-    .transpose .col-state {
-        text-align: left;
-        padding-top: 0.35rem;
-    }
+.succession .version {
+    margin-left: 0.4rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
 }
 
 /* ---------- Registry ---------- */
 
-/* The project list. Rows on rules, with the identity on the left, the
+/* The project list. Each row is a card: the identity on the left, the
    description in the middle and the release metadata right-aligned in the
-   monospaced column where numbers belong. */
+   column where numbers belong. Each row is a filled panel and the 1px gap lets
+   the page show through as the divider, so the list reads as one slab of
+   stacked panels rather than a set of floating boxes. */
 .registry {
     list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
     margin: 0;
     padding: 0;
-    border-top: 1px solid var(--rule-strong);
 }
 
 .registry > li {
     margin: 0;
-    border-bottom: 1px solid var(--rule);
-}
-
-.registry-head {
-    display: grid;
-    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 10rem);
-    gap: 0 2rem;
-    padding-bottom: 0.65rem;
-    border-bottom: 1px solid var(--rule-strong);
-}
-
-.registry-head span {
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-faint);
-}
-
-.registry-head span:last-child {
-    text-align: right;
-}
-
-.registry-head + .registry {
-    border-top: 0;
 }
 
 .registry-name {
@@ -805,12 +896,6 @@ hr {
     display: flex;
     flex-direction: column;
     gap: 0.15rem;
-}
-
-@media (max-width: 62rem) {
-    .registry-head {
-        display: none;
-    }
 }
 
 /* ---------- Document pages ---------- */
@@ -964,10 +1049,9 @@ hr {
     border-top: 1px solid var(--rule-strong);
 }
 
+/* The answer always sits under its question, at every width: a question and
+   its answer are one thing read in sequence, not two columns compared. */
 .faq > div {
-    display: grid;
-    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
-    gap: 0 3rem;
     padding: 1.5rem 0;
     border-bottom: 1px solid var(--rule);
 }
@@ -977,25 +1061,22 @@ hr {
     line-height: 1.5;
 }
 
+/* Full wrapper width, not the prose measure: these are short answers on rules,
+   and holding them to 40rem left the right half of every row empty. */
 .faq dd {
-    margin: 0;
+    margin: 0.4rem 0 0;
     color: var(--text-muted);
     font-size: 0.9375rem;
-    max-width: var(--measure);
-}
-
-@media (max-width: 60rem) {
-    .faq > div {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 0.4rem;
-    }
 }
 
 /* ---------- Footer ---------- */
 
+/* The closing panel. It takes the masthead's palette, so the page ends on the
+   same ground it opened on and the document reads as a sheet between the two.
+   No top rule: the change of ground is the division. */
 .site-footer {
-    border-top: 1px solid var(--rule-strong);
-    padding: 3rem 0 2rem;
+    background: var(--bg);
+    padding: 3.5rem 0 2rem;
     font-size: 0.875rem;
     color: var(--text-muted);
 }
@@ -1091,9 +1172,11 @@ hr {
 
 /* ---------- Articles ---------- */
 
-/* Articles reuse the project registry: same three columns, same rules, so the
-   two lists read as one system. Only the pieces the projects have no equivalent
-   for are defined here. */
+/* Articles share the registry's surface, spacing and hover with the project
+   list, but not its columns: a headline and a summary squeezed into a third of
+   the row is what made this list hard to read. An article row stacks instead —
+   one metadata line across the top, then the title and the summary running the
+   full width underneath. */
 
 /* The source is a fact about the row, not a link out of it: the whole row
    already goes somewhere, and a second target inside the title block would
@@ -1102,11 +1185,87 @@ hr {
     color: var(--text);
 }
 
-.registry-tags {
-    flex-direction: row;
+/* The metadata line: kind, then the quiet facts, then the topic chips pushed
+   to the end. Everything wraps, so at narrow widths the chips drop to their own
+   line instead of squeezing the date into a column two words wide. */
+.article-meta {
+    display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.9rem;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-faint);
+}
+
+.article-facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem;
+    white-space: nowrap;
+}
+
+/* Chips sit at the end of the line on a wide row and wrap to the left under it
+   on a narrow one, which is why this is `margin-left: auto` rather than
+   `justify-content: space-between` on the parent. */
+.article-tags {
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.35rem;
+    margin-left: auto;
+}
+
+/* Chips are bare text elsewhere on the site. On this line they sit next to the
+   date and the reading time, so they need an edge to read as topics rather
+   than as two more facts. */
+.article-tags .p-chip {
+    padding: 0.15rem 0.5rem;
+    background: var(--bg-subtle);
+    font-size: 0.6875rem;
+    line-height: 1.5;
+}
+
+@media (max-width: 30rem) {
+    .article-tags {
+        margin-left: 0;
+    }
+}
+
+/* The row's call to action. Buttons, not links: at the foot of a card the
+   reader is deciding whether to open the piece, and that needs a target, not a
+   footnote. They wrap to a stack on a narrow row and stretch to the full width
+   there, where a half-width button next to an empty half reads as unfinished. */
+.article-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+}
+
+@media (max-width: 30rem) {
+    .article-actions {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .article-actions .p-button {
+        justify-content: center;
+    }
+}
+
+/* The title now owns a full-width line, so it can carry the size it should
+   have had. */
+.article-title {
+    font-size: 1.5rem;
+    max-width: 46ch;
+}
+
+@media (max-width: 40rem) {
+    .article-title {
+        font-size: 1.25rem;
+    }
 }
 
 /* Date, byline and reading time under the lede. Separated by middots rather
@@ -1442,10 +1601,15 @@ hr {
 }
 
 /* Cards used as registry rows: the body becomes the row's three-column grid,
-   and the rules on the list item do the separating. */
+   and the card carries its own surface. */
 .registry .p-card,
 .registry .p-card-body {
     height: 100%;
+}
+
+.registry .p-card {
+    background: var(--surface);
+    transition: background-color 0.15s;
 }
 
 .registry .p-card-body {
@@ -1453,8 +1617,7 @@ hr {
     grid-template-columns: minmax(0, 15rem) minmax(0, 1fr) minmax(0, 10rem);
     gap: 0 2rem;
     align-items: start;
-    padding: 1.6rem 0;
-    transition: background-color 0.12s;
+    padding: 1.5rem 1.75rem;
 }
 
 .registry .p-card-caption,
@@ -1464,11 +1627,36 @@ hr {
     margin: 0;
 }
 
-/* The row highlights as one object, bleeding slightly past the text so the tint
-   reads as a band across the rule rather than a box drawn round the content. */
-.registry > li:hover .p-card-body {
-    background: var(--bg-subtle);
-    box-shadow: -0.75rem 0 0 var(--bg-subtle), 0.75rem 0 0 var(--bg-subtle);
+/* Article rows override the grid: one column, and the summary is measured for
+   reading rather than stretched across the row. */
+.registry .article-row .p-card-body {
+    display: block;
+    padding: 1.75rem;
+}
+
+.registry .article-row .registry-summary {
+    max-width: 68ch;
+    margin-top: 0.9rem;
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+@media (max-width: 40rem) {
+    .registry .article-row .p-card-body {
+        padding: 1.25rem;
+    }
+}
+
+/* Hover deepens the panel rather than moving it: the whole card is one
+   object, and a step in value says so without anything floating. */
+.registry > li:hover .p-card {
+    background: var(--surface-hover);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .registry .p-card {
+        transition: none;
+    }
 }
 
 .registry > li:hover .registry-name a {
@@ -1479,6 +1667,7 @@ hr {
     .registry .p-card-body {
         grid-template-columns: minmax(0, 1fr);
         gap: 1rem;
+        padding: 1.25rem 1.25rem;
     }
 
     .registry .p-card-footer {

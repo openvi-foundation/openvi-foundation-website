@@ -22,11 +22,15 @@
  *   { t: 'ul',   items }             string, or { title, text } for a lead-in
  *   { t: 'code', code, lang }        lang 'diff' colours the +/- lines
  *   { t: 'note', text }              an aside, set apart from the argument
+ *   { t: 'figure', src, alt, width, height, caption?, href? }
+ *                                    a screenshot; width/height are the file's
+ *                                    own pixels, so the page reserves the space
  */
 
 const sources = {
     devto: { name: 'DEV Community', short: 'dev.to' },
-    vuejs: { name: 'r/vuejs', short: 'reddit' }
+    vuejs: { name: 'r/vuejs', short: 'reddit' },
+    discussions: { name: 'OpenVi Foundation discussions', short: 'GitHub' }
 };
 
 export const articles = [
@@ -221,6 +225,80 @@ export const articles = [
                     'GitHub: [openvi-foundation/openvue](https://github.com/openvi-foundation/openvue)',
                     'Migration from PrimeVue: [openvue.dev/migrate](https://openvue.dev/migrate/)'
                 ]
+            }
+        ]
+    },
+    {
+        slug: 'deni-free-mit-admin-dashboard-template',
+        title: 'Deni, a free MIT admin dashboard template for OpenVue',
+        kind: 'discussion',
+        date: '2026-09-17',
+        author: 'Nikola Jevrić',
+        source: {
+            ...sources.discussions,
+            url: 'https://github.com/orgs/openvi-foundation/discussions/660'
+        },
+        tags: ['Template', 'Admin', 'MIT', 'TypeScript'],
+        lede: 'Deni is a free, MIT-licensed admin dashboard built with OpenVue, Vue 3, TypeScript and Vite. Not a landing page with a chart on it: the screens an admin app actually needs, with the loading and empty states already written.',
+        summary:
+            'A free, MIT-licensed admin dashboard template built on OpenVue, Vue 3, TypeScript and Vite, with CRUD screens, a theming engine, and the loading and empty states already written.',
+        metaDescription:
+            'Deni is a free MIT admin dashboard template built with OpenVue, Vue 3, TypeScript and Vite. Demo, repository, and what it ships with.',
+        body: [
+            {
+                t: 'p',
+                text: "We've added Deni, a free, MIT-licensed admin dashboard template built with OpenVue, Vue 3, TypeScript and Vite."
+            },
+            {
+                t: 'figure',
+                src: '/articles/deni-admin-dashboard.png',
+                alt: 'The Deni dashboard in its light theme: a sidebar of admin sections, statistic tiles for revenue, orders, average order and active customers, revenue and orders charts, and a table of recent orders.',
+                width: 1907,
+                height: 916,
+                href: 'https://deni.openvue.dev/',
+                caption: 'The dashboard screen. [Open the live demo](https://deni.openvue.dev/).'
+            },
+            {
+                t: 'p',
+                text: "It's a real starting point for admin apps rather than a screenshot of one. The screens are there, and so are the states a demo usually skips."
+            },
+            { t: 'h2', text: 'What it ships with' },
+            {
+                t: 'ul',
+                items: [
+                    {
+                        title: 'CRUD screens',
+                        text: 'Products, orders and customers, each with list, detail and edit views.'
+                    },
+                    {
+                        title: 'The rest of the app',
+                        text: 'Dashboard, analytics, calendar, inbox, forms, authentication and error pages.'
+                    },
+                    {
+                        title: 'Loading and empty states',
+                        text: 'Written for every screen, because those are the states a template normally leaves you to fill in against a real API.'
+                    },
+                    {
+                        title: 'A theming engine',
+                        text: 'Light, dim and dark, four presets, and custom palettes.'
+                    },
+                    {
+                        title: 'A modular architecture',
+                        text: 'Structured so swapping the mock data for a real backend is a change in one layer.'
+                    }
+                ]
+            },
+            { t: 'h2', text: 'Try it' },
+            {
+                t: 'ul',
+                items: [
+                    'Demo: [deni.openvue.dev](https://deni.openvue.dev/)',
+                    'Repository: [openvi-foundation/deni](https://github.com/openvi-foundation/deni)'
+                ]
+            },
+            {
+                t: 'p',
+                text: 'Give it a try and let us know what you think. The thread is open, and issues on the repository are the fastest way to get something fixed.'
             }
         ]
     }

@@ -1314,6 +1314,47 @@ hr {
     color: var(--text-muted);
 }
 
+/* A screenshot in the body. Ruled rather than shadowed, like every other
+   surface on the site, and allowed past the prose measure: a dashboard
+   screenshot at 66 characters wide is a thumbnail of a thing you cannot read.
+   The intrinsic width/height on the img reserve the space before it loads. */
+.article-figure {
+    margin: 2rem 0;
+    /* Wider than the prose measure, up to whatever the body column actually
+       has: the page is 76rem with a 9rem margin column beside the article, so
+       there is room to the right of a 40rem line of text, and a dashboard
+       screenshot needs it. The calc is that column, and the 1rem is slack for
+       a scrollbar so the page never scrolls sideways to reach the figure. */
+    width: min(
+        52rem,
+        calc(100vw - 2 * var(--gutter) - var(--label-col) - var(--label-gap) - 1rem)
+    );
+    min-width: 100%;
+}
+
+.article-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    background: var(--surface);
+}
+
+.article-figure a {
+    display: block;
+}
+
+.article-figure a:hover img {
+    border-color: var(--accent);
+}
+
+.article-figure figcaption {
+    margin-top: 0.65rem;
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+}
+
 /* The disclaimer at the foot of a piece, set as a Message so it reads as an
    aside rather than as the last paragraph of the argument. */
 .article-note {

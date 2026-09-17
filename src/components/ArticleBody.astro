@@ -62,6 +62,39 @@ const { blocks } = Astro.props;
             return <pre><code>{block.code}</code></pre>;
         }
 
+        if (block.t === 'figure') {
+            // `width`/`height` are the file's own pixel dimensions, not a
+            // display size: they give the browser the aspect ratio so the
+            // paragraph under the image does not jump when it loads.
+            const picture = (
+                <img
+                    src={block.src}
+                    alt={block.alt}
+                    width={block.width}
+                    height={block.height}
+                    loading="lazy"
+                    decoding="async"
+                />
+            );
+
+            return (
+                <figure class="article-figure">
+                    {block.href ? (
+                        <a href={block.href} rel="noopener">
+                            {picture}
+                        </a>
+                    ) : (
+                        picture
+                    )}
+                    {block.caption && (
+                        <figcaption>
+                            <RichText text={block.caption} />
+                        </figcaption>
+                    )}
+                </figure>
+            );
+        }
+
         if (block.t === 'note') {
             return (
                 <div class="article-note">

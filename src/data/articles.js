@@ -102,6 +102,100 @@ export const articles = [
         ]
     },
     {
+        slug: 'openvue-1-0-is-officially-out',
+        title: "OpenVue 1.0 is officially out, and here's what's next: Volt, Vapor & 2.0",
+        kind: 'discussion',
+        // TODO: confirm against the reddit post timestamp.
+        date: '2026-09-28',
+        author: 'Nikola Jevrić',
+        source: {
+            ...sources.vuejs,
+            url: 'https://www.reddit.com/r/vuejs/comments/1wsk2vs/openvue_10_is_officially_out_and_heres_whats_next/'
+        },
+        tags: ['Release', 'Roadmap', 'Volt', 'Vapor'],
+        lede: 'The 1.0 post: what landed since the release candidate, what 1.1 is focused on, and where 2.0 is headed with Vue Vapor and a TypeScript-first core.',
+        summary:
+            'OpenVue 1.0.0 is on npm, with TreeTable filtering, a free Theme Designer and the Deni template. Next up: Volt, a new default theme, more templates, and a Vapor-ready 2.0.',
+        metaDescription:
+            'OpenVue 1.0 is out: TreeTable filtering, a free Theme Designer, Deni. Next: Volt and a new theme in 1.1, Vue Vapor and TypeScript-first in 2.0.',
+        body: [
+            {
+                t: 'p',
+                text: 'Quick update for everyone following the project: OpenVue 1.0.0 is officially live on npm. For context if you missed the previous threads: OpenVue is an MIT licensed fork of PrimeVue 4.5.5, maintained under the OpenVi Foundation.'
+            },
+            { t: 'p', text: "Since the RC post, here's what landed in 1.0:" },
+            {
+                t: 'ul',
+                items: [
+                    {
+                        title: 'TreeTable filtering',
+                        text: 'Added row filters, filter menus, and multi constraint rules matching DataTable.'
+                    },
+                    {
+                        title: 'Theme Designer',
+                        text: 'Integrated a visual editor to tweak primitive, semantic, and component tokens and export theme presets. Fully free, with no accounts or license keys.'
+                    },
+                    {
+                        title: 'Deni',
+                        text: 'Released our [first free admin dashboard template](/articles/deni-free-mit-admin-dashboard-template) built with OpenVue.'
+                    },
+                    {
+                        title: 'DataTable fixes',
+                        text: 'Fixed an issue with persisted column widths when toggling columns dynamically.'
+                    }
+                ]
+            },
+            {
+                t: 'p',
+                text: 'Plus plenty of smaller bug fixes and improvements across the library and showcase. Full changelog: [CHANGELOG.md](https://github.com/openvi-foundation/openvue/blob/master/CHANGELOG.md)'
+            },
+            { t: 'h2', text: 'OpenVue 1.1' },
+            { t: 'p', text: "We're currently focused on:" },
+            {
+                t: 'ul',
+                items: [
+                    {
+                        title: 'Volt',
+                        text: 'Bringing source based, Tailwind oriented components back into the OpenVue ecosystem.'
+                    },
+                    {
+                        title: 'A new default theme',
+                        text: 'Giving OpenVue its own visual identity rather than relying entirely on the existing themes.'
+                    },
+                    {
+                        title: 'More free templates',
+                        text: 'Expanding on Deni with additional templates and application layouts.'
+                    }
+                ]
+            },
+            { t: 'h2', text: 'OpenVue 2.0' },
+            {
+                t: 'p',
+                text: "The long term goal for 2.0 is to modernize the internals around Vue Vapor, Composition API, and a TypeScript first architecture. We're keeping VDOM and Options API support, so this isn't about abandoning the existing Vue ecosystem. Instead, 2.0 will be the milestone where we can clean up and modernize the internals under the hood."
+            },
+            {
+                t: 'p',
+                text: "There's already a [community discussion](https://github.com/orgs/openvi-foundation/discussions/644) around this direction if you want to join in or see what people are suggesting."
+            },
+            {
+                t: 'p',
+                text: "We're still a relatively small project, so community feedback matters a lot. If you're using OpenVue, testing it, or just following the project, we'd love to hear what you'd like to see in 1.1, especially around Volt, themes, templates and the component backlog."
+            },
+            { t: 'h2', text: 'Links' },
+            {
+                t: 'ul',
+                items: [
+                    '[OpenVue documentation](https://openvue.dev/)',
+                    '[GitHub repository](https://github.com/openvi-foundation/openvue)'
+                ]
+            },
+            {
+                t: 'p',
+                text: 'Thanks to everyone who has contributed, tested, reported issues and followed the project since the first release.'
+            }
+        ]
+    },
+    {
         slug: 'openvue-1-0-0-rc',
         title: 'OpenVue, the MIT fork of PrimeVue, hit 1.0.0-rc',
         kind: 'discussion',

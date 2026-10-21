@@ -1,0 +1,266 @@
+---
+import Base from '../../../layouts/Base.astro';
+import DocPage from '../../../components/DocPage.astro';
+import { site } from '../../../data/site.js';
+
+const description =
+    'Migrate a PrimeVue 4 project to OpenVue with one command: npx @openvue/migrate. Every package it renames, what stays the same, and the icons, Volt and v3 paths.';
+
+const url = `${site.url}/projects/openvue/migrate`;
+
+/** Section headings, mirrored into the margin column by DocPage. */
+const contents = [
+    { id: 'before-you-start', text: 'Before you start' },
+    { id: 'run-the-migration', text: 'Run the migration' },
+    { id: 'what-it-changes', text: 'What it changes' },
+    { id: 'package-map', text: 'Package map' },
+    { id: 'what-stays-the-same', text: 'What stays the same' },
+    { id: 'icons', text: 'Icons' },
+    { id: 'volt', text: 'Coming from Volt' },
+    { id: 'try-first', text: 'Try it without changing code' },
+    { id: 'older-versions', text: 'PrimeVue 3 and earlier' }
+];
+
+// The steps people search for, stated as a HowTo so the order survives out of
+// context. They must stay in step with the sections below.
+const schema = [
+    {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        '@id': `${url}#howto`,
+        name: 'How to migrate from PrimeVue to OpenVue',
+        description,
+        totalTime: 'PT10M',
+        tool: [{ '@type': 'HowToTool', name: '@openvue/migrate' }],
+        step: [
+            {
+                '@type': 'HowToStep',
+                name: 'Check the PrimeVue version',
+                text: 'Make sure the project is on PrimeVue 4.x and the git working tree is clean.',
+                url: `${url}#before-you-start`
+            },
+            {
+                '@type': 'HowToStep',
+                name: 'Run the codemod',
+                text: 'Run npx @openvue/migrate at the project root, review the plan it prints, and choose a full migration.',
+                url: `${url}#run-the-migration`
+            },
+            {
+                '@type': 'HowToStep',
+                name: 'Review the diff',
+                text: 'Review the single diff it leaves and fix any PrimeVue references it lists as remaining.',
+                url: `${url}#what-it-changes`
+            },
+            {
+                '@type': 'HowToStep',
+                name: 'Swap the icon stylesheet',
+                text: "Replace the primeicons import with '@openvue/openicons/primeicons.css' so existing pi pi-* classes keep rendering.",
+                url: `${url}#icons`
+            }
+        ]
+    }
+];
+
+const packageMap = [
+    { from: 'primevue, primevue/*', to: 'openvue, openvue/*' },
+    {
+        from: '@primevue/core, forms, icons, themes, nuxt-module, auto-import-resolver, metadata, mcp',
+        to: 'Same names under @openvue/*'
+    },
+    { from: '@primeuix/themes, @primeuix/themes/*', to: '@openvue/themes, @openvue/themes/*' },
+    { from: '@primeuix/styled, utils, styles, forms, mcp', to: 'Same names under @openuxkit/*' }
+];
+---
+
+<Base
+    title="Migrate from PrimeVue to OpenVue"
+    description={description}
+    schema={schema}
+    image="/og/openvue/migrate.png"
+    breadcrumbs={[
+        { name: 'Projects', path: '/projects' },
+        { name: 'OpenVue', path: '/projects/openvue' },
+        { name: 'Migrate from PrimeVue', path: '/projects/openvue/migrate' }
+    ]}
+>
+    <DocPage
+        title="Migrate from PrimeVue"
+        label="Migration guide"
+        lede="OpenVue keeps PrimeVue 4's public API unchanged, so migrating is a package rename. One command does it and leaves a single diff to review."
+        contents={contents}
+    >
+        <pre><code>npx @openvue/migrate</code></pre>
+        <p>
+            That is the whole migration for most projects. The rest of this page is what the command
+            does, so you know what you are reviewing, and the few cases it leaves to you.
+        </p>
+
+        <h2 id="before-you-start">Before you start</h2>
+        <ul>
+            <li>
+                <strong>PrimeVue 4.x.</strong> OpenVue forked from 4.5.5. The tool detects the installed
+                major version and stops without changing anything if it is not 4.x.
+            </li>
+            <li><strong>Node.js 18 or newer.</strong></li>
+            <li>
+                <strong>A clean git working tree.</strong> Then the migration is one commit you can read
+                and revert. Interactively the tool only asks if the tree is dirty; in CI or with a mode
+                flag it stops unless you pass <code>--force</code>.
+            </li>
+        </ul>
+
+        <h2 id="run-the-migration">Run the migration</h2>
+        <p>
+            From the project root (for a monorepo, the workspace root), run the command above. It
+            prints a plan first: the detected package manager, the PrimeVue version, the files and
+            references it will change, and your git status. Then it asks how to proceed:
+        </p>
+        <ul>
+            <li>
+                <strong>Full migration</strong> rewrites files and runs your package manager's install,
+                so the project builds straight away.
+            </li>
+            <li>
+                <strong>Files only</strong> rewrites files and dependencies and leaves
+                <code>node_modules</code> alone for you to install.
+            </li>
+            <li><strong>Dry run</strong> shows everything and writes nothing.</li>
+        </ul>
+        <p>To run it without the prompt, in CI for example, pass the mode:</p>
+        <pre><code>npx @openvue/migrate --dry
+npx @openvue/migrate --mode files-only
+npx @openvue/migrate --yes</code></pre>
+        <p>
+            If OpenVue is already installed, the tool switches to sources-only mode: it rewrites
+            imports and leaves dependencies and <code>node_modules</code> untouched.
+        </p>
+
+        <h2 id="what-it-changes">What it changes</h2>
+        <ol>
+            <li>
+                <strong>Dependencies</strong> in every <code>package.json</code>, including
+                <code>overrides</code>, <code>resolutions</code>, <code>pnpm.overrides</code> and
+                <code>pnpm-workspace.yaml</code> catalogs. <code>workspace:</code>,
+                <code>catalog:</code> and <code>npm:</code> values are preserved.
+            </li>
+            <li>
+                <strong>Imports</strong> in <code>.js</code>, <code>.ts</code>, <code>.vue</code>,
+                <code>.jsx</code>, <code>.tsx</code>, <code>.astro</code> and <code>.mdx</code> files:
+                static and dynamic imports, <code>require()</code>, Nuxt <code>modules</code>, Vite
+                <code>optimizeDeps</code> and generated <code>components.d.ts</code>. A bare
+                <code>'primevue'</code> string is only rewritten where it is an import, so runtime data
+                such as <code>provider: 'primevue'</code> is left alone.
+            </li>
+            <li>
+                <strong>An audit</strong> of what is left. Interpolated imports, CSS
+                <code>@import</code>s, CDN URLs and tsconfig <code>paths</code> it could not rewrite
+                safely are listed with file and line, so it never reports success while a reference
+                remains.
+            </li>
+        </ol>
+        <p>
+            <code>openvue</code> and <code>@openvue/*</code> are pinned to the exact version the tool
+            ships with, so a migration is reproducible. <code>@openuxkit/*</code> gets a caret range,
+            because it versions independently. Widen either afterwards if you prefer.
+        </p>
+
+        <h2 id="package-map">Package map</h2>
+        <div class="table-scroll">
+            <table class="spec">
+                <thead>
+                    <tr>
+                        <th scope="col">PrimeVue</th>
+                        <th scope="col">OpenVue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        packageMap.map((row) => (
+                            <tr>
+                                <td class="spec-package">
+                                    <code>{row.from}</code>
+                                </td>
+                                <td>
+                                    <code>{row.to}</code>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <h2 id="what-stays-the-same">What stays the same</h2>
+        <p>
+            Component props, slots and events match PrimeVue 4.x. So do the names your code already
+            uses: <code>usePrimeVue</code>, <code>PrimeVueResolver</code>, the <code>p-</code> CSS
+            classes, pass-through options, and the <code>primevue</code> key in
+            <code>nuxt.config</code>, which the OpenVue Nuxt module kept on purpose.
+        </p>
+        <p>
+            Three packages are deliberately left untouched: <code>primeicons</code>,
+            <code>primeflex</code> and <code>tailwindcss-primeui</code>. The icons have a maintained
+            replacement, covered next.
+        </p>
+
+        <h2 id="icons">Icons</h2>
+        <p>
+            <a href="/projects/openicons">OpenIcons</a> continues PrimeIcons. Swap the package and the
+            stylesheet, and every existing <code>pi pi-*</code> class keeps rendering through a
+            compatibility layer:
+        </p>
+        <pre><code>npm uninstall primeicons
+npm install @openvue/openicons</code></pre>
+        <pre class="code-diff"><code><span class="diff-del">- import 'primeicons/primeicons.css';</span><span class="diff-add">+ import '@openvue/openicons/primeicons.css';</span></code></pre>
+        <p>
+            Move to the new <code>oi oi-*</code> classes at your own pace by importing
+            <code>@openvue/openicons/openicons.css</code>; both stylesheets can be loaded at once. The
+            one icon removed rather than renamed is <code>pi-prime</code>, the PrimeTek logo mark.
+        </p>
+
+        <h2 id="volt">Coming from Volt</h2>
+        <p>
+            If the project uses PrimeVue Volt components, run the migration first, then replace them
+            with <a href="/projects/openvolt">OpenVolt</a>:
+        </p>
+        <pre><code>npx @openvue/migrate
+npx openvolt-vue add all --overwrite</code></pre>
+        <p>
+            Leave out <code>--overwrite</code> to keep the components you have customised; only the
+            untouched ones are replaced.
+        </p>
+
+        <h2 id="try-first">Try it without changing code</h2>
+        <p>
+            To evaluate OpenVue before committing to the rename, alias it in place of PrimeVue. No
+            source file changes:
+        </p>
+        <pre><code>{`// package.json (npm and bun; yarn uses "resolutions")
+{
+  "overrides": {
+    "primevue": "npm:openvue@1.0.0"
+  }
+}`}</code></pre>
+        <p>
+            On pnpm 10.5 and newer the override belongs in <code>pnpm-workspace.yaml</code> under
+            <code>overrides</code>. Once you decide to stay, run <code>npx @openvue/migrate</code> for
+            the real rename.
+        </p>
+
+        <h2 id="older-versions">PrimeVue 3 and earlier</h2>
+        <p>
+            Upgrade to PrimeVue 4 first with the <a
+                href="https://openvue.dev/guides/migration/v4/"
+                rel="noopener">v4 migration guide</a
+            >, then run <code>npx @openvue/migrate</code>. The tool will not run on a project that is
+            not on 4.x.
+        </p>
+        <p>
+            Stuck on something the tool did not handle? <a
+                href="https://github.com/openvi-foundation/openvue/issues/new/choose"
+                rel="noopener">Open an issue</a
+            > or ask in <a href={site.discord} rel="noopener">Discord</a>. Migration gaps are bugs, and
+            we fix them.
+        </p>
+    </DocPage>
+</Base>

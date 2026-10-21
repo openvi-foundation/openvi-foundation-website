@@ -2,9 +2,10 @@
 import Base from '../layouts/Base.astro';
 import DocPage from '../components/DocPage.astro';
 import { site } from '../data/site.js';
+import { projects, statusLabels } from '../data/projects.js';
 
 const description =
-    'Who maintains OpenVue and why. An independent, community-run foundation that keeps widely used front-end libraries working after upstream archives them.';
+    'Who the OpenVi Foundation is and why it exists: an independent, community-run group that keeps widely used front-end libraries working after upstream stops.';
 
 /** Section headings, mirrored into the margin column by DocPage. */
 const contents = [
@@ -17,7 +18,7 @@ const contents = [
 ];
 ---
 
-<Base title="About: who maintains OpenVue" description={description}
+<Base title="About the OpenVi Foundation" description={description}
     image="/og/about.png"
     pageType="AboutPage"
     breadcrumbs={[{ name: 'About', path: '/about' }]}
@@ -66,8 +67,8 @@ const contents = [
         <h2 id="how-we-approach-it">How we approach it</h2>
         <ul>
             <li>
-                <strong>Compatibility over novelty.</strong> The component API matches PrimeVue 4.x.
-                Migrating should be a dependency swap, not a rewrite.
+                <strong>Compatibility over novelty.</strong> A continuation keeps the API of the
+                project it continues. Moving to it should be a dependency swap, not a rewrite.
             </li>
             <li>
                 <strong>Stability first, growth second.</strong> Backlog and dependency currency
@@ -89,16 +90,23 @@ const contents = [
 
         <h2 id="where-things-stand">Where things stand</h2>
         <p>
-            OpenVue has shipped <strong>1.0.0</strong>. The API is settled and the packages are on
-            npm under the <code>latest</code> dist-tag; current work is the existing issue backlog.
-            OpenIcons is at <strong>1.0.0</strong> and OpenUXKit at <strong>1.1.0</strong>. All
-            three follow semantic versioning from here.
+            Every project is on a stable release and follows semantic versioning from here. Current
+            work is the issue backlog before new surface area.
         </p>
+        <ul>
+            {
+                projects.map((p) => (
+                    <li>
+                        <a href={`/projects/${p.slug}`}>{p.name}</a> <code>{p.version}</code>,{' '}
+                        {statusLabels[p.status].label.toLowerCase()}. Continues {p.continues}.
+                    </li>
+                ))
+            }
+        </ul>
         <p>
-            The roadmap and its progress live in the <a
-                href="https://github.com/openvi-foundation/openvue#roadmap"
-                rel="noopener">OpenVue README</a
-            >.
+            Each project keeps its own plans. OpenVue's are on its <a
+                href="/projects/openvue/roadmap">roadmap</a
+            >, with every release in the <a href="/projects/openvue/changelog">changelog</a>.
         </p>
 
         <h2 id="contact">Contact</h2>
@@ -108,7 +116,7 @@ const contents = [
             the relevant repository under <a href={site.github} rel="noopener"
                 >github.com/openvi-foundation</a
             >. Security reports should follow the <a
-                href="https://github.com/openvi-foundation/openvue/blob/main/SECURITY.md"
+                href="https://github.com/openvi-foundation/openvue/blob/master/SECURITY.md"
                 rel="noopener">security policy</a
             > rather than a public issue.
         </p>

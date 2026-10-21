@@ -9,7 +9,8 @@ import {
     kindLabels,
     headingId,
     readingTime,
-    formatDate
+    formatDate,
+    tagSlug
 } from '../../data/articles.js';
 import { site } from '../../data/site.js';
 
@@ -125,7 +126,7 @@ const schema = [
 
                 <span class="label">Tags</span>
                 <p class="article-fact article-tag-list">
-                    {article.tags.map((tag) => <span>{tag}</span>)}
+                    {article.tags.map((tag) => <a href={`/articles/tag/${tagSlug(tag)}`}>{tag}</a>)}
                 </p>
 
                 {

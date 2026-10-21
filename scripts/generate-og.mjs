@@ -130,8 +130,26 @@ const cards = [
         {
             slug: 'projects',
             eyebrow: 'Projects',
-            title: 'Three libraries',
-            tagline: 'Each one a maintained continuation of an archived upstream library. All MIT licensed, all versioned independently.'
+            title: 'Four libraries',
+            tagline: 'Each one a maintained continuation of an upstream project that stopped moving. All MIT licensed.'
+        },
+        {
+            slug: 'openvue/migrate',
+            eyebrow: 'OpenVue migration guide',
+            title: 'Migrate from PrimeVue',
+            tagline: 'One command moves a PrimeVue 4 project to OpenVue: npx @openvue/migrate. Same API, one reviewable diff.'
+        },
+        {
+            slug: 'openvue/roadmap',
+            eyebrow: 'OpenVue roadmap',
+            title: 'Stability first',
+            tagline: 'What has shipped, what is being worked on now, and where OpenVue 2.0 is headed.'
+        },
+        {
+            slug: 'openvue/changelog',
+            eyebrow: 'OpenVue changelog',
+            title: 'Every release',
+            tagline: 'What was added, changed and fixed in OpenVue, version by version since the fork.'
         },
         {
             slug: 'about',
@@ -153,7 +171,11 @@ const cards = [
         }
     ].map((page) => ({
         out: path.join(root, `public/og/${page.slug}.png`),
-        html: card({ ...page, footer: `openvi.dev/${page.slug}` })
+        html: card({
+            ...page,
+            // Project guides live under the project's own path.
+            footer: `openvi.dev/${page.slug.includes('/') ? `projects/${page.slug}` : page.slug}`
+        })
     }))
 ];
 

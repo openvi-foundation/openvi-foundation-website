@@ -5,13 +5,13 @@ import Icon from '../components/Icon.astro';
 import PixelBlast from '../components/vendor/PixelBlast.vue';
 import LinkButton from '../components/openvue/LinkButton.vue';
 import FeatureCard from '../components/openvue/FeatureCard.vue';
-import Callout from '../components/openvue/Callout.vue';
 import { projects } from '../data/projects.js';
 import { faq } from '../data/faq.js';
 import { site } from '../data/site.js';
+import { getStats, formatCount } from '../data/stats.js';
 
 const description =
-    'OpenVue continues PrimeVue after its archive: 80+ accessible Vue and Nuxt components, a theming engine and an icon set. Community run and MIT licensed.';
+    'The OpenVi Foundation maintains open source UI libraries for the web: OpenVue, OpenVolt, OpenIcons and OpenUXKit. Community run and permanently MIT licensed.';
 
 const schema = [
     // The questions are on the page and in the markup. Google matches one
@@ -39,6 +39,30 @@ const schema = [
         }))
     }
 ];
+
+// Proof the projects are alive, fetched at build time and counted across the
+// whole foundation rather than any one project. Any figure that could not be
+// fetched is dropped rather than shown as a stale or invented number.
+const stats = await getStats();
+
+const figures = [
+    { value: String(projects.length), label: 'maintained libraries', href: '/projects' },
+    stats.totalStars != null && {
+        value: formatCount(stats.totalStars),
+        label: 'GitHub stars across the foundation',
+        href: site.github
+    },
+    stats.totalDownloads != null && {
+        value: formatCount(stats.totalDownloads),
+        label: 'npm downloads last week',
+        href: site.npm
+    },
+    stats.contributors != null && {
+        value: formatCount(stats.contributors),
+        label: 'contributors since the forks',
+        href: '/contribute'
+    }
+].filter(Boolean);
 
 // The reasons the foundation exists, as numbered clauses rather than a card
 // grid: they are an argument in sequence, not three parallel features.
@@ -103,14 +127,34 @@ const rationale = [
         </div>
     </section>
 
+    {
+        figures.length > 0 && (
+            <section class="band band-tight" aria-label="The projects in numbers">
+                <div class="wrap">
+                    <ul class="stats">
+                        {figures.map((f) => (
+                            <li>
+                                <a href={f.href} rel={f.href.startsWith('http') ? 'noopener' : undefined}>
+                                    <span class="stats-value">{f.value}</span>
+                                    <span class="stats-label">{f.label}</span>
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </section>
+        )
+    }
+
     <section class="band" aria-labelledby="succession-heading">
         <div class="wrap">
             <div>
                 <div class="section-head">
                     <h2 id="succession-heading">What we picked up</h2>
                     <p>
-                        Three archived upstream libraries, each with a maintained continuation
-                        published under a license that cannot be changed out from under it.
+                        Four upstream projects that stopped moving, each with a maintained
+                        continuation published under a license that cannot be changed out from
+                        under it.
                     </p>
                 </div>
 
@@ -130,6 +174,14 @@ const rationale = [
                         ))
                     }
                 </ul>
+                {/* The one pointer to a project guide on this page. The guide
+                    itself belongs to OpenVue, so the home page only says
+                    where it is. */}
+                <p class="small muted succession-note">
+                    Moving an existing PrimeVue 4 project? <a href="/projects/openvue/migrate"
+                        >OpenVue's migration guide</a
+                    > does it in one command.
+                </p>
             </div>
         </div>
     </section>
@@ -140,8 +192,8 @@ const rationale = [
                 <div class="section-head">
                     <h2 id="projects-heading">Projects</h2>
                     <p>
-                        Three repositories covering the full stack a UI library needs. Each one is
-                        versioned and published independently.
+                        Components, Tailwind components you own, a theming engine and an icon set:
+                        the full stack a UI library needs, each one published to npm on its own.
                     </p>
                 </div>
                 <ProjectList items={projects} heading="h3" />
@@ -174,34 +226,13 @@ const rationale = [
         </div>
     </section>
 
-    <section class="band" aria-labelledby="start-heading">
-        <div class="wrap">
-            <div>
-                <Callout header="Migrating from PrimeVue" headingId="start-heading">
-                    <p class="muted">
-                        If you have a PrimeVue v4 project, one command moves it across. It prints a
-                        plan first and asks before writing anything.
-                    </p>
-                    <pre><code>npx @openvue/migrate</code></pre>
-                    <p class="muted">
-                        It renames dependencies, rewrites imports, adds a compatibility override so
-                        third-party libraries keep resolving, and leaves a single reviewable diff.
-                        Run it with <code>--dry</code> for a preview that writes nothing. The full guide
-                        is at <a href="https://openvue.dev/migrate" rel="noopener">openvue.dev/migrate</a
-                        >.
-                    </p>
-                </Callout>
-            </div>
-        </div>
-    </section>
-
     <section class="band" aria-labelledby="faq-heading">
         <div class="wrap">
             <div class="section-head">
                 <h2 id="faq-heading">Common questions</h2>
                 <p>
-                    What people ask most often about PrimeVue being archived and what running
-                    OpenVue instead involves.
+                    What people ask most often about the foundation, its projects and how they
+                    are run.
                 </p>
             </div>
 

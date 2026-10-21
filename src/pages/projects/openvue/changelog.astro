@@ -1,0 +1,106 @@
+---
+import Base from '../../../layouts/Base.astro';
+import DocPage from '../../../components/DocPage.astro';
+import RichText from '../../../components/RichText.astro';
+import { getReleases, changelogUrl, versionId } from '../../../data/changelog.js';
+import { formatDate } from '../../../data/articles.js';
+
+const description =
+    'Every OpenVue release since the fork from PrimeVue 4.5.5: what was added, changed and fixed, version by version, read straight from the project changelog.';
+
+const releases = await getReleases();
+
+const contents = (releases ?? []).map((r) => ({
+    id: versionId(r.version),
+    text: r.unreleased ? 'Unreleased' : r.version
+}));
+
+const latest = releases?.find((r) => !r.unreleased);
+---
+
+<Base
+    title="OpenVue changelog"
+    description={description}
+    image="/og/openvue/changelog.png"
+    breadcrumbs={[
+        { name: 'Projects', path: '/projects' },
+        { name: 'OpenVue', path: '/projects/openvue' },
+        { name: 'Changelog', path: '/projects/openvue/changelog' }
+    ]}
+>
+    <DocPage
+        title="OpenVue changelog"
+        label="Releases"
+        lede="Every OpenVue release since the fork, newest first. All packages in the repository ship together under one version."
+        contents={contents}
+    >
+        {
+            releases ? (
+                <>
+                    <p>
+                        {latest && (
+                            <>
+                                The current release is <strong>{latest.version}</strong>, published{' '}
+                                {formatDate(latest.date)}.{' '}
+                            </>
+                        )}
+                        This page is built from{' '}
+                        <a href={changelogUrl} rel="noopener">CHANGELOG.md</a> on every deploy. History
+                        from before the fork is in the{' '}
+                        <a
+                            href="https://github.com/openvi-foundation/openvue/blob/master/CHANGELOG_PRIMEVUE.md"
+                            rel="noopener">PrimeVue changelog</a
+                        >.
+                    </p>
+
+                    {releases.map((release) => (
+                        <>
+                            <h2 id={versionId(release.version)}>
+                                {release.unreleased ? 'Unreleased' : release.version}
+                            </h2>
+                            <p class="dateline">
+                                {release.unreleased ? (
+                                    <span>On main, ships in the next release</span>
+                                ) : (
+                                    release.date && (
+                                        <time datetime={release.date}>{formatDate(release.date)}</time>
+                                    )
+                                )}
+                                {release.compareUrl && (
+                                    <>
+                                        <span aria-hidden="true">·</span>
+                                        <a href={release.compareUrl} rel="noopener">
+                                            {release.unreleased ? 'Commits since the last release' : 'Compare'}
+                                        </a>
+                                    </>
+                                )}
+                            </p>
+                            {release.intro.map((para) => (
+                                <p>
+                                    <RichText text={para} />
+                                </p>
+                            ))}
+                            {release.groups.map((group) => (
+                                <>
+                                    {group.heading && <h3>{group.heading}</h3>}
+                                    <ul>
+                                        {group.items.map((item) => (
+                                            <li>
+                                                <RichText text={item} />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </>
+                            ))}
+                        </>
+                    ))}
+                </>
+            ) : (
+                <p>
+                    The release history could not be loaded for this build. Read it in{' '}
+                    <a href={changelogUrl} rel="noopener">CHANGELOG.md</a> on GitHub.
+                </p>
+            )
+        }
+    </DocPage>
+</Base>

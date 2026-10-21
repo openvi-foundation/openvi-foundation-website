@@ -1,7 +1,11 @@
 /**
- * The questions people actually type into a search engine after PrimeVue was
- * archived, answered on the home page and mirrored into FAQPage structured
- * data so the answers can surface directly in a result.
+ * The questions people ask about the foundation, answered on the home page and
+ * mirrored into FAQPage structured data so the answers can surface directly in
+ * a result.
+ *
+ * These are about the foundation as a whole. Questions about one project, such
+ * as migrating a PrimeVue codebase, belong on that project's own pages; one is
+ * kept here because it is the reason most people find the foundation at all.
  *
  * Answers are plain text on purpose: FAQPage markup is matched against the
  * visible answer, so anything here has to read as a complete sentence both on
@@ -11,27 +15,31 @@
  */
 export const faq = [
     {
-        q: 'What is the difference between OpenVue and PrimeVue?',
-        a: 'OpenVue continues PrimeVue 4.x with the same component API, so props, slots and events match. The differences are maintenance and ownership: OpenVue is actively released, permanently MIT licensed, and its theming engine and icon set are maintained in the same organization rather than resolved at runtime from a scope the project does not control.'
+        q: 'What is the OpenVi Foundation?',
+        a: 'An independent, community-run organization that maintains open source UI libraries for the web. It picks up widely used front-end libraries after their original maintainers stop, and keeps them released, documented and MIT licensed.'
     },
     {
-        q: 'How do I migrate from PrimeVue to OpenVue?',
-        a: 'Run npx @openvue/migrate in a PrimeVue v4 project. It prints a plan first, then renames dependencies, rewrites imports and adds a compatibility override so third-party libraries keep resolving, leaving a single reviewable diff. Run it with --dry for a preview that writes nothing.'
+        q: 'Which projects does the foundation maintain?',
+        a: 'Four libraries: OpenVue, the Vue component library that continues PrimeVue; OpenVolt, Tailwind CSS components for OpenVue that continue Volt; OpenIcons, which continues PrimeIcons; and OpenUXKit, the theming engine that continues PrimeUIX. It also publishes templates and starters such as the Deni admin dashboard.'
     },
     {
-        q: 'Is OpenVue free to use commercially?',
+        q: 'Are the projects free to use commercially?',
         a: 'Yes. Every project the OpenVi Foundation publishes is MIT licensed and stays MIT licensed, which permits commercial use, modification and redistribution. Releases already published cannot be relicensed retroactively.'
     },
     {
-        q: 'What replaced PrimeIcons and PrimeUIX?',
-        a: 'OpenIcons continues PrimeIcons: 323 icons as a dependency-free webfont or tree-shakeable Vue 3 components, with a compatibility stylesheet so existing pi pi-* class names keep rendering. OpenUXKit continues PrimeUIX, the framework-agnostic theming engine and design tokens that OpenVue renders with.'
+        q: 'Who runs the foundation, and who funds it?',
+        a: 'A group of engineers who know these libraries well, together with a growing set of community contributors. There is no company behind it and no funding. Commit access is granted on sustained, review-quality contribution rather than employer or affiliation.'
     },
     {
-        q: 'Does OpenVue work with Nuxt?',
-        a: 'Yes. OpenVue ships a Nuxt module, @openvue/nuxt-module, which auto-imports components and needs no configuration. The documentation at openvue.dev covers both Vue and Nuxt setups.'
+        q: 'How can I contribute?',
+        a: 'Pick an issue on any of the project repositories, report a bug with a reproduction, improve the documentation, or test components with assistive technology. Each project lists where help is needed most on the contribute page, and conversation happens on Discord.'
     },
     {
-        q: 'Who maintains OpenVue?',
-        a: 'The OpenVi Foundation, an independent group of engineers who know these libraries well. There is no company behind it and no funding. Commit access is granted on sustained, review-quality contribution rather than employer or affiliation.'
+        q: 'I use PrimeVue. Where do I start?',
+        a: 'With OpenVue, which keeps the PrimeVue 4 component API. Running npx @openvue/migrate in a PrimeVue 4 project renames the packages and rewrites the imports in one reviewable diff, and the OpenVue migration guide covers icons, Volt and older versions.'
+    },
+    {
+        q: 'Is the foundation affiliated with PrimeTek?',
+        a: 'No. The OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek Informatics or PrimeUI. The projects continue upstream work under its original MIT license, with attribution.'
     }
 ];

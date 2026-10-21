@@ -7,6 +7,7 @@ import StatusTag from '../../components/openvue/StatusTag.vue';
 import LinkButton from '../../components/openvue/LinkButton.vue';
 import { projects, statusLabels } from '../../data/projects.js';
 import { site } from '../../data/site.js';
+import { getStats, formatCount } from '../../data/stats.js';
 
 export function getStaticPaths() {
     return projects.map((project) => ({
@@ -20,6 +21,14 @@ const status = statusLabels[project.status];
 const others = projects.filter((p) => p.slug !== project.slug);
 
 const url = `${site.url}/projects/${project.slug}`;
+
+const stats = await getStats();
+const stars = stats.stars[project.githubRepo];
+const downloads = stats.downloads[project.npmPackage];
+// OpenVolt lives inside the OpenVue monorepo, so its stars are OpenVue's and
+// the row has to say whose they are.
+const repoName = project.githubRepo.split('/')[1];
+const sharedRepo = repoName !== project.slug;
 
 const schema = [
     {
@@ -113,7 +122,7 @@ const schema = [
                             </tr>
                             <tr>
                                 <th scope="row">Continues</th>
-                                <td>{project.continues}, archived upstream</td>
+                                <td>{project.continues}, {project.upstreamNote ?? 'archived upstream'}</td>
                             </tr>
                             <tr>
                                 <th scope="row">Language</th>
@@ -147,6 +156,25 @@ const schema = [
                                     </td>
                                 </tr>
                             )}
+                            {stars != null && (
+                                <tr>
+                                    <th scope="row">GitHub stars</th>
+                                    <td>
+                                        {formatCount(stars)}
+                                        {sharedRepo && (
+                                            <span class="muted"> (the {repoName} repository)</span>
+                                        )}
+                                    </td>
+                                </tr>
+                            )}
+                            {downloads != null && (
+                                <tr>
+                                    <th scope="row">Downloads</th>
+                                    <td>
+                                        {formatCount(downloads)} last week, <code>{project.npmPackage}</code>
+                                    </td>
+                                </tr>
+                            )}
                             {project.install && (
                                 <tr>
                                     <th scope="row">Install</th>
@@ -159,6 +187,32 @@ const schema = [
             </div>
         </div>
     </section>
+
+    {
+        project.guides && (
+            <section class="band" aria-labelledby="guides-heading">
+                <div class="wrap">
+                    <div>
+                        <div class="section-head">
+                            <h2 id="guides-heading">Guides</h2>
+                        </div>
+                        <ul class="notes">
+                            {project.guides.map((guide) => (
+                                <li>
+                                    <FeatureCard title={guide.title}>
+                                        <p class="tool-summary">{guide.body}</p>
+                                        <p class="registry-links">
+                                            <a href={guide.href}>{guide.cta}</a>
+                                        </p>
+                                    </FeatureCard>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        )
+    }
 
     <section class="band" aria-labelledby="why-heading">
         <div class="wrap">

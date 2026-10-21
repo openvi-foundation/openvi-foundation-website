@@ -1,0 +1,47 @@
+---
+import Base from '../../../layouts/Base.astro';
+import ArticleList from '../../../components/ArticleList.astro';
+import TagFilter from '../../../components/TagFilter.astro';
+import { tags } from '../../../data/articles.js';
+
+export function getStaticPaths() {
+    return tags.map((tag) => ({ params: { tag: tag.slug }, props: { tag } }));
+}
+
+const { tag } = Astro.props;
+const count = tag.articles.length;
+---
+
+{/* A filtered view of /articles, so it stays out of the index: the articles
+    themselves are what should rank, and a page per tag would only compete
+    with them. Crawlers still follow the links. */}
+<Base
+    title={`Articles about ${tag.name}`}
+    description={`${count} ${count === 1 ? 'article' : 'articles'} from the OpenVi Foundation tagged ${tag.name}.`}
+    image="/og/articles.png"
+    pageType="CollectionPage"
+    noindex
+    breadcrumbs={[
+        { name: 'Articles', path: '/articles' },
+        { name: tag.name, path: `/articles/tag/${tag.slug}` }
+    ]}
+>
+    <section class="band hero-doc">
+        <div class="wrap">
+            <p class="breadcrumb"><a href="/articles">Articles</a> / {tag.name}</p>
+            <h1>{tag.name}</h1>
+            <p class="lede">
+                {count} {count === 1 ? 'piece' : 'pieces'} tagged {tag.name}, newest first.
+            </p>
+        </div>
+    </section>
+
+    <section class="band">
+        <div class="wrap">
+            <div>
+                <TagFilter current={tag.slug} />
+                <ArticleList items={tag.articles} />
+            </div>
+        </div>
+    </section>
+</Base>

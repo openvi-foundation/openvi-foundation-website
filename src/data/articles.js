@@ -524,6 +524,28 @@ export const articles = [
 /** Newest first. The data file is grouped by source; the site reads as a feed. */
 export const articlesByDate = [...articles].sort((a, b) => b.date.localeCompare(a.date));
 
+/** URL segment for a tag, e.g. `Tailwind CSS` -> `tailwind-css`. */
+export const tagSlug = (tag) =>
+    tag
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+
+/**
+ * Every tag in use with its articles, most used first and alphabetical within
+ * a count, so the filter bar leads with the topics there is most to read on.
+ */
+export const tags = Object.values(
+    articlesByDate.reduce((acc, article) => {
+        for (const name of article.tags) {
+            const slug = tagSlug(name);
+            acc[slug] ??= { name, slug, articles: [] };
+            acc[slug].articles.push(article);
+        }
+        return acc;
+    }, {})
+).sort((a, b) => b.articles.length - a.articles.length || a.name.localeCompare(b.name));
+
 export const kindLabels = {
     article: { label: 'Article', note: 'Written for publication' },
     discussion: { label: 'Discussion', note: 'Opened a thread, and the thread is still there' }

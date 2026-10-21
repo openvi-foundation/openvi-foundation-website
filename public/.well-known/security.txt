@@ -1,0 +1,8 @@
+# Security contact for the OpenVi Foundation and every project it publishes.
+# RFC 9116. Renew "Expires" before it lapses: a stale file is treated as absent.
+Contact: https://github.com/openvi-foundation/openvue/security/advisories/new
+Contact: mailto:contact@openvi.dev
+Expires: 2027-10-21T00:00:00.000Z
+Policy: https://github.com/openvi-foundation/openvue/blob/master/SECURITY.md
+Preferred-Languages: en
+Canonical: https://openvi.dev/.well-known/security.txt

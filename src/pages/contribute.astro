@@ -1,65 +1,100 @@
 ---
 import Base from '../layouts/Base.astro';
 import DocPage from '../components/DocPage.astro';
+import InlineCode from '../components/InlineCode.astro';
+import { projects, tools } from '../data/projects.js';
 import { site } from '../data/site.js';
 
 const description =
-    'Help maintain OpenVue: triage the issue backlog, report migration gaps, or join the maintainer team. Start in Discord, no prior involvement needed.';
+    'Help maintain the OpenVi Foundation projects: fix issues, report bugs, write docs, or join the maintainer team. Where each project needs help, and how to start.';
 
 /** Section headings, mirrored into the margin column by DocPage. */
 const contents = [
-    { id: 'where-help-is-most-needed', text: 'Where help is most needed' },
-    { id: 'development-setup', text: 'Development setup' },
+    { id: 'ways-to-help', text: 'Ways to help' },
+    { id: 'projects', text: 'Where each project needs help' },
     { id: 'before-you-open-a-pull-request', text: 'Before you open a pull request' },
     { id: 'becoming-a-maintainer', text: 'Becoming a maintainer' },
-    { id: 'reporting-a-security-issue', text: 'Reporting a security issue' }
+    { id: 'conduct-and-security', text: 'Conduct and security' }
 ];
 ---
 
-<Base title="Contribute to OpenVue" description={description}
+<Base title="Contribute" description={description}
     image="/og/contribute.png"
     pageType="WebPage"
     breadcrumbs={[{ name: 'Contribute', path: '/contribute' }]}
 >
     <DocPage
         title="Contribute"
-        lede="We are building out the maintainer team now. If you know Vue and these libraries well, you are the person we are looking for."
+        lede="We are building out the maintainer team now. If you know these libraries well, or want to, you are the person we are looking for."
         label="Contribute"
         contents={contents}
     >
-        <h2 id="where-help-is-most-needed">Where help is most needed</h2>
+        <h2 id="ways-to-help">Ways to help</h2>
+        <p>
+            Every project works the same way: issues and pull requests on GitHub, conversation on <a
+                href={site.discord}
+                rel="noopener">Discord</a
+            >. None of it needs prior involvement.
+        </p>
         <ul>
             <li>
-                <strong>Issue backlog.</strong> Reproducing, triaging and fixing inherited issues is
-                the highest-value work right now.
+                <strong>Fix something.</strong> Pick up an open issue, say you are on it, and open a
+                pull request.
             </li>
             <li>
-                <strong>Migration reports.</strong> If <code>npx @openvue/migrate</code> misses something
-                in your codebase, file it. That makes the path easier for everyone behind you.
+                <strong>Report a bug well.</strong> A minimal reproduction is worth more than a long
+                description. For OpenVue there is a <a
+                    href="https://stackblitz.com/github/openvi-foundation/openvue-reproducer?file=src%2FApp.vue"
+                    rel="noopener">one-click StackBlitz starter</a
+                > for exactly that.
             </li>
             <li>
-                <strong>Accessibility.</strong> Real assistive-technology testing on components,
-                reported against specific screen readers and versions.
+                <strong>Improve the documentation.</strong> Gaps and inaccuracies are bugs too.
             </li>
             <li>
-                <strong>Documentation.</strong> Gaps and inaccuracies on <a
-                    href="https://openvue.dev"
-                    rel="noopener">openvue.dev</a
-                >, especially around theming and unstyled mode.
+                <strong>Test accessibility.</strong> Real assistive-technology testing, reported
+                against specific screen readers and versions.
+            </li>
+            <li>
+                <strong>Review.</strong> Reading and testing other people's pull requests is how most
+                maintainers start.
             </li>
         </ul>
 
-        <h2 id="development-setup">Development setup</h2>
-        <p>The monorepo uses pnpm workspaces.</p>
-        <pre><code>git clone https://github.com/openvi-foundation/openvue.git
-cd openvue
-pnpm install
-pnpm run dev</code></pre>
+        <h2 id="projects">Where each project needs help</h2>
+        {
+            projects.map((project) => (
+                <>
+                    <h3>
+                        <a href={`/projects/${project.slug}`}>{project.name}</a>
+                    </h3>
+                    <ul>
+                        {project.contribute.help.map((item) => (
+                            <li>
+                                <InlineCode text={item} />
+                            </li>
+                        ))}
+                    </ul>
+                    <pre><code>{project.contribute.setup}</code></pre>
+                    <p class="small">
+                        <a href={`https://github.com/${project.githubRepo}/issues`} rel="noopener">
+                            Open issues
+                        </a>
+                        {project.contribute.guide && (
+                            <>
+                                {' · '}
+                                <a href={project.contribute.guide} rel="noopener">
+                                    Contributing guide
+                                </a>
+                            </>
+                        )}
+                    </p>
+                </>
+            ))
+        }
         <p>
-            The full setup, project layout and review process are in the <a
-                href="https://github.com/openvi-foundation/openvue/blob/main/CONTRIBUTING.md"
-                rel="noopener">contributing guide</a
-            >.
+            The templates and starters ({tools.map((t) => t.name).join(', ')}) take pull requests the
+            same way. They are listed under <a href="/projects#tools-heading">templates and tools</a>.
         </p>
 
         <h2 id="before-you-open-a-pull-request">Before you open a pull request</h2>
@@ -69,8 +104,8 @@ pnpm run dev</code></pre>
                 on.
             </li>
             <li>
-                Keep the component API compatible with PrimeVue 4.x unless there is a documented
-                migration path.
+                Keep the public API compatible with the release line it belongs to. A breaking change
+                needs a documented migration path and waits for the next major version.
             </li>
             <li>Include a test where the change is testable, and run the existing suites.</li>
             <li>One logical change per pull request. Reviewable diffs get merged faster.</li>
@@ -78,20 +113,23 @@ pnpm run dev</code></pre>
 
         <h2 id="becoming-a-maintainer">Becoming a maintainer</h2>
         <p>
-            Commit access follows sustained, review-quality contribution rather than affiliation.
-            Start by picking up issues, then reach out on <a href={site.discord} rel="noopener"
-                >Discord</a
+            Commit access follows sustained, review-quality contribution rather than affiliation, on
+            any of the projects. Start by picking up issues, then reach out on <a
+                href={site.discord}
+                rel="noopener">Discord</a
             > or at <a href={`mailto:${site.email}`}>{site.email}</a>. See <a href="/governance"
                 >governance</a
             > for how decisions get made.
         </p>
 
-        <h2 id="reporting-a-security-issue">Reporting a security issue</h2>
+        <h2 id="conduct-and-security">Conduct and security</h2>
         <p>
-            Do not open a public issue. Follow the <a
-                href="https://github.com/openvi-foundation/openvue/blob/main/SECURITY.md"
+            Participation in every repository and on Discord is covered by the code of conduct
+            described in <a href="/governance#code-of-conduct">governance</a>. Security issues are
+            never reported as public issues: follow the <a
+                href="https://github.com/openvi-foundation/openvue/blob/master/SECURITY.md"
                 rel="noopener">security policy</a
-            >.
+            > instead.
         </p>
     </DocPage>
 </Base>

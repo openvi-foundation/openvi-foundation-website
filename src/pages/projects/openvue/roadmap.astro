@@ -1,0 +1,93 @@
+---
+import Base from '../../../layouts/Base.astro';
+import RichText from '../../../components/RichText.astro';
+import Tag from 'openvue/tag';
+import { roadmap, roadmapStatus, roadmapSource } from '../../../data/roadmap.js';
+import { formatDate } from '../../../data/articles.js';
+
+const description =
+    'What OpenVue has shipped and what comes next: 1.x fixes, OpenVolt, a new theme and templates, then Vue Vapor and TypeScript in 2.0.';
+
+const counts = Object.fromEntries(
+    Object.keys(roadmapStatus).map((status) => [
+        status,
+        roadmap.flatMap((phase) => phase.items).filter((item) => item.status === status).length
+    ])
+);
+---
+
+<Base
+    title="OpenVue roadmap"
+    description={description}
+    image="/og/openvue/roadmap.png"
+    breadcrumbs={[
+        { name: 'Projects', path: '/projects' },
+        { name: 'OpenVue', path: '/projects/openvue' },
+        { name: 'Roadmap', path: '/projects/openvue/roadmap' }
+    ]}
+>
+    <section class="band hero-doc">
+        <div class="wrap">
+            <p class="breadcrumb">
+                <a href="/projects">Projects</a> / <a href="/projects/openvue">OpenVue</a> / Roadmap
+            </p>
+            <h1>OpenVue roadmap</h1>
+            <p class="lede">
+                Stability first, growth second. What has shipped, what is being worked on now, and
+                where 2.0 is headed.
+            </p>
+            <p class="small muted">
+                {counts.done} done, {counts.active} in progress, {counts.planned} planned. The order
+                is decided in the <a href={roadmapSource} rel="noopener">OpenVue README</a>, and
+                this page follows it.
+            </p>
+        </div>
+    </section>
+
+    {
+        roadmap.map((phase) => (
+            <section class="band" aria-labelledby={`${phase.id}-heading`}>
+                <div class="wrap">
+                    <div>
+                        <div class="section-head">
+                            <h2 id={`${phase.id}-heading`}>{phase.title}</h2>
+                            <p>{phase.summary}</p>
+                        </div>
+                        <ul class="notes roadmap">
+                            {phase.items.map((item) => (
+                                <li class="roadmap-item">
+                                    <div class="roadmap-head">
+                                        <h3 class="note-title">{item.title}</h3>
+                                        <Tag
+                                            severity={roadmapStatus[item.status].severity}
+                                            value={roadmapStatus[item.status].label}
+                                        />
+                                    </div>
+                                    <p class="roadmap-text">
+                                        <RichText text={item.text} />
+                                    </p>
+                                    {item.date && (
+                                        <p class="roadmap-date">
+                                            Shipped <time datetime={item.date}>{formatDate(item.date)}</time>
+                                        </p>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        ))
+    }
+
+    <section class="band band-tight">
+        <div class="wrap">
+            <p class="small muted" style="margin: 0; max-width: var(--measure);">
+                Something missing that you need? Open an issue or start a thread in <a
+                    href="https://github.com/orgs/openvi-foundation/discussions"
+                    rel="noopener">GitHub discussions</a
+                >. Requests with a concrete use case behind them are the ones that move up the list.
+            </p>
+        </div>
+    </section>
+</Base>

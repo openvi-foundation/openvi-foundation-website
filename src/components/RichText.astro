@@ -24,7 +24,10 @@ while ((match = pattern.exec(text)) !== null) {
     if (match[1] !== undefined) {
         nodes.push({ type: 'code', value: match[1] });
     } else {
-        nodes.push({ type: 'link', value: match[2], href: match[3] });
+        // A label that is entirely a code span, such as a package name in the
+        // changelog, keeps its code styling inside the link.
+        const code = match[2].match(/^`([^`]+)`$/);
+        nodes.push({ type: 'link', value: match[2], href: match[3], code: code?.[1] });
     }
 
     last = pattern.lastIndex;
@@ -41,7 +44,7 @@ if (last < text.length) nodes.push({ type: 'text', value: text.slice(last) });
             const external = /^https?:/.test(node.href);
             return (
                 <a href={node.href} rel={external ? 'noopener' : undefined}>
-                    {node.value}
+                    {node.code ? <code>{node.code}</code> : node.value}
                 </a>
             );
         }

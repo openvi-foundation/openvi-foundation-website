@@ -2,11 +2,12 @@
 import Base from '../../layouts/Base.astro';
 import ProjectList from '../../components/ProjectList.astro';
 import FeatureCard from '../../components/openvue/FeatureCard.vue';
-import { projects } from '../../data/projects.js';
+import InlineCode from '../../components/InlineCode.astro';
+import { projects, tools } from '../../data/projects.js';
 import { site } from '../../data/site.js';
 
 const description =
-    'The three libraries the foundation maintains: OpenVue (PrimeVue continued), OpenIcons (PrimeIcons continued) and OpenUXKit (PrimeUIX continued).';
+    'The libraries the foundation maintains: OpenVue (PrimeVue), OpenVolt (Volt), OpenIcons (PrimeIcons) and OpenUXKit (PrimeUIX), plus templates and starters.';
 
 const schema = [
     {
@@ -33,6 +34,10 @@ const layers = [
         body: 'The component library you install. This is the only direct dependency most projects need.'
     },
     {
+        title: 'OpenVolt',
+        body: 'Optional. Tailwind CSS components copied into your own codebase, running on OpenVue in unstyled mode instead of a theme preset.'
+    },
+    {
         title: 'OpenUXKit',
         body: 'The theming engine OpenVue renders with. Framework-agnostic, and usable on its own.'
     },
@@ -44,7 +49,7 @@ const layers = [
 ---
 
 <Base
-    title="Projects: OpenVue, OpenIcons, OpenUXKit"
+    title="Projects: OpenVue, OpenVolt, OpenIcons, OpenUXKit"
     description={description}
     schema={schema}
     image="/og/projects.png"
@@ -55,8 +60,8 @@ const layers = [
         <div class="wrap">
             <h1>Projects</h1>
             <p class="lede">
-                Three repositories, each one a maintained continuation of an archived upstream
-                library. All MIT licensed, all versioned independently.
+                Four libraries, each one a maintained continuation of an upstream project that
+                stopped moving. All MIT licensed, all published to npm on their own.
             </p>
         </div>
     </section>
@@ -75,8 +80,9 @@ const layers = [
                 <div class="section-head">
                     <h2 id="fit-heading">How the pieces fit</h2>
                     <p>
-                        Most applications only ever install OpenVue and a theme preset. The rest
-                        either comes in as a dependency or gets left out entirely.
+                        Most applications only ever install OpenVue and a theme preset, or OpenVue
+                        and OpenVolt for Tailwind. The rest either comes in as a dependency or gets
+                        left out entirely.
                     </p>
                 </div>
                 <ul class="notes">
@@ -85,6 +91,43 @@ const layers = [
                             <li>
                                 <FeatureCard title={layer.title}>
                                     {layer.body}
+                                </FeatureCard>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="band" aria-labelledby="tools-heading">
+        <div class="wrap">
+            <div>
+                <div class="section-head">
+                    <h2 id="tools-heading">Templates and tools</h2>
+                    <p>
+                        Repositories you start from rather than install: a full application
+                        template, minimal starters, and the sandbox a bug report begins in.
+                    </p>
+                </div>
+                <ul class="notes">
+                    {
+                        tools.map((tool) => (
+                            <li>
+                                <FeatureCard title={tool.name}>
+                                    <span class="label">{tool.kind}</span>
+                                    <p class="tool-summary">
+                                        <InlineCode text={tool.summary} />
+                                    </p>
+                                    <p class="registry-links">
+                                        <a href={tool.repo} rel="noopener">Source</a>
+                                        {tool.demo && (
+                                            <a href={tool.demo} rel="noopener">
+                                                {tool.demoLabel ?? 'Live demo'}
+                                            </a>
+                                        )}
+                                        {tool.article && <a href={tool.article}>Read the announcement</a>}
+                                    </p>
                                 </FeatureCard>
                             </li>
                         ))

@@ -75,3 +75,36 @@ const { name, class: className } = Astro.props;
         </svg>
     )
 }
+{
+    name === 'copy' && (
+        <svg
+            class={className}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+        >
+            <rect x="9" y="9" width="12" height="12" />
+            <path d="M5 15H3V3h12v2" />
+        </svg>
+    )
+}
+{
+    name === 'check' && (
+        <svg
+            class={className}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+        >
+            <path d="m5 12 5 5L20 7" />
+        </svg>
+    )
+}

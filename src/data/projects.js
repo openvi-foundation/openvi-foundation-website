@@ -37,6 +37,8 @@ export const projects = [
         language: 'Vue',
         license: 'MIT',
         continues: 'PrimeVue',
+        upstreamStatus: 'Security fixes only',
+        upstreamNote: 'security fixes only upstream, new development no longer MIT',
         guides: [
             {
                 href: '/projects/openvue/migrate',
@@ -58,11 +60,11 @@ export const projects = [
             }
         ],
         summary:
-            'A community-maintained continuation of PrimeVue, one of the most widely adopted Vue.js component libraries, picked up after its original maintainers archived it. 80+ accessible, themeable components for Vue and Nuxt.',
+            'A community-maintained continuation of PrimeVue, one of the most widely adopted Vue.js component libraries, picked up after its MIT-licensed 4.x line stopped moving. 80+ accessible, themeable components for Vue and Nuxt.',
         metaDescription:
             'OpenVue is the maintained continuation of PrimeVue: 80+ accessible Vue and Nuxt components, an unchanged API, MIT licensed. Migrate with one command.',
         why: [
-            'PrimeVue was archived while a lot of production applications still depended on it. Teams running it were left choosing between freezing the dependency and rewriting their UI layer.',
+            'PrimeVue 4 was archived, then reopened for security fixes only. New development moved to PrimeVue 5 under a license that is no longer MIT, while a lot of production applications still depend on the MIT 4.x line. Teams running it were left choosing between freezing the dependency, accepting a new license and rewriting their UI layer.',
             'OpenVue keeps the same component API, so existing code keeps working. The MIT license is unchanged and stays that way.',
             'We forked the whole toolchain rather than just the components. The theming engine and the icon set are maintained here too, so nothing critical resolves at runtime from a scope we do not control.'
         ],
@@ -107,62 +109,6 @@ export const projects = [
         ]
     },
     {
-        slug: 'openvolt',
-        name: 'OpenVolt',
-        tagline: 'Tailwind CSS components for OpenVue, continued.',
-        status: 'stable',
-        version: '1.0.1',
-        repo: 'https://github.com/openvi-foundation/openvue/tree/master/packages/volt-cli',
-        githubRepo: 'openvi-foundation/openvue',
-        npmPackage: 'openvolt-vue',
-        docs: 'https://openvolt.openvue.dev',
-        npm: 'https://www.npmjs.com/package/openvolt-vue',
-        install: 'npx openvolt-vue add Button',
-        language: 'Vue',
-        license: 'MIT',
-        continues: 'PrimeVue Volt',
-        // Volt itself is not archived; what it sits on is. The spec table says
-        // "archived upstream" for everything else.
-        upstreamNote: 'built on PrimeVue v4, now security-only upstream',
-        summary:
-            'A maintained continuation of Volt, the Tailwind CSS components built on unstyled PrimeVue. 69 components you copy into your project as plain .vue files and own from then on, built on OpenVue and released with it.',
-        metaDescription:
-            'OpenVolt continues PrimeVue Volt: 69 Tailwind CSS components for OpenVue that you copy into your project and own. Tested in CI, MIT licensed.',
-        why: [
-            'Volt depends on PrimeVue v4, which has moved to security-only maintenance with a read-only issue tracker. Projects built on Volt had nowhere to report a broken component.',
-            'OpenVolt is the same 69 components and the same design, rebuilt on `openvue` instead of `primevue`. It lives in the OpenVue repository and ships with every OpenVue release, so the components and the library underneath them cannot drift apart.',
-            'The upstream CLI cloned the repository and copied whatever was on the main branch at that moment. The OpenVolt CLI carries its components inside the published package, so an install always gives you files from a release, matched to your OpenVue version.'
-        ],
-        highlights: [
-            {
-                title: 'You own the code',
-                body: '`npx openvolt-vue add Button` writes the component into `src/volt` as a regular `.vue` file. The styling is Tailwind classes you can read and change; keyboard support and accessibility still come from OpenVue underneath.'
-            },
-            {
-                title: 'Tested on every pull request',
-                body: 'CI installs OpenVolt into a fresh project, type checks it and runs it in a real browser, so a component that breaks fails the build before it ships.'
-            },
-            {
-                title: 'Works offline',
-                body: 'Nothing is downloaded when you add a component, so the CLI works in CI, behind firewalls and without git.'
-            },
-            {
-                title: 'Your edits are safe',
-                body: 'Components you have customised are never overwritten unless you pass `--overwrite`. Coming from PrimeVue Volt, `npx @openvue/migrate` followed by `npx openvolt-vue add all --overwrite` moves a project across.'
-            }
-        ],
-        contribute: {
-            guide: 'https://github.com/openvi-foundation/openvue/blob/master/CONTRIBUTING.md',
-            setup: 'git clone https://github.com/openvi-foundation/openvue.git\ncd openvue\npnpm install\n# the CLI and its components: packages/volt-cli',
-            help: [
-                'Components that break or look wrong after `npx openvolt-vue add`, with the Tailwind and OpenVue versions you are on.',
-                'Gaps in the Vite and Nuxt setup guides on openvolt.openvue.dev.',
-                'Projects moving from PrimeVue Volt: what the switch did not cover.'
-            ]
-        },
-        packages: [{ name: 'openvolt-vue', desc: 'CLI that copies OpenVolt components into your project' }]
-    },
-    {
         slug: 'openicons',
         name: 'OpenIcons',
         tagline: 'The icon library for OpenVue, continued.',
@@ -177,12 +123,13 @@ export const projects = [
         language: 'CSS',
         license: 'MIT',
         continues: 'PrimeIcons',
+        upstreamStatus: 'Archived',
         summary:
             'A community-maintained continuation of PrimeIcons, the icon font used by PrimeVue and the wider Prime ecosystem. 323 icons, shipped as a dependency-free webfont and as tree-shakeable Vue 3 components.',
         metaDescription:
             'OpenIcons is the maintained continuation of PrimeIcons: 323 icons as a dependency-free webfont or tree-shakeable Vue components. MIT licensed.',
         why: [
-            'PrimeIcons was archived alongside PrimeVue, so every application using the `pi pi-*` classes needed a maintained replacement.',
+            'The MIT-licensed PrimeIcons repository was archived, so every application using the `pi pi-*` classes needed a maintained replacement.',
             'OpenIcons ships a compatibility stylesheet. Existing `pi-` class names keep rendering while a codebase moves to `oi-` at its own pace.',
             'The webfont has no dependencies, no build step and no runtime: it is a font and a stylesheet. Projects that would rather ship only the icons they use can import the Vue components instead.'
         ],
@@ -233,6 +180,7 @@ export const projects = [
         language: 'TypeScript',
         license: 'MIT',
         continues: 'PrimeUIX',
+        upstreamStatus: 'Archived',
         summary:
             'The styling and theming engine underneath OpenVue, forked from the last MIT-licensed PrimeUIX source and maintained independently. Framework-agnostic.',
         metaDescription:
@@ -276,6 +224,63 @@ export const projects = [
             { name: '@openuxkit/headless', desc: 'Headless UI utilities' },
             { name: '@openuxkit/mcp', desc: 'Shared Model Context Protocol server core' }
         ]
+    },
+    {
+        slug: 'openvolt',
+        name: 'OpenVolt',
+        tagline: 'Tailwind CSS components for OpenVue, continued.',
+        status: 'stable',
+        version: '1.0.1',
+        repo: 'https://github.com/openvi-foundation/openvue/tree/master/packages/volt-cli',
+        githubRepo: 'openvi-foundation/openvue',
+        npmPackage: 'openvolt-vue',
+        docs: 'https://openvolt.openvue.dev',
+        npm: 'https://www.npmjs.com/package/openvolt-vue',
+        install: 'npx openvolt-vue add Button',
+        language: 'Vue',
+        license: 'MIT',
+        continues: 'PrimeVue Volt',
+        upstreamStatus: 'Security fixes only',
+        // Volt itself is not archived; what it sits on is. The spec table says
+        // "archived upstream" for everything else.
+        upstreamNote: 'built on PrimeVue v4, now security-only upstream',
+        summary:
+            'A maintained continuation of Volt, the Tailwind CSS components built on unstyled PrimeVue. 69 components you copy into your project as plain .vue files and own from then on, built on OpenVue and released with it.',
+        metaDescription:
+            'OpenVolt continues PrimeVue Volt: 69 Tailwind CSS components for OpenVue that you copy into your project and own. Tested in CI, MIT licensed.',
+        why: [
+            'Volt depends on PrimeVue v4, which has moved to security-only maintenance with a read-only issue tracker. Projects built on Volt had nowhere to report a broken component.',
+            'OpenVolt is the same 69 components and the same design, rebuilt on `openvue` instead of `primevue`. It lives in the OpenVue repository and ships with every OpenVue release, so the components and the library underneath them cannot drift apart.',
+            'The upstream CLI cloned the repository and copied whatever was on the main branch at that moment. The OpenVolt CLI carries its components inside the published package, so an install always gives you files from a release, matched to your OpenVue version.'
+        ],
+        highlights: [
+            {
+                title: 'You own the code',
+                body: '`npx openvolt-vue add Button` writes the component into `src/volt` as a regular `.vue` file. The styling is Tailwind classes you can read and change; keyboard support and accessibility still come from OpenVue underneath.'
+            },
+            {
+                title: 'Tested on every pull request',
+                body: 'CI installs OpenVolt into a fresh project, type checks it and runs it in a real browser, so a component that breaks fails the build before it ships.'
+            },
+            {
+                title: 'Works offline',
+                body: 'Nothing is downloaded when you add a component, so the CLI works in CI, behind firewalls and without git.'
+            },
+            {
+                title: 'Your edits are safe',
+                body: 'Components you have customised are never overwritten unless you pass `--overwrite`. Coming from PrimeVue Volt, `npx @openvue/migrate` followed by `npx openvolt-vue add all --overwrite` moves a project across.'
+            }
+        ],
+        contribute: {
+            guide: 'https://github.com/openvi-foundation/openvue/blob/master/CONTRIBUTING.md',
+            setup: 'git clone https://github.com/openvi-foundation/openvue.git\ncd openvue\npnpm install\n# the CLI and its components: packages/volt-cli',
+            help: [
+                'Components that break or look wrong after `npx openvolt-vue add`, with the Tailwind and OpenVue versions you are on.',
+                'Gaps in the Vite and Nuxt setup guides on openvolt.openvue.dev.',
+                'Projects moving from PrimeVue Volt: what the switch did not cover.'
+            ]
+        },
+        packages: [{ name: 'openvolt-vue', desc: 'CLI that copies OpenVolt components into your project' }]
     }
 ];
 

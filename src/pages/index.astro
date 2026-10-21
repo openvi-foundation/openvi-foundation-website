@@ -1,11 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-import ProjectList from '../components/ProjectList.astro';
 import Icon from '../components/Icon.astro';
 import PixelBlast from '../components/vendor/PixelBlast.vue';
 import LinkButton from '../components/openvue/LinkButton.vue';
-import FeatureCard from '../components/openvue/FeatureCard.vue';
-import { projects } from '../data/projects.js';
+import StatusTag from '../components/openvue/StatusTag.vue';
+import { projects, statusLabels } from '../data/projects.js';
 import { faq } from '../data/faq.js';
 import { site } from '../data/site.js';
 import { getStats, formatCount } from '../data/stats.js';
@@ -49,7 +48,7 @@ const figures = [
     { value: String(projects.length), label: 'maintained libraries', href: '/projects' },
     stats.totalStars != null && {
         value: formatCount(stats.totalStars),
-        label: 'GitHub stars across the foundation',
+        label: 'GitHub stars',
         href: site.github
     },
     stats.totalDownloads != null && {
@@ -64,26 +63,63 @@ const figures = [
     }
 ].filter(Boolean);
 
-// The reasons the foundation exists, as numbered clauses rather than a card
-// grid: they are an argument in sequence, not three parallel features.
+const migrateCommand = 'npx @openvue/migrate';
+
+// The reasons the foundation exists, set side by side as three short points.
+const openvue = projects.find((p) => p.slug === 'openvue');
+
 const rationale = [
     {
+        kind: 'versions',
         title: 'We started with PrimeVue',
-        body: 'Its last release, 4.5.5, shipped in April 2026 and the repository is archived. The package is still pulled from npm over half a million times a week.'
+        body: 'The MIT 4.x line last shipped in April 2026 and now gets security fixes only, while new development moved off MIT. It is still pulled from npm over 400,000 times a week.'
     },
     {
+        kind: 'stack',
         title: 'The whole stack, in one place',
         body: 'Components, theming engine and icon set are all maintained here, so nothing critical resolves at runtime from a scope we do not control.'
     },
     {
+        kind: 'license',
         title: 'MIT, permanently',
         body: 'Every project here is MIT and stays MIT. A relicense upstream cannot reach these packages.'
     }
 ];
+
+// What each reason points at, shown above it: the release lines, the packages
+// that make up the stack, and the head of the license itself.
+const versionLines = [
+    { pkg: 'primevue', version: '4.5.5', note: 'MIT, security fixes only', tone: 'archived' },
+    { pkg: 'primevue', version: '5.x', note: 'PrimeUI License', tone: 'muted' },
+    { pkg: 'openvue', version: openvue.version, note: 'MIT, maintained', tone: 'live' }
+];
+
+const stackPackages = [
+    { pkg: 'openvue', role: 'Components' },
+    { pkg: '@openvue/themes', role: 'Theme presets' },
+    { pkg: '@openuxkit/themes', role: 'Theming engine' },
+    { pkg: '@openvue/openicons', role: 'Icons' },
+    { pkg: 'openvolt-vue', role: 'Tailwind components' }
+];
+
+// The opening of the OpenVue LICENSE.md, as published: both copyright lines,
+// because the upstream one is the point.
+const licenseHead = [
+    'The MIT License (MIT)',
+    '',
+    'Copyright (c) 2018-2025 PrimeTek',
+    'Copyright (c) 2026 OpenVue Foundation and contributors',
+    '',
+    'Permission is hereby granted, free of charge,',
+    'to any person obtaining a copy of this software',
+    'and associated documentation files (the',
+    '"Software"), to deal in the Software without',
+    'restriction, including without limitation...'
+];
 ---
 
 <Base title={null} description={description} schema={schema}>
-    <section class="band hero">
+    <section class="band hero hero-home">
         {/* Decoration and nothing else: it carries no text, it is hydrated
             late, and the masthead reads the same without it. */}
         <div class="hero-field" aria-hidden="true">
@@ -103,136 +139,210 @@ const rationale = [
         </div>
 
         <div class="wrap">
-            <h1>Maintained, not archived</h1>
-            <div class="hero-rule"></div>
-            <p class="lede">
-                We build and maintain open source UI libraries for the web. Components, theming,
-                icons and the tooling around them, all MIT licensed and community run.
-            </p>
-            <div class="hero-actions">
-                <LinkButton href="/projects" label="Browse projects">
-                    <Icon name="arrow-right" />
-                </LinkButton>
-                <LinkButton
-                    href={site.docs}
-                    label="Read the docs"
-                    severity="secondary"
-                    outlined
-                    rel="noopener"
-                />
-                <LinkButton href={site.github} label="GitHub" severity="secondary" text rel="noopener">
-                    <Icon name="github" />
-                </LinkButton>
-            </div>
-        </div>
-    </section>
+            <div class="hero-grid">
+                <div class="hero-copy">
+                    <h1>Maintained, <span class="hero-accent">not archived</span></h1>
+                    <p class="lede">
+                        We build and maintain open source UI libraries for the web. Components,
+                        theming, icons and the tooling around them, all MIT licensed and community
+                        run.
+                    </p>
+                    <div class="hero-actions">
+                        <LinkButton href="/projects" label="Browse projects">
+                            <Icon name="arrow-right" class="icon-trail" />
+                        </LinkButton>
+                        <LinkButton
+                            href={site.docs}
+                            label="Read the docs"
+                            severity="secondary"
+                            outlined
+                            rel="noopener"
+                        />
+                        <LinkButton
+                            href={site.github}
+                            label="GitHub"
+                            severity="secondary"
+                            text
+                            rel="noopener"
+                        >
+                            <Icon name="github" />
+                        </LinkButton>
+                    </div>
+                </div>
 
-    {
-        figures.length > 0 && (
-            <section class="band band-tight" aria-label="The projects in numbers">
-                <div class="wrap">
-                    <ul class="stats">
+                {/* The thesis as a figure: where each upstream stands now, and
+                    what carries it on. Every row is a link to the continuation. */}
+                <section class="board" aria-labelledby="board-heading">
+                    <h2 id="board-heading" class="board-title">What we picked up</h2>
+                    <ul class="board-list">
+                        {
+                            projects.map((p) => (
+                                <li>
+                                    <a href={`/projects/${p.slug}`}>
+                                        <span class="board-side">
+                                            <span class="board-name board-from">{p.continues}</span>
+                                            <span class="board-meta board-meta-upstream">
+                                                {p.upstreamStatus}
+                                            </span>
+                                        </span>
+                                        <span class="board-arrow" aria-hidden="true">
+                                            <Icon name="arrow-right" />
+                                        </span>
+                                        <span class="board-side">
+                                            <span class="board-name board-to">{p.name}</span>
+                                            <span class="board-meta">v{p.version} · MIT</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                    <div class="board-foot">
+                        <span class="board-foot-label">Moving a PrimeVue 4 project?</span>
+                        <div class="cmd" data-copy={migrateCommand}>
+                            <code><span class="cmd-prompt" aria-hidden="true">$</span>{migrateCommand}</code>
+                            <button type="button" class="cmd-copy" aria-label="Copy command">
+                                <Icon name="copy" class="cmd-icon-copy" />
+                                <Icon name="check" class="cmd-icon-done" />
+                            </button>
+                        </div>
+                        <a class="board-foot-link" href="/projects/openvue/migrate">
+                            Read the migration guide <Icon name="arrow-right" />
+                        </a>
+                    </div>
+                </section>
+            </div>
+
+            {
+                figures.length > 0 && (
+                    <ul class="hero-stats" aria-label="The projects in numbers">
                         {figures.map((f) => (
                             <li>
-                                <a href={f.href} rel={f.href.startsWith('http') ? 'noopener' : undefined}>
-                                    <span class="stats-value">{f.value}</span>
-                                    <span class="stats-label">{f.label}</span>
+                                <a
+                                    href={f.href}
+                                    rel={f.href.startsWith('http') ? 'noopener' : undefined}
+                                >
+                                    <span class="hero-stats-value">{f.value}</span>
+                                    <span class="hero-stats-label">{f.label}</span>
                                 </a>
                             </li>
                         ))}
                     </ul>
-                </div>
-            </section>
-        )
-    }
+                )
+            }
+        </div>
+    </section>
 
-    <section class="band" aria-labelledby="succession-heading">
+    <section class="band home-band" aria-labelledby="projects-heading">
         <div class="wrap">
-            <div>
-                <div class="section-head">
-                    <h2 id="succession-heading">What we picked up</h2>
-                    <p>
-                        Four upstream projects that stopped moving, each with a maintained
-                        continuation published under a license that cannot be changed out from
-                        under it.
-                    </p>
-                </div>
+            <h2 id="projects-heading" class="home-head">The full stack a UI library needs</h2>
 
-                <ul class="succession">
-                    {
-                        projects.map((p) => (
-                            <li>
-                                <span class="from">{p.continues}</span>
-                                <span class="arrow" aria-hidden="true">
-                                    &rarr;
-                                </span>
-                                <span class="to">
-                                    <a href={`/projects/${p.slug}`}>{p.name}</a>
-                                    <span class="version">v{p.version}</span>
-                                </span>
+            {/* Built here rather than with ProjectList: the home page shows the
+                projects as a grid to pick from, /projects as a register to read. */}
+            <ul class="project-grid">
+                {
+                    projects.map((p) => {
+                        const status = statusLabels[p.status];
+                        return (
+                            <li class="project-tile">
+                                <div class="project-tile-top">
+                                    <h3 class="project-tile-name">
+                                        <a href={`/projects/${p.slug}`}>{p.name}</a>
+                                    </h3>
+                                    <StatusTag
+                                        version={p.version}
+                                        status={p.status}
+                                        label={status.label}
+                                        note={status.note}
+                                    />
+                                </div>
+                                <p class="project-tile-continues">
+                                    continues {p.continues}
+                                </p>
+                                <p class="project-tile-tagline">{p.tagline}</p>
+                                <div class="cmd project-tile-install" data-copy={p.install}>
+                                    <code><span class="cmd-prompt" aria-hidden="true">$</span>{p.install}</code>
+                                    <button
+                                        type="button"
+                                        class="cmd-copy"
+                                        aria-label={`Copy install command for ${p.name}`}
+                                    >
+                                        <Icon name="copy" class="cmd-icon-copy" />
+                                        <Icon name="check" class="cmd-icon-done" />
+                                    </button>
+                                </div>
+                                <div class="project-tile-foot">
+                                    <span class="project-tile-facts">
+                                        {p.language} · {p.license}
+                                    </span>
+                                    <span class="project-tile-more" aria-hidden="true">
+                                        Details <Icon name="arrow-right" />
+                                    </span>
+                                </div>
                             </li>
-                        ))
-                    }
-                </ul>
-                {/* The one pointer to a project guide on this page. The guide
-                    itself belongs to OpenVue, so the home page only says
-                    where it is. */}
-                <p class="small muted succession-note">
-                    Moving an existing PrimeVue 4 project? <a href="/projects/openvue/migrate"
-                        >OpenVue's migration guide</a
-                    > does it in one command.
-                </p>
-            </div>
+                        );
+                    })
+                }
+            </ul>
         </div>
     </section>
 
-    <section class="band" aria-labelledby="projects-heading">
+    <section class="band home-band home-band-subtle" aria-labelledby="why-heading">
         <div class="wrap">
-            <div>
-                <div class="section-head">
-                    <h2 id="projects-heading">Projects</h2>
-                    <p>
-                        Components, Tailwind components you own, a theming engine and an icon set:
-                        the full stack a UI library needs, each one published to npm on its own.
-                    </p>
-                </div>
-                <ProjectList items={projects} heading="h3" />
-            </div>
+            <h2 id="why-heading" class="home-head">Why the foundation exists</h2>
+
+            <ul class="reasons">
+                {
+                    rationale.map((item) => (
+                        <li class="reason">
+                            <div class="reason-figure" aria-hidden="true">
+                                {item.kind === 'versions' && (
+                                    <ul class="figure-rows">
+                                        {versionLines.map((line) => (
+                                            <li>
+                                                <code>
+                                                    {line.pkg}
+                                                    <span class="figure-faint">@{line.version}</span>
+                                                </code>
+                                                <span class={`figure-note tone-${line.tone}`}>
+                                                    {line.note}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                                {item.kind === 'stack' && (
+                                    <ul class="figure-rows">
+                                        {stackPackages.map((row) => (
+                                            <li>
+                                                <code>{row.pkg}</code>
+                                                <span class="figure-note">{row.role}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                                {item.kind === 'license' && (
+                                    <pre class="figure-license">{licenseHead.join('\n')}</pre>
+                                )}
+                            </div>
+                            <div class="reason-text">
+                                <h3>{item.title}</h3>
+                                <p>{item.body}</p>
+                            </div>
+                        </li>
+                    ))
+                }
+            </ul>
         </div>
     </section>
 
-    <section class="band" aria-labelledby="why-heading">
-        <div class="wrap">
-            <div>
-                <div class="section-head">
-                    <h2 id="why-heading">Why the foundation exists</h2>
-                    <p>
-                        To keep widely used libraries maintained after their original maintainers
-                        move on.
-                    </p>
-                </div>
-                <ul class="notes">
-                    {
-                        rationale.map((item) => (
-                            <li>
-                                <FeatureCard title={item.title}>
-                                    {item.body}
-                                </FeatureCard>
-                            </li>
-                        ))
-                    }
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section class="band" aria-labelledby="faq-heading">
-        <div class="wrap">
-            <div class="section-head">
+    <section class="band home-band" aria-labelledby="faq-heading">
+        <div class="wrap faq-layout">
+            <div class="faq-aside">
                 <h2 id="faq-heading">Common questions</h2>
-                <p>
-                    What people ask most often about the foundation, its projects and how they
-                    are run.
+                <p class="faq-aside-more">
+                    Something else? Ask on <a href={site.discord} rel="noopener">Discord</a> or
+                    write to <a href={`mailto:${site.email}`}>{site.email}</a>.
                 </p>
             </div>
 
@@ -252,12 +362,52 @@ const rationale = [
         </div>
     </section>
 
-    <section class="band band-tight">
+    <section class="band home-cta" aria-labelledby="cta-heading">
         <div class="wrap">
-            <p class="small muted" style="margin: 0; max-width: var(--measure);">
+            <div class="home-cta-inner">
+                <div>
+                    <h2 id="cta-heading">Help keep it maintained</h2>
+                    <p>
+                        Triage an issue, test a release against your app, or fix a doc. Commit
+                        access follows sustained contribution, not affiliation.
+                    </p>
+                </div>
+                <div class="hero-actions">
+                    <LinkButton href="/contribute" label="Start contributing">
+                        <Icon name="arrow-right" class="icon-trail" />
+                    </LinkButton>
+                    <LinkButton
+                        href={site.discord}
+                        label="Join Discord"
+                        severity="secondary"
+                        outlined
+                        rel="noopener"
+                    >
+                        <Icon name="discord" />
+                    </LinkButton>
+                </div>
+            </div>
+            <p class="home-cta-note">
                 OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek
                 Informatics or PrimeUI.
             </p>
         </div>
     </section>
+
+    <script>
+        // Copy-to-clipboard for the shell commands on the page. Without JavaScript the
+        // button does nothing and the command is still there to select.
+        for (const box of document.querySelectorAll<HTMLElement>('.cmd[data-copy]')) {
+            const button = box.querySelector('button');
+            button?.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(box.dataset.copy ?? '');
+                    box.classList.add('is-copied');
+                    setTimeout(() => box.classList.remove('is-copied'), 1600);
+                } catch {
+                    // Clipboard blocked: leave the command for manual selection.
+                }
+            });
+        }
+    </script>
 </Base>

@@ -757,62 +757,6 @@ hr {
     margin-top: 2rem;
 }
 
-/* ---------- Succession list ---------- */
-
-/* The site's whole thesis in one figure: what was archived, and what maintains
-   it now. A plain list on rules — no headers, no badges. Every line has the
-   same status, so stating it per row would say nothing. */
-.succession {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    font-size: 0.9375rem;
-}
-
-.succession li {
-    display: flex;
-    align-items: baseline;
-    gap: 0.6rem;
-    padding: 0.7rem 0;
-    border-bottom: 1px solid var(--rule);
-}
-
-.succession-note {
-    margin: 1.25rem 0 0;
-}
-
-.succession li:last-child {
-    border-bottom: 0;
-}
-
-/* Struck through, because the upstream release is the end of that line. */
-.succession .from {
-    color: var(--text-muted);
-    text-decoration: line-through;
-    text-decoration-color: var(--archived);
-    text-decoration-thickness: 1px;
-}
-
-.succession .arrow {
-    color: var(--text-faint);
-}
-
-.succession .to a {
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.succession .to a:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-.succession .version {
-    margin-left: 0.4rem;
-    color: var(--text-faint);
-    font-variant-numeric: tabular-nums;
-}
-
 /* ---------- Registry ---------- */
 
 /* The project list. Each row is a card: the identity on the left, the
@@ -1044,33 +988,704 @@ hr {
     font-size: 0.9375rem;
 }
 
-/* ---------- Questions ---------- */
+/* ---------- Home ---------- */
 
-/* Two columns on a wide screen: the question holds the left, the answer runs
-   beside it. Same ruled rows as everything else. */
+/* The home page is the one place the document is allowed to be a front page:
+   wider rhythm, larger section heads, and content laid out across the width
+   instead of down a single ruled column. The palette and the square corners
+   are the same as everywhere else. */
+
+.hero-home {
+    /* The masthead palette has no archived hue of its own; the light one is
+       too dark to read on this ground. */
+    --archived: #d3866b;
+
+    padding-bottom: 0;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 4rem;
+    align-items: center;
+}
+
+.hero-home h1 {
+    max-width: 12ch;
+}
+
+.hero-accent {
+    color: var(--accent);
+}
+
+.hero-home .lede {
+    margin: 1.5rem 0 0;
+}
+
+/* The succession board: one panel, one row per upstream project. Status is
+   written out rather than colour-coded: the upstreams are not all in the same
+   state, and a word says which one without a legend. */
+.board {
+    border: 1px solid var(--rule-strong);
+    background: color-mix(in srgb, var(--bg) 72%, transparent);
+    backdrop-filter: blur(8px);
+}
+
+.board-title {
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--rule-strong);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+}
+
+.board-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.board-list li + li {
+    margin: 0;
+    border-top: 1px solid var(--rule);
+}
+
+.board-list a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0.9rem 1.25rem;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.15s;
+}
+
+.board-list a:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.board-side {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+}
+
+.board-name {
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.board-from {
+    color: var(--text-muted);
+}
+
+.board-to {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.board-meta {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+}
+
+.board-meta-upstream {
+    color: var(--archived);
+}
+
+.board-arrow {
+    display: grid;
+    color: var(--text-faint);
+    transition: color 0.15s, transform 0.15s;
+}
+
+.board-arrow svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.board-list a:hover .board-arrow {
+    color: var(--accent);
+    transform: translateX(2px);
+}
+
+.board-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.1rem 1.25rem 1.25rem;
+    border-top: 1px solid var(--rule-strong);
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.board-foot-label {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+.board-foot-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    align-self: flex-start;
+    font-size: 0.8125rem;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.board-foot-link:hover {
+    color: var(--accent-hover);
+}
+
+.board-foot-link svg {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+
+/* A shell command with a copy button. */
+.cmd {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--rule-strong);
+    background: var(--bg);
+}
+
+.cmd code {
+    flex: 1;
+    min-width: 0;
+    padding: 0.6rem 0.85rem;
+    background: none;
+    font-size: 0.875rem;
+    color: var(--text);
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.cmd-prompt {
+    margin-right: 0.6rem;
+    color: var(--accent);
+    user-select: none;
+}
+
+.cmd-copy {
+    display: grid;
+    place-items: center;
+    flex: none;
+    align-self: stretch;
+    width: 2.75rem;
+    border: 0;
+    border-left: 1px solid var(--rule-strong);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: color 0.15s, background-color 0.15s;
+}
+
+.cmd-copy:hover {
+    color: var(--text);
+    background: var(--bg-inset);
+}
+
+.cmd-copy svg {
+    width: 1rem;
+    height: 1rem;
+}
+
+.cmd-icon-done,
+.cmd.is-copied .cmd-icon-copy {
+    display: none;
+}
+
+.cmd.is-copied .cmd-icon-done {
+    display: block;
+    color: var(--accent);
+}
+
+/* An arrow reads as "go", so it follows the label rather than leading it. */
+.p-button > .icon-trail {
+    order: 1;
+}
+
+/* The numbers close the masthead: a row of cells on its bottom edge. */
+.hero-stats {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    margin: clamp(3rem, 1rem + 5vw, 5rem) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--rule-strong);
+}
+
+.hero-stats > li {
+    margin: 0;
+}
+
+.hero-stats > li + li {
+    border-left: 1px solid var(--rule);
+}
+
+.hero-stats a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1.5rem 1.5rem 1.75rem;
+    color: inherit;
+    text-decoration: none;
+    transition: background-color 0.15s;
+}
+
+.hero-stats > li:first-child a {
+    padding-left: 0;
+}
+
+.hero-stats a:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.hero-stats-value {
+    font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+    font-weight: 650;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.15s;
+}
+
+.hero-stats a:hover .hero-stats-value {
+    color: var(--accent);
+}
+
+.hero-stats-label {
+    font-size: 0.8125rem;
+    color: var(--text-faint);
+}
+
+@media (max-width: 60rem) {
+    .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 3rem;
+    }
+
+    .hero-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .hero-stats > li:nth-child(odd) {
+        border-left: 0;
+    }
+
+    .hero-stats > li:nth-child(odd) a {
+        padding-left: 0;
+    }
+
+    .hero-stats > li:nth-child(n + 3) {
+        border-top: 1px solid var(--rule);
+    }
+}
+
+/* Sections below the masthead. */
+.home-band {
+    border-top: 0;
+    padding: clamp(4rem, 2rem + 5vw, 6.5rem) 0;
+}
+
+.home-band-subtle {
+    background: var(--bg-subtle);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+}
+
+.home-band h2 {
+    font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.5rem);
+    letter-spacing: -0.03em;
+}
+
+.home-head {
+    margin-bottom: clamp(2rem, 1rem + 2vw, 3rem);
+}
+
+/* Projects: a two-by-two slab of tiles, divided by the page showing through a
+   1px gap, the same device the registry uses for its rows. */
+.project-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+}
+
+.project-tile {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: clamp(1.5rem, 1rem + 1.5vw, 2.25rem);
+    background: var(--bg);
+    transition: background-color 0.15s, box-shadow 0.15s;
+}
+
+.project-grid li + li {
+    margin-top: 0;
+}
+
+.project-tile:hover {
+    background: var(--surface);
+    box-shadow: inset 0 2px 0 var(--accent);
+}
+
+.project-tile-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.project-tile-name {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 650;
+    letter-spacing: -0.03em;
+}
+
+.project-tile-name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* The whole tile is the link to the project. */
+.project-tile-name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+}
+
+.project-tile-continues {
+    margin: 0.3rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--text-faint);
+}
+
+.project-tile-tagline {
+    margin: 1.1rem 0 1.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+
+/* Sits above the stretched link, so the command can be selected and copied
+   without opening the project. */
+.project-tile-install {
+    position: relative;
+    z-index: 1;
+    background: var(--bg-subtle);
+    border-color: var(--rule);
+}
+
+.project-tile-install code {
+    font-size: 0.8125rem;
+}
+
+.project-tile-install .cmd-copy {
+    border-left-color: var(--rule);
+}
+
+.project-tile:hover .project-tile-install {
+    background: var(--bg);
+}
+
+.project-tile-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    font-size: 0.8125rem;
+}
+
+.project-tile-facts {
+    color: var(--text-faint);
+}
+
+.project-tile-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    transition: color 0.15s;
+}
+
+.project-tile-more svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    transition: transform 0.15s;
+}
+
+.project-tile:hover .project-tile-more {
+    color: var(--accent);
+}
+
+.project-tile:hover .project-tile-more svg {
+    transform: translateX(3px);
+}
+
+@media (max-width: 48rem) {
+    .project-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Reasons: three panels, each one showing the thing its point is about
+   above the point itself, so the argument has evidence next to it. */
+.reasons {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+}
+
+.reasons > li {
+    margin: 0;
+}
+
+.reason {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    border: 1px solid var(--rule);
+}
+
+.reason-figure {
+    height: 13.5rem;
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--rule);
+    overflow: hidden;
+}
+
+.reason-text {
+    padding: 1.5rem 1.5rem 1.75rem;
+}
+
+.reason h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1.1875rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.reason p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+    text-wrap: pretty;
+}
+
+/* Package rows: the name in code on the left, what it is on the right. */
+.figure-rows {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.figure-rows li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    padding: 0.55rem 0;
+    border-bottom: 1px dashed var(--rule);
+}
+
+.figure-rows li:last-child {
+    border-bottom: 0;
+}
+
+.figure-rows code {
+    padding: 0;
+    background: none;
+    font-size: 0.8125rem;
+    color: var(--text);
+    white-space: nowrap;
+}
+
+.figure-faint {
+    color: var(--text-faint);
+}
+
+.figure-note {
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    text-align: right;
+    white-space: nowrap;
+}
+
+.figure-note.tone-archived {
+    color: var(--archived);
+}
+
+.figure-note.tone-live {
+    color: var(--accent);
+    font-weight: 500;
+}
+
+/* The license head, fading out where the text carries on. */
+.figure-license {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.6875rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+    white-space: pre;
+    overflow: hidden;
+    /* Lines run on under the edge rather than wrapping mid-phrase, so the
+       right side fades as well as the foot. */
+    -webkit-mask-image:
+        linear-gradient(to bottom, #000 55%, transparent),
+        linear-gradient(to right, #000 85%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image:
+        linear-gradient(to bottom, #000 55%, transparent),
+        linear-gradient(to right, #000 85%, transparent);
+    mask-composite: intersect;
+}
+
+@media (max-width: 60rem) {
+    .reasons {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .reason-figure {
+        height: auto;
+        max-height: 13.5rem;
+    }
+}
+
+/* Questions: the heading holds a sticky column on the left, the answers run
+   down the right. */
+.faq-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
+    gap: 2.5rem 5rem;
+    align-items: start;
+}
+
+.faq-aside {
+    position: sticky;
+    top: calc(var(--header-h) + 2rem);
+}
+
+.faq-aside p {
+    margin: 1rem 0 0;
+    color: var(--text-muted);
+}
+
+.faq-aside .faq-aside-more {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.875rem;
+}
+
+@media (max-width: 60rem) {
+    .faq-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .faq-aside {
+        position: static;
+    }
+}
+
+/* The answer always sits under its question: a question and its answer are
+   one thing read in sequence, not two columns compared. */
 .faq {
     margin: 0;
     border-top: 1px solid var(--rule-strong);
 }
 
-/* The answer always sits under its question, at every width: a question and
-   its answer are one thing read in sequence, not two columns compared. */
 .faq > div {
     padding: 1.5rem 0;
     border-bottom: 1px solid var(--rule);
 }
 
 .faq dt {
+    font-size: 1.0625rem;
     font-weight: 600;
-    line-height: 1.5;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
 }
 
-/* Full wrapper width, not the prose measure: these are short answers on rules,
-   and holding them to 40rem left the right half of every row empty. */
 .faq dd {
-    margin: 0.4rem 0 0;
+    max-width: 62ch;
+    margin: 0.5rem 0 0;
     color: var(--text-muted);
     font-size: 0.9375rem;
+}
+
+/* Closing call to action, the last thing above the footer. */
+.home-cta {
+    border-top: 0;
+    padding: 0 0 clamp(3rem, 2rem + 3vw, 4.5rem);
+}
+
+.home-cta-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 3rem;
+    padding: clamp(1.75rem, 1rem + 3vw, 3rem);
+    background:
+        radial-gradient(
+            ellipse 60% 120% at 100% 0%,
+            color-mix(in srgb, var(--accent) 14%, transparent),
+            transparent 70%
+        ),
+        var(--accent-soft);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.home-cta-inner h2 {
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2rem);
+    letter-spacing: -0.03em;
+}
+
+.home-cta-inner p {
+    max-width: 34rem;
+    margin: 0.6rem 0 0;
+    color: var(--text-muted);
+}
+
+.home-cta-inner .hero-actions {
+    margin: 0;
+}
+
+.home-cta-note {
+    margin: 1.5rem 0 0;
+    font-size: 0.75rem;
+    color: var(--text-faint);
 }
 
 /* ---------- Footer ---------- */
@@ -1395,51 +2010,6 @@ hr {
 .code-diff .diff-del {
     background: var(--archived-soft);
     color: var(--archived);
-}
-
-/* ---------- Figures ---------- */
-
-/* The numbers under the home masthead. Big tabular figures over small labels,
-   divided by the same hairline rules as the registry, so they read as one
-   line of the document rather than a row of dashboard tiles. */
-.stats {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-    margin: 0;
-    padding: 0;
-    border-top: 1px solid var(--rule-strong);
-}
-
-.stats > li {
-    margin: 0;
-    border-bottom: 1px solid var(--rule);
-}
-
-.stats a {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    padding: 1.1rem 1.25rem 1.1rem 0;
-    color: inherit;
-    text-decoration: none;
-}
-
-.stats-value {
-    font-size: 1.75rem;
-    font-weight: 650;
-    letter-spacing: -0.03em;
-    line-height: 1.2;
-    font-variant-numeric: tabular-nums;
-}
-
-.stats-label {
-    font-size: 0.8125rem;
-    color: var(--text-muted);
-}
-
-.stats a:hover .stats-value {
-    color: var(--accent);
 }
 
 /* ---------- Tag filter ---------- */

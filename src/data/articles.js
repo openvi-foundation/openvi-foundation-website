@@ -68,7 +68,7 @@ export const articles = [
             { t: 'p', text: 'To address this gap, we launched [OpenVue](https://openvue.dev/).' },
             {
                 t: 'p',
-                text: 'OpenVue is an independent, community-driven continuation of PrimeVue 4.5.5, the final release under open-source governance. Maintained under the [OpenVi Foundation](https://www.openvi.dev/), it operates as a fully open-source, MIT-licensed ecosystem free from commercial gating or paywalled functionality. It maintains total architectural fidelity across 80+ core components, preserving full parity with existing props, slots, events, and theming systems, while unifying icon sets and design tooling under a single ecosystem.'
+                text: 'OpenVue is an independent, community-driven continuation of PrimeVue 4.5.5, the final release under open-source governance. Maintained under the [OpenVi Foundation](https://openvi.dev), it operates as a fully open-source, MIT-licensed ecosystem free from commercial gating or paywalled functionality. It maintains total architectural fidelity across 80+ core components, preserving full parity with existing props, slots, events, and theming systems, while unifying icon sets and design tooling under a single ecosystem.'
             },
             {
                 t: 'p',

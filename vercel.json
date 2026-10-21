@@ -1,4 +1,12 @@
 {
     "$schema": "https://openapi.vercel.sh/vercel.json",
-    "cleanUrls": true
+    "cleanUrls": true,
+    "redirects": [
+        {
+            "source": "/:path*",
+            "has": [{ "type": "host", "value": "openvi-foundation-website.vercel.app" }],
+            "destination": "https://openvi.dev/:path*",
+            "permanent": true
+        }
+    ]
 }

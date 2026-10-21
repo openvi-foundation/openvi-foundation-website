@@ -2,7 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import InlineCode from '../../components/InlineCode.astro';
 import ProjectList from '../../components/ProjectList.astro';
-import FeatureCard from '../../components/openvue/FeatureCard.vue';
+import CopyCommand from '../../components/CopyCommand.astro';
+import Icon from '../../components/Icon.astro';
 import StatusTag from '../../components/openvue/StatusTag.vue';
 import LinkButton from '../../components/openvue/LinkButton.vue';
 import { projects, statusLabels } from '../../data/projects.js';
@@ -65,126 +66,102 @@ const schema = [
         { name: project.name, path: `/projects/${project.slug}` }
     ]}
 >
-    <section class="band hero-doc">
-        <div class="wrap">
-            <p class="breadcrumb"><a href="/projects">Projects</a> / {project.name}</p>
-
-            <div class="page-head">
-                <h1>{project.name}</h1>
-                <StatusTag
-                    version={project.version}
-                    status={project.status}
-                    label={status.label}
-                    note={status.note}
-                />
-            </div>
-            <p class="lede">{project.tagline}</p>
-            <p class="prose">{project.summary}</p>
-
-            <div class="button-row">
-                <LinkButton href={project.repo} label="Source" rel="noopener" />
-                {project.docs && (
-                    <LinkButton
-                        href={project.docs}
-                        label="Documentation"
-                        severity="secondary"
-                        outlined
-                        rel="noopener"
-                    />
-                )}
-                {project.npm && (
-                    <LinkButton
-                        href={project.npm}
-                        label="npm"
-                        severity="secondary"
-                        text
-                        rel="noopener"
-                    />
-                )}
-            </div>
-        </div>
-    </section>
-
-    <section class="band" aria-labelledby="spec-heading">
-        <div class="wrap">
+    <section class="band hero hero-doc">
+        <div class="wrap hero-grid hero-grid-doc">
             <div>
-                <h2 id="spec-heading" class="visually-hidden">At a glance</h2>
-                <div class="table-scroll">
-                    <table class="spec">
-                        <tbody>
-                            <tr>
-                                <th scope="row">Status</th>
-                                <td>{status.label}. {status.note}.</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Latest version</th>
-                                <td><code>{project.version}</code></td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Continues</th>
-                                <td>{project.continues}, {project.upstreamNote ?? 'archived upstream'}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Language</th>
-                                <td>{project.language}</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">License</th>
-                                <td>{project.license}, permanently</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">Source</th>
-                                <td><a href={project.repo} rel="noopener">{project.repo}</a></td>
-                            </tr>
-                            {project.docs && (
-                                <tr>
-                                    <th scope="row">Documentation</th>
-                                    <td>
-                                        <a href={project.docs} rel="noopener">
-                                            {project.docs}
-                                        </a>
-                                    </td>
-                                </tr>
-                            )}
-                            {project.npm && (
-                                <tr>
-                                    <th scope="row">Registry</th>
-                                    <td>
-                                        <a href={project.npm} rel="noopener">
-                                            npm
-                                        </a>
-                                    </td>
-                                </tr>
-                            )}
-                            {stars != null && (
-                                <tr>
-                                    <th scope="row">GitHub stars</th>
-                                    <td>
-                                        {formatCount(stars)}
-                                        {sharedRepo && (
-                                            <span class="muted"> (the {repoName} repository)</span>
-                                        )}
-                                    </td>
-                                </tr>
-                            )}
-                            {downloads != null && (
-                                <tr>
-                                    <th scope="row">Downloads</th>
-                                    <td>
-                                        {formatCount(downloads)} last week, <code>{project.npmPackage}</code>
-                                    </td>
-                                </tr>
-                            )}
-                            {project.install && (
-                                <tr>
-                                    <th scope="row">Install</th>
-                                    <td><pre><code>{project.install}</code></pre></td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+                <p class="breadcrumb"><a href="/projects">Projects</a> / {project.name}</p>
+
+                <div class="page-head">
+                    <h1>{project.name}</h1>
+                    <StatusTag
+                        version={project.version}
+                        status={project.status}
+                        label={status.label}
+                        note={status.note}
+                    />
+                </div>
+                <p class="lede">{project.tagline}</p>
+                <p class="hero-summary">{project.summary}</p>
+
+                <div class="button-row">
+                    <LinkButton href={project.repo} label="Source" rel="noopener">
+                        <Icon name="github" />
+                    </LinkButton>
+                    {project.docs && (
+                        <LinkButton
+                            href={project.docs}
+                            label="Documentation"
+                            severity="secondary"
+                            outlined
+                            rel="noopener"
+                        />
+                    )}
+                    {project.npm && (
+                        <LinkButton
+                            href={project.npm}
+                            label="npm"
+                            severity="secondary"
+                            text
+                            rel="noopener"
+                        />
+                    )}
                 </div>
             </div>
+
+            {/* The facts a reader checks before adopting it, beside the pitch
+                rather than in a table under it. */}
+            <section class="board" aria-labelledby="facts-heading">
+                <h2 id="facts-heading" class="board-title">At a glance</h2>
+                <dl class="facts">
+                    <div>
+                        <dt>Status</dt>
+                        <dd>{status.label}, v{project.version}</dd>
+                    </div>
+                    <div>
+                        <dt>Continues</dt>
+                        <dd>
+                            {project.continues}
+                            {(project.upstreamNote || project.upstreamStatus) && (
+                                <span class="facts-note">
+                                    {project.upstreamNote ?? `${project.upstreamStatus.toLowerCase()} upstream`}
+                                </span>
+                            )}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt>License</dt>
+                        <dd>{project.license}, permanently</dd>
+                    </div>
+                    <div>
+                        <dt>Language</dt>
+                        <dd>{project.language}</dd>
+                    </div>
+                    {stars != null && (
+                        <div>
+                            <dt>GitHub stars</dt>
+                            <dd>
+                                {formatCount(stars)}
+                                {sharedRepo && <span class="facts-note">the {repoName} repository</span>}
+                            </dd>
+                        </div>
+                    )}
+                    {downloads != null && (
+                        <div>
+                            <dt>Downloads</dt>
+                            <dd>
+                                {formatCount(downloads)} last week
+                                <span class="facts-note">{project.npmPackage}</span>
+                            </dd>
+                        </div>
+                    )}
+                </dl>
+                {project.install && (
+                    <div class="board-foot">
+                        <span class="board-foot-label">Install</span>
+                        <CopyCommand command={project.install} label="install command" />
+                    </div>
+                )}
+            </section>
         </div>
     </section>
 
@@ -192,54 +169,62 @@ const schema = [
         project.guides && (
             <section class="band" aria-labelledby="guides-heading">
                 <div class="wrap">
-                    <div>
-                        <div class="section-head">
-                            <h2 id="guides-heading">Guides</h2>
-                        </div>
-                        <ul class="notes">
-                            {project.guides.map((guide) => (
-                                <li>
-                                    <FeatureCard title={guide.title}>
-                                        <p class="tool-summary">{guide.body}</p>
-                                        <p class="registry-links">
-                                            <a href={guide.href}>{guide.cta}</a>
-                                        </p>
-                                    </FeatureCard>
-                                </li>
-                            ))}
-                        </ul>
+                    <div class="section-head">
+                        <h2 id="guides-heading">Guides</h2>
                     </div>
+                    <ul class="card-grid">
+                        {project.guides.map((guide) => (
+                            <li>
+                                <article class="card card-linked">
+                                    <h3 class="card-title">
+                                        <a href={guide.href}>{guide.title}</a>
+                                    </h3>
+                                    <p class="card-body">{guide.body}</p>
+                                    <p class="card-foot">
+                                        <span class="card-more" aria-hidden="true">
+                                            {guide.cta} <Icon name="arrow-right" />
+                                        </span>
+                                    </p>
+                                </article>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </section>
         )
     }
 
-    <section class="band" aria-labelledby="why-heading">
+    <section class="band band-subtle" aria-labelledby="highlights-heading">
         <div class="wrap">
-            <div class="prose">
-                <h2 id="why-heading">Why this project exists</h2>
-                {project.why.map((para) => <p>{para}</p>)}
+            <div class="section-head">
+                <h2 id="highlights-heading">What you get</h2>
             </div>
+            <ul class="card-grid card-grid-2">
+                {
+                    project.highlights.map((h) => (
+                        <li>
+                            <article class="card">
+                                <h3 class="card-title">{h.title}</h3>
+                                <p class="card-body">
+                                    <InlineCode text={h.body} />
+                                </p>
+                            </article>
+                        </li>
+                    ))
+                }
+            </ul>
         </div>
     </section>
 
-    <section class="band" aria-labelledby="highlights-heading">
+    <section class="band" aria-labelledby="why-heading">
         <div class="wrap">
-            <div>
-                <div class="section-head">
-                    <h2 id="highlights-heading">What you get</h2>
-                </div>
-                <ul class="notes">
-                    {
-                        project.highlights.map((h) => (
-                            <li>
-                                <FeatureCard title={h.title}>
-                                    <InlineCode text={h.body} />
-                                </FeatureCard>
-                            </li>
-                        ))
-                    }
-                </ul>
+            <div class="prose">
+                <h2 id="why-heading" class="section-title">Why this project exists</h2>
+                {project.why.map((para) => (
+                    <p>
+                        <InlineCode text={para} />
+                    </p>
+                ))}
             </div>
         </div>
     </section>
@@ -248,48 +233,40 @@ const schema = [
         project.packages.length > 0 && (
             <section class="band" aria-labelledby="packages-heading">
                 <div class="wrap">
-                    <div>
-                        <div class="section-head">
-                            <h2 id="packages-heading">Packages</h2>
-                            <p>
-                                Everything published under this project, and what each one is
-                                responsible for.
-                            </p>
-                        </div>
-                        <div class="table-scroll">
-                            <table class="spec">
-                                <thead>
+                    <div class="section-head">
+                        <h2 id="packages-heading">Packages</h2>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="spec">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Package</th>
+                                    <th scope="col">Responsibility</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {project.packages.map((pkg) => (
                                     <tr>
-                                        <th scope="col">Package</th>
-                                        <th scope="col">Responsibility</th>
+                                        <td class="spec-package">
+                                            <code>{pkg.name}</code>
+                                        </td>
+                                        <td>{pkg.desc}</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {project.packages.map((pkg) => (
-                                        <tr>
-                                            <td class="spec-package">
-                                                <code>{pkg.name}</code>
-                                            </td>
-                                            <td>{pkg.desc}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
         )
     }
 
-    <section class="band" aria-labelledby="others-heading">
+    <section class="band band-subtle" aria-labelledby="others-heading">
         <div class="wrap">
-            <div>
-                <div class="section-head">
-                    <h2 id="others-heading">Other projects</h2>
-                </div>
-                <ProjectList items={others} heading="h3" />
+            <div class="section-head">
+                <h2 id="others-heading">Other projects</h2>
             </div>
+            <ProjectList items={others} heading="h3" />
         </div>
     </section>
 </Base>

@@ -126,10 +126,6 @@ const breadcrumbList =
 
 const year = new Date().getFullYear();
 
-// The home page opens on a dark masthead panel that runs up behind the header,
-// so the header there starts transparent and takes the panel's palette. Every
-// other page puts it straight onto the sheet.
-const overHero = Astro.url.pathname.replace(/\/$/, '') === '';
 ---
 
 <html lang="en" data-theme="light">
@@ -216,9 +212,10 @@ const overHero = Astro.url.pathname.replace(/\/$/, '') === '';
     </head>
 
     <body>
-        <a class="skip-link" href="#main">Skip to content</a>
-
-        <header class:list={['site-header', overHero && 'site-header-over']}>
+        {/* Every page opens on a dark masthead panel that runs up behind the
+            header, so the header starts transparent and takes the panel's
+            palette until the page moves. */}
+        <header class="site-header site-header-over">
             <div class="wrap">
                 <a class="brand" href="/">
                     <Logo />
@@ -342,5 +339,32 @@ const overHero = Astro.url.pathname.replace(/\/$/, '') === '';
         </footer>
 
         <Analytics />
+
+        <script>
+            // Marks the section being read in a page's contents column. The
+            // last heading above the top third of the viewport is current.
+            const toc = document.querySelector('.doc-toc');
+            const links = toc
+                ? [...toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')]
+                : [];
+            const targets = links
+                .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+                .filter((el): el is HTMLElement => el !== null);
+
+            if (targets.length > 0) {
+                const update = () => {
+                    const line = window.innerHeight / 3;
+                    let current = targets[0];
+                    for (const el of targets) {
+                        if (el.getBoundingClientRect().top <= line) current = el;
+                    }
+                    for (const link of links) {
+                        link.classList.toggle('is-current', link.hash === `#${current.id}`);
+                    }
+                };
+                addEventListener('scroll', update, { passive: true });
+                update();
+            }
+        </script>
     </body>
 </html>

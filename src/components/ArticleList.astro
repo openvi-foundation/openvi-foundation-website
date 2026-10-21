@@ -1,24 +1,50 @@
 ---
+/**
+ * Articles as a grid of cards. Each card links to the piece as a whole; the
+ * link to where it first ran sits above that link in the card's foot.
+ *
+ * `heading` sets the card title level. `compact` drops the summary and the
+ * outbound link, for the "more articles" strip under a piece.
+ */
 import { kindLabels, formatDate, readingTime } from '../data/articles.js';
-import ArticleCard from './openvue/ArticleCard.vue';
+import Icon from './Icon.astro';
 
-/** `heading` controls whether each article title renders as h2 or h3. */
-const { items, heading = 'h2' } = Astro.props;
+const { items, heading = 'h2', compact = false } = Astro.props;
+const Heading = heading;
 ---
 
-<ul class="registry">
+<ul class:list={['card-grid', !compact && 'card-grid-2']}>
     {
         items.map((article) => (
             <li>
-                {/* No client directive: the OpenVue card is rendered to HTML at
-                    build time and ships no JavaScript. */}
-                <ArticleCard
-                    article={article}
-                    kind={kindLabels[article.kind]}
-                    dateLabel={formatDate(article.date)}
-                    minutes={readingTime(article)}
-                    headingLevel={heading}
-                />
+                <article class="card card-linked article-card">
+                    <p class="article-card-meta">
+                        <span>{kindLabels[article.kind].label}</span>
+                        <span aria-hidden="true">·</span>
+                        <time datetime={article.date}>{formatDate(article.date)}</time>
+                        {!compact && (
+                            <>
+                                <span aria-hidden="true">·</span>
+                                <span>{readingTime(article)} min read</span>
+                            </>
+                        )}
+                    </p>
+                    <Heading class="card-title article-card-title">
+                        <a href={`/articles/${article.slug}`}>{article.title}</a>
+                    </Heading>
+                    {!compact && <p class="card-body">{article.summary}</p>}
+                    <p class="card-foot">
+                        <span class="card-more" aria-hidden="true">
+                            Read <Icon name="arrow-right" />
+                        </span>
+                        {!compact && (
+                            <a href={article.source.url} rel="noopener">
+                                {article.kind === 'discussion' ? 'Thread' : 'Original'} on{' '}
+                                {article.source.short}
+                            </a>
+                        )}
+                    </p>
+                </article>
             </li>
         ))
     }

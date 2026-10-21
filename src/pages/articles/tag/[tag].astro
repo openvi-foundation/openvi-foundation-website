@@ -26,7 +26,7 @@ const count = tag.articles.length;
         { name: tag.name, path: `/articles/tag/${tag.slug}` }
     ]}
 >
-    <section class="band hero-doc">
+    <section class="band hero hero-doc">
         <div class="wrap">
             <p class="breadcrumb"><a href="/articles">Articles</a> / {tag.name}</p>
             <h1>{tag.name}</h1>
@@ -38,10 +38,8 @@ const count = tag.articles.length;
 
     <section class="band">
         <div class="wrap">
-            <div>
                 <TagFilter current={tag.slug} />
                 <ArticleList items={tag.articles} />
-            </div>
         </div>
     </section>
 </Base>

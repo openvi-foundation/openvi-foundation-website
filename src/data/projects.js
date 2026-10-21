@@ -241,8 +241,8 @@ export const projects = [
         license: 'MIT',
         continues: 'PrimeVue Volt',
         upstreamStatus: 'Security fixes only',
-        // Volt itself is not archived; what it sits on is. The spec table says
-        // "archived upstream" for everything else.
+        // `upstreamNote` replaces the plain status on the project page where
+        // the upstream's state needs more than two words.
         upstreamNote: 'built on PrimeVue v4, now security-only upstream',
         summary:
             'A maintained continuation of Volt, the Tailwind CSS components built on unstyled PrimeVue. 69 components you copy into your project as plain .vue files and own from then on, built on OpenVue and released with it.',

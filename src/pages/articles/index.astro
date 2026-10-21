@@ -39,7 +39,7 @@ const schema = [
     pageType="CollectionPage"
     breadcrumbs={[{ name: 'Articles', path: '/articles' }]}
 >
-    <section class="band hero-doc">
+    <section class="band hero hero-doc">
         <div class="wrap">
             <h1>Articles</h1>
             <p class="lede">
@@ -52,10 +52,8 @@ const schema = [
 
     <section class="band">
         <div class="wrap">
-            <div>
                 <TagFilter />
                 <ArticleList items={articlesByDate} />
-            </div>
         </div>
     </section>
 </Base>

@@ -3,8 +3,9 @@ import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import PixelBlast from '../components/vendor/PixelBlast.vue';
 import LinkButton from '../components/openvue/LinkButton.vue';
-import StatusTag from '../components/openvue/StatusTag.vue';
-import { projects, statusLabels } from '../data/projects.js';
+import ProjectList from '../components/ProjectList.astro';
+import CopyCommand from '../components/CopyCommand.astro';
+import { projects } from '../data/projects.js';
 import { faq } from '../data/faq.js';
 import { site } from '../data/site.js';
 import { getStats, formatCount } from '../data/stats.js';
@@ -199,13 +200,7 @@ const licenseHead = [
                     </ul>
                     <div class="board-foot">
                         <span class="board-foot-label">Moving a PrimeVue 4 project?</span>
-                        <div class="cmd" data-copy={migrateCommand}>
-                            <code><span class="cmd-prompt" aria-hidden="true">$</span>{migrateCommand}</code>
-                            <button type="button" class="cmd-copy" aria-label="Copy command">
-                                <Icon name="copy" class="cmd-icon-copy" />
-                                <Icon name="check" class="cmd-icon-done" />
-                            </button>
-                        </div>
+                        <CopyCommand command={migrateCommand} label="migration command" />
                         <a class="board-foot-link" href="/projects/openvue/migrate">
                             Read the migration guide <Icon name="arrow-right" />
                         </a>
@@ -237,53 +232,7 @@ const licenseHead = [
         <div class="wrap">
             <h2 id="projects-heading" class="home-head">The full stack a UI library needs</h2>
 
-            {/* Built here rather than with ProjectList: the home page shows the
-                projects as a grid to pick from, /projects as a register to read. */}
-            <ul class="project-grid">
-                {
-                    projects.map((p) => {
-                        const status = statusLabels[p.status];
-                        return (
-                            <li class="project-tile">
-                                <div class="project-tile-top">
-                                    <h3 class="project-tile-name">
-                                        <a href={`/projects/${p.slug}`}>{p.name}</a>
-                                    </h3>
-                                    <StatusTag
-                                        version={p.version}
-                                        status={p.status}
-                                        label={status.label}
-                                        note={status.note}
-                                    />
-                                </div>
-                                <p class="project-tile-continues">
-                                    continues {p.continues}
-                                </p>
-                                <p class="project-tile-tagline">{p.tagline}</p>
-                                <div class="cmd project-tile-install" data-copy={p.install}>
-                                    <code><span class="cmd-prompt" aria-hidden="true">$</span>{p.install}</code>
-                                    <button
-                                        type="button"
-                                        class="cmd-copy"
-                                        aria-label={`Copy install command for ${p.name}`}
-                                    >
-                                        <Icon name="copy" class="cmd-icon-copy" />
-                                        <Icon name="check" class="cmd-icon-done" />
-                                    </button>
-                                </div>
-                                <div class="project-tile-foot">
-                                    <span class="project-tile-facts">
-                                        {p.language} · {p.license}
-                                    </span>
-                                    <span class="project-tile-more" aria-hidden="true">
-                                        Details <Icon name="arrow-right" />
-                                    </span>
-                                </div>
-                            </li>
-                        );
-                    })
-                }
-            </ul>
+            <ProjectList items={projects} />
         </div>
     </section>
 
@@ -394,20 +343,4 @@ const licenseHead = [
         </div>
     </section>
 
-    <script>
-        // Copy-to-clipboard for the shell commands on the page. Without JavaScript the
-        // button does nothing and the command is still there to select.
-        for (const box of document.querySelectorAll<HTMLElement>('.cmd[data-copy]')) {
-            const button = box.querySelector('button');
-            button?.addEventListener('click', async () => {
-                try {
-                    await navigator.clipboard.writeText(box.dataset.copy ?? '');
-                    box.classList.add('is-copied');
-                    setTimeout(() => box.classList.remove('is-copied'), 1600);
-                } catch {
-                    // Clipboard blocked: leave the command for manual selection.
-                }
-            });
-        }
-    </script>
 </Base>

@@ -84,7 +84,7 @@ const schema = [
         { name: article.title, path: `/articles/${article.slug}` }
     ]}
 >
-    <section class="band hero-doc">
+    <section class="band hero hero-doc">
         <div class="wrap">
             <p class="breadcrumb"><a href="/articles">Articles</a> / {kind.label}</p>
 
@@ -157,14 +157,12 @@ const schema = [
         </div>
     </section>
 
-    <section class="band" aria-labelledby="more-heading">
+    <section class="band band-subtle" aria-labelledby="more-heading">
         <div class="wrap">
-            <div>
-                <div class="section-head">
-                    <h2 id="more-heading">More articles</h2>
-                </div>
-                <ArticleList items={others} heading="h3" />
+            <div class="section-head">
+                <h2 id="more-heading">More articles</h2>
             </div>
+            <ArticleList items={others.slice(0, 3)} heading="h3" compact />
         </div>
     </section>
 </Base>

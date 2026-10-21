@@ -30,7 +30,7 @@ const { blocks } = Astro.props;
                             </li>
                         ) : (
                             <li>
-                                <strong>{item.title}.</strong> <RichText text={item.text} />
+                                <strong>{item.title}.</strong>{' '}<RichText text={item.text} />
                             </li>
                         )
                     )}

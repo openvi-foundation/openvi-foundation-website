@@ -1,0 +1,34 @@
+---
+/**
+ * A shell command with a copy button. Without JavaScript the button does
+ * nothing and the command is still there to select.
+ *
+ * `label` names what is being copied for screen readers, e.g. "install command
+ * for OpenVue"; it defaults to "command".
+ */
+import Icon from './Icon.astro';
+
+const { command, label = 'command', class: className } = Astro.props;
+---
+
+<div class:list={['cmd', className]} data-copy={command}>
+    <code><span class="cmd-prompt" aria-hidden="true">$</span>{command}</code>
+    <button type="button" class="cmd-copy" aria-label={`Copy ${label}`}>
+        <Icon name="copy" class="cmd-icon-copy" />
+        <Icon name="check" class="cmd-icon-done" />
+    </button>
+</div>
+
+<script>
+    for (const box of document.querySelectorAll<HTMLElement>('.cmd[data-copy]')) {
+        box.querySelector('button')?.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(box.dataset.copy ?? '');
+                box.classList.add('is-copied');
+                setTimeout(() => box.classList.remove('is-copied'), 1600);
+            } catch {
+                // Clipboard blocked: leave the command for manual selection.
+            }
+        });
+    }
+</script>

@@ -26,7 +26,7 @@ const counts = Object.fromEntries(
         { name: 'Roadmap', path: '/projects/openvue/roadmap' }
     ]}
 >
-    <section class="band hero-doc">
+    <section class="band hero hero-doc">
         <div class="wrap">
             <p class="breadcrumb">
                 <a href="/projects">Projects</a> / <a href="/projects/openvue">OpenVue</a> / Roadmap
@@ -45,36 +45,40 @@ const counts = Object.fromEntries(
     </section>
 
     {
-        roadmap.map((phase) => (
-            <section class="band" aria-labelledby={`${phase.id}-heading`}>
+        roadmap.map((phase, i) => (
+            <section
+                class:list={['band', i % 2 === 1 && 'band-subtle']}
+                aria-labelledby={`${phase.id}-heading`}
+            >
                 <div class="wrap">
-                    <div>
-                        <div class="section-head">
-                            <h2 id={`${phase.id}-heading`}>{phase.title}</h2>
-                            <p>{phase.summary}</p>
-                        </div>
-                        <ul class="notes roadmap">
-                            {phase.items.map((item) => (
-                                <li class="roadmap-item">
-                                    <div class="roadmap-head">
-                                        <h3 class="note-title">{item.title}</h3>
+                    <div class="section-head">
+                        <h2 id={`${phase.id}-heading`}>{phase.title}</h2>
+                        <p class="roadmap-summary">{phase.summary}</p>
+                    </div>
+                    <ul class="card-grid card-grid-2">
+                        {phase.items.map((item) => (
+                            <li>
+                                <article class="card">
+                                    <div class="card-top">
+                                        <h3 class="card-title">{item.title}</h3>
                                         <Tag
                                             severity={roadmapStatus[item.status].severity}
                                             value={roadmapStatus[item.status].label}
                                         />
                                     </div>
-                                    <p class="roadmap-text">
+                                    <p class="card-body">
                                         <RichText text={item.text} />
                                     </p>
                                     {item.date && (
-                                        <p class="roadmap-date">
-                                            Shipped <time datetime={item.date}>{formatDate(item.date)}</time>
+                                        <p class="card-foot roadmap-date">
+                                            Shipped{' '}
+                                            <time datetime={item.date}>{formatDate(item.date)}</time>
                                         </p>
                                     )}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                                </article>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </section>
         ))

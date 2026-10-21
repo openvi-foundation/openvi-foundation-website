@@ -1,19 +1,77 @@
 ---
+/**
+ * The projects as a grid of tiles: name and version, what it continues, a line
+ * about it, and the command that installs it. The whole tile links to the
+ * project page; the command sits above that link so it can still be copied.
+ *
+ * `heading` sets the tile title level. `detailed` swaps the one-line tagline
+ * for the full summary and adds the outbound links, for /projects where the
+ * list is read rather than picked from.
+ */
 import { statusLabels } from '../data/projects.js';
-import ProjectCard from './openvue/ProjectCard.vue';
+import StatusTag from './openvue/StatusTag.vue';
+import CopyCommand from './CopyCommand.astro';
+import Icon from './Icon.astro';
 
-/** `heading` controls whether each project title renders as h2 or h3. */
-const { items, heading = 'h2' } = Astro.props;
+const { items, heading = 'h3', detailed = false } = Astro.props;
+const Heading = heading;
+
+const linksFor = (p) =>
+    [
+        { label: 'Source', href: p.repo },
+        { label: 'Docs', href: p.docs },
+        { label: 'npm', href: p.npm }
+    ].filter((link) => link.href);
 ---
 
-<ul class="registry">
+<ul class:list={['project-grid', items.length % 3 === 0 && 'project-grid-thirds']}>
     {
-        items.map((p) => (
-            <li>
-                {/* No client directive: the OpenVue card is rendered to HTML at
-                    build time and ships no JavaScript. */}
-                <ProjectCard project={p} status={statusLabels[p.status]} headingLevel={heading} />
-            </li>
-        ))
+        items.map((p) => {
+            const status = statusLabels[p.status];
+            return (
+                <li class="project-tile">
+                    <div class="project-tile-top">
+                        <Heading class="project-tile-name">
+                            <a href={`/projects/${p.slug}`}>{p.name}</a>
+                        </Heading>
+                        <StatusTag
+                            version={p.version}
+                            status={p.status}
+                            label={status.label}
+                            note={status.note}
+                        />
+                    </div>
+                    <p class="project-tile-continues">continues {p.continues}</p>
+                    <p class:list={['project-tile-tagline', detailed && 'is-summary']}>
+                        {detailed ? p.summary : p.tagline}
+                    </p>
+                    {p.install && (
+                        <CopyCommand
+                            command={p.install}
+                            label={`install command for ${p.name}`}
+                            class="project-tile-install"
+                        />
+                    )}
+                    <div class="project-tile-foot">
+                        {detailed ? (
+                            <span class="project-tile-links">
+                                {linksFor(p).map((link) => (
+                                    <a href={link.href} rel="noopener">
+                                        {link.label}
+                                    </a>
+                                ))}
+                            </span>
+                        ) : (
+                            <span class="project-tile-facts">
+                                {p.language} · {p.license}
+                            </span>
+                        )}
+                        <span class="project-tile-more" aria-hidden="true">
+                            Details <Icon name="arrow-right" />
+                        </span>
+                    </div>
+                </li>
+            );
+        })
     }
 </ul>

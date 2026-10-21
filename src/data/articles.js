@@ -30,7 +30,8 @@
 const sources = {
     devto: { name: 'DEV Community', short: 'dev.to' },
     vuejs: { name: 'r/vuejs', short: 'reddit' },
-    discussions: { name: 'OpenVi Foundation discussions', short: 'GitHub' }
+    discussions: { name: 'OpenVi Foundation discussions', short: 'GitHub' },
+    github: { name: 'OpenVue on GitHub', short: 'GitHub' }
 };
 
 export const articles = [
@@ -393,6 +394,128 @@ export const articles = [
             {
                 t: 'p',
                 text: 'Give it a try and let us know what you think. The thread is open, and issues on the repository are the fastest way to get something fixed.'
+            }
+        ]
+    },
+    {
+        slug: 'openvolt-is-live-tailwind-components-for-openvue',
+        title: 'OpenVolt is live: Tailwind components for OpenVue, based on PrimeVue Volt',
+        kind: 'article',
+        date: '2026-10-21',
+        author: 'Nikola Jevrić',
+        // TODO: point at the dev.to or reddit post once it is up.
+        source: {
+            ...sources.github,
+            url: 'https://github.com/openvi-foundation/openvue/tree/master/packages/volt-cli'
+        },
+        tags: ['OpenVolt', 'Tailwind CSS', 'Open source', 'MIT'],
+        lede: 'OpenVolt is the Tailwind CSS side of OpenVue: 69 components you copy into your project and own, built on the MIT fork of PrimeVue. It is actively maintained, tested on every pull request, and installed from releases only.',
+        summary:
+            'OpenVolt brings Volt, the Tailwind CSS components built on unstyled PrimeVue, to OpenVue. Same components and design, now actively maintained, tested in CI, and installed by a CLI that always matches your OpenVue release.',
+        metaDescription:
+            'OpenVolt is live: 69 Tailwind CSS components for OpenVue, the MIT fork of PrimeVue. Actively maintained, tested, and always matched to your release.',
+        body: [
+            {
+                t: 'p',
+                text: 'OpenVolt is live at [openvolt.openvue.dev](https://openvolt.openvue.dev/).'
+            },
+            {
+                t: 'p',
+                text: 'When we forked PrimeVue 4.5.5 as [OpenVue](https://openvue.dev/), the goal was to keep the whole MIT ecosystem alive, not only the component library. Volt was the piece still missing, and with OpenVolt it is back: maintained, tested and released together with OpenVue.'
+            },
+            { t: 'h2', text: 'What is Volt?' },
+            {
+                t: 'p',
+                text: 'Volt is a set of Tailwind CSS components built on top of PrimeVue in unstyled mode. Instead of installing a styled library and fighting its theme, you copy each component into your project as a regular `.vue` file. The styling is plain Tailwind classes you can read and change, while keyboard support, accessibility and all the hard behaviour still come from the library underneath.'
+            },
+            {
+                t: 'p',
+                text: 'You get the convenience of a full component library and the freedom of owning your UI code.'
+            },
+            { t: 'h2', text: 'What is OpenVolt?' },
+            {
+                t: 'p',
+                text: 'OpenVolt is Volt for OpenVue. The same 69 components and the same design, now built on `openvue` instead of `primevue`, and maintained by the OpenVi Foundation under the MIT license.'
+            },
+            {
+                t: 'p',
+                text: 'PrimeVue Volt depends on PrimeVue v4, which has moved to security-only maintenance with read-only issue tracking. OpenVolt lives in the OpenVue repository, ships with every OpenVue release, and has an open issue tracker if something needs fixing.'
+            },
+            { t: 'h2', text: 'Why OpenVolt' },
+            {
+                t: 'ul',
+                items: [
+                    {
+                        title: 'Actively maintained',
+                        text: 'Bugs get reported, fixed and released, together with the library the components are built on.'
+                    },
+                    {
+                        title: 'Tested on every pull request',
+                        text: 'CI installs OpenVolt into a fresh project, type checks it and runs it in a real browser. We fixed the components that failed, and that check now keeps them working.'
+                    },
+                    {
+                        title: 'Always installs a release',
+                        text: "PrimeVue's Volt CLI clones the repository and copies whatever is on the main branch at that moment. The OpenVolt CLI ships its components inside the package, so you always get the files from a published release, matched to your OpenVue version."
+                    },
+                    {
+                        title: 'Works offline, no git needed',
+                        text: 'Nothing is downloaded when you add a component, so it works in CI, behind firewalls and on a plane.'
+                    },
+                    {
+                        title: 'Your edits are safe',
+                        text: 'Components you have already customised are never overwritten unless you ask for it.'
+                    },
+                    {
+                        title: 'MIT, with no strings attached',
+                        text: 'No accounts, no license keys, no paid tier.'
+                    }
+                ]
+            },
+            { t: 'h2', text: 'Get started' },
+            {
+                t: 'p',
+                text: 'Set up OpenVue in unstyled mode with Tailwind CSS by following the [Vite](https://openvolt.openvue.dev/vite) or [Nuxt](https://openvolt.openvue.dev/nuxt) guide, then add the components you need:'
+            },
+            {
+                t: 'code',
+                lang: 'shell',
+                code: 'npx openvolt-vue add Button\nnpx openvolt-vue add DataTable Dialog DatePicker\nnpx openvolt-vue add all'
+            },
+            {
+                t: 'p',
+                text: 'The files land in `src/volt`, and from that moment they are yours.'
+            },
+            { t: 'h2', text: 'Already using PrimeVue Volt?' },
+            {
+                t: 'p',
+                text: 'Switching takes two commands. The migration tool moves your project from PrimeVue to OpenVue, and the OpenVolt CLI replaces your Volt components with the OpenVolt versions:'
+            },
+            {
+                t: 'code',
+                lang: 'shell',
+                code: 'npx @openvue/migrate\nnpx openvolt-vue add all --overwrite'
+            },
+            {
+                t: 'p',
+                text: 'If you have customised some components, leave out `--overwrite` and your edited files will be kept.'
+            },
+            { t: 'h2', text: 'Links' },
+            {
+                t: 'ul',
+                items: [
+                    'OpenVolt: [openvolt.openvue.dev](https://openvolt.openvue.dev/)',
+                    'OpenVue: [openvue.dev](https://openvue.dev/)',
+                    'CLI on npm: [openvolt-vue](https://www.npmjs.com/package/openvolt-vue)',
+                    'GitHub: [openvi-foundation/openvue](https://github.com/openvi-foundation/openvue)'
+                ]
+            },
+            {
+                t: 'p',
+                text: "Give OpenVolt a try and tell us what you think. If a component is missing or something doesn't work the way you expect, open an issue on GitHub, and a star on the repository helps more people find the project."
+            },
+            {
+                t: 'note',
+                text: 'OpenVue and OpenVolt are independent, community-maintained MIT projects and are not affiliated with PrimeTek or PrimeUI. Volt was created by PrimeTek; OpenVolt continues it under the same MIT license.'
             }
         ]
     }

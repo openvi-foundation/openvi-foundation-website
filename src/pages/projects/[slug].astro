@@ -26,7 +26,6 @@ const schema = [
         '@context': 'https://schema.org',
         '@type': 'SoftwareSourceCode',
         name: project.name,
-        alternateName: `${project.continues} continued`,
         description: project.metaDescription,
         codeRepository: project.repo,
         programmingLanguage: project.language,
@@ -42,7 +41,7 @@ const schema = [
         // `keywords` states the terms this page competes on, which for a fork is
         // mostly the upstream name people are still searching for.
         keywords: [project.name, project.continues, `${project.continues} alternative`,
-            `${project.continues} fork`, `${project.continues} maintained`, project.language]
+            `${project.continues} fork`, project.language]
     }
 ];
 ---

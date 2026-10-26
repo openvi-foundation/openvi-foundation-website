@@ -1,14 +1,3 @@
-/**
- * OpenVue's roadmap, on /projects/openvue/roadmap. It mirrors the Roadmap
- * section of the OpenVue README, which is where the order is decided; change
- * both together, so the site never promises something the repository does not.
- *
- * `status` is one of `done`, `active` (being worked on now) or `planned`.
- * `date` is set on done items whose ship date is on record.
- *
- * Text takes `backtick` code spans and [markdown](links), like the article
- * bodies.
- */
 export const roadmapSource = 'https://github.com/openvi-foundation/openvue#roadmap';
 
 export const roadmapStatus = {

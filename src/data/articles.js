@@ -1,32 +1,3 @@
-/**
- * Everything the foundation has published about the fork, wherever it first
- * appeared. Each entry generates a row on /articles and its own indexable page
- * at /articles/<slug>.
- *
- * These pieces were written by the foundation and posted to dev.to and reddit
- * first; the copies here are the canonical ones, because the foundation's own
- * site is where the argument for the fork belongs. Every detail page links back
- * to the original thread, which is where the discussion actually happened.
- *
- * `kind` splits the two registers. An `article` is written to be read on its
- * own; a `discussion` is a post that opened a thread, and its page says so
- * rather than pretending the comments underneath it do not exist.
- *
- * `summary` is row copy and runs long. `metaDescription` is the search-result
- * version of the same claim, kept under 160 characters so Google does not cut
- * it.
- *
- * Body blocks, all of which take `backtick` code spans and [markdown](links):
- *   { t: 'p',    text }
- *   { t: 'h2',   text }              heading, id derived from the text
- *   { t: 'ul',   items }             string, or { title, text } for a lead-in
- *   { t: 'code', code, lang }        lang 'diff' colours the +/- lines
- *   { t: 'note', text }              an aside, set apart from the argument
- *   { t: 'figure', src, alt, width, height, caption?, href? }
- *                                    a screenshot; width/height are the file's
- *                                    own pixels, so the page reserves the space
- */
-
 const sources = {
     devto: { name: 'DEV Community', short: 'dev.to' },
     vuejs: { name: 'r/vuejs', short: 'reddit' },
@@ -39,7 +10,6 @@ export const articles = [
         slug: 'primevue-v4-stopped-active-dev-openvue-takes-over',
         title: 'PrimeVue v4 stopped active development. OpenVue takes over, on MIT.',
         kind: 'article',
-        // From the dev.to API, so this one is exact.
         date: '2026-08-29',
         author: 'Nikola Jevrić',
         source: {
@@ -106,7 +76,6 @@ export const articles = [
         slug: 'openvue-1-0-is-officially-out',
         title: "OpenVue 1.0 is officially out, and here's what's next: Volt, Vapor & 2.0",
         kind: 'discussion',
-        // TODO: confirm against the reddit post timestamp.
         date: '2026-09-28',
         author: 'Nikola Jevrić',
         source: {
@@ -200,7 +169,6 @@ export const articles = [
         slug: 'openvue-1-0-0-rc',
         title: 'OpenVue, the MIT fork of PrimeVue, hit 1.0.0-rc',
         kind: 'discussion',
-        // TODO: confirm. Anchored to the 1.0.0-rc.0 npm publish on 2026-08-18.
         date: '2026-08-19',
         author: 'Nikola Jevrić',
         source: {
@@ -273,7 +241,6 @@ export const articles = [
         slug: 'meet-openvue-mit-fork-of-primevue',
         title: 'Meet OpenVue, an MIT fork of PrimeVue 4.5.5',
         kind: 'discussion',
-        // TODO: confirm. Anchored to the beta window on npm, 2026-07-23 to 2026-08-02.
         date: '2026-07-28',
         author: 'Nikola Jevrić',
         source: {
@@ -403,7 +370,6 @@ export const articles = [
         kind: 'article',
         date: '2026-10-21',
         author: 'Nikola Jevrić',
-        // TODO: point at the dev.to or reddit post once it is up.
         source: {
             ...sources.github,
             url: 'https://github.com/openvi-foundation/openvue/tree/master/packages/volt-cli'
@@ -521,20 +487,14 @@ export const articles = [
     }
 ];
 
-/** Newest first. The data file is grouped by source; the site reads as a feed. */
 export const articlesByDate = [...articles].sort((a, b) => b.date.localeCompare(a.date));
 
-/** URL segment for a tag, e.g. `Tailwind CSS` -> `tailwind-css`. */
 export const tagSlug = (tag) =>
     tag
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
 
-/**
- * Every tag in use with its articles, most used first and alphabetical within
- * a count, so the filter bar leads with the topics there is most to read on.
- */
 export const tags = Object.values(
     articlesByDate.reduce((acc, article) => {
         for (const name of article.tags) {
@@ -551,17 +511,12 @@ export const kindLabels = {
     discussion: { label: 'Discussion', note: 'Opened a thread, and the thread is still there' }
 };
 
-/** Anchor id for a body heading. Matches what the detail page links to. */
 export const headingId = (text) =>
     text
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '');
 
-/**
- * Reading time from the body's own words, so it cannot drift from the copy.
- * 200wpm, rounded up, because a one-minute read should never round to zero.
- */
 export const readingTime = (article) => {
     const words = article.body
         .flatMap((block) => {
@@ -577,7 +532,6 @@ export const readingTime = (article) => {
     return Math.max(1, Math.round(words / 200));
 };
 
-/** 29 August 2026. Written out, because a numeric date is ambiguous by country. */
 export const formatDate = (iso) =>
     new Date(`${iso}T00:00:00Z`).toLocaleDateString('en-GB', {
         day: 'numeric',

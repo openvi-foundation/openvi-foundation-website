@@ -1,26 +1,3 @@
-/**
- * Single source of truth for every project the foundation maintains.
- * Each entry generates a card on the home page, a row on /projects,
- * and its own indexable detail page at /projects/<slug>.
- *
- * `version` is the latest version published to npm; update it on release.
- *
- * `githubRepo` and `npmPackage` are what the build-time stats read: the
- * repository whose stars count for the project, and the one package whose
- * weekly downloads stand for it. OpenVolt lives in the OpenVue monorepo, so it
- * names that repository rather than a `repo` URL the API cannot take.
- *
- * `contribute` feeds that project's block on /contribute: its contributing
- * guide (null where the repository has none yet), the commands that get a
- * working checkout, and where help is wanted most.
- *
- * `guides` are a project's own pages under /projects/<slug>/, listed on its
- * detail page. They belong to the project, not the foundation, so they are not
- * in the site navigation.
- *
- * `summary` is page copy and runs long. `metaDescription` is the search-result
- * version of the same claim, kept under 160 characters so Google does not cut it.
- */
 export const projects = [
     {
         slug: 'openvue',
@@ -241,8 +218,6 @@ export const projects = [
         license: 'MIT',
         continues: 'PrimeVue Volt',
         upstreamStatus: 'Security fixes only',
-        // `upstreamNote` replaces the plain status on the project page where
-        // the upstream's state needs more than two words.
         upstreamNote: 'built on PrimeVue v4, now security-only upstream',
         summary:
             'A maintained continuation of Volt, the Tailwind CSS components built on unstyled PrimeVue. 69 components you copy into your project as plain .vue files and own from then on, built on OpenVue and released with it.',
@@ -284,12 +259,6 @@ export const projects = [
     }
 ];
 
-/**
- * Repositories that are not libraries: a template to start from, examples to
- * read, and the sandbox a bug report starts in. They sit under the projects on
- * /projects rather than among them, because nobody installs them as a
- * dependency and none of them continues an upstream project.
- */
 export const tools = [
     {
         name: 'Deni',

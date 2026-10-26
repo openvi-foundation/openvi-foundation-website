@@ -26,8 +26,6 @@ const url = `${site.url}/projects/${project.slug}`;
 const stats = await getStats();
 const stars = stats.stars[project.githubRepo];
 const downloads = stats.downloads[project.npmPackage];
-// OpenVolt lives inside the OpenVue monorepo, so its stars are OpenVue's and
-// the row has to say whose they are.
 const repoName = project.githubRepo.split('/')[1];
 const sharedRepo = repoName !== project.slug;
 
@@ -48,8 +46,6 @@ const schema = [
         author: { '@id': `${site.url}/#organization` },
         publisher: { '@id': `${site.url}/#organization` },
         isPartOf: { '@id': `${site.url}/#website` },
-        // `keywords` states the terms this page competes on, which for a fork is
-        // mostly the upstream name people are still searching for.
         keywords: [project.name, project.continues, `${project.continues} alternative`,
             `${project.continues} fork`, project.language]
     }
@@ -108,8 +104,6 @@ const schema = [
                 </div>
             </div>
 
-            {/* The facts a reader checks before adopting it, beside the pitch
-                rather than in a table under it. */}
             <section class="board" aria-labelledby="facts-heading">
                 <h2 id="facts-heading" class="board-title">At a glance</h2>
                 <dl class="facts">
@@ -140,7 +134,9 @@ const schema = [
                         <div>
                             <dt>GitHub stars</dt>
                             <dd>
-                                {formatCount(stars)}
+                                <span data-stat={`stars.${project.githubRepo}`}>
+                                    {formatCount(stars)}
+                                </span>
                                 {sharedRepo && <span class="facts-note">the {repoName} repository</span>}
                             </dd>
                         </div>
@@ -149,7 +145,12 @@ const schema = [
                         <div>
                             <dt>Downloads</dt>
                             <dd>
-                                {formatCount(downloads)} last week
+                                <span>
+                                    <span data-stat={`downloads.${project.npmPackage}`}>
+                                        {formatCount(downloads)}
+                                    </span>{' '}
+                                    last week
+                                </span>
                                 <span class="facts-note">{project.npmPackage}</span>
                             </dd>
                         </div>

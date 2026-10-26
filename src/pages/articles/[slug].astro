@@ -29,16 +29,10 @@ const others = articlesByDate.filter((a) => a.slug !== article.slug);
 const url = `${site.url}/articles/${article.slug}`;
 const image = `/og/articles/${article.slug}.png`;
 
-// Body headings, for the margin column. Derived rather than written out per
-// page, because unlike the prose pages the body here is already structured
-// data, so there is nothing to scrape.
 const contents = article.body
     .filter((block) => block.t === 'h2')
     .map((block) => ({ id: headingId(block.text), text: block.text }));
 
-// A reddit thread is a forum post and a dev.to piece is an article; saying so
-// is the difference between a result that shows a byline and one that shows a
-// comment count.
 const schema = [
     {
         '@context': 'https://schema.org',
@@ -48,7 +42,6 @@ const schema = [
         description: article.metaDescription,
         abstract: article.lede,
         datePublished: article.date,
-        // Nothing has been revised since publication, so the two dates match.
         dateModified: article.date,
         inLanguage: 'en',
         url,
@@ -65,8 +58,6 @@ const schema = [
         publisher: { '@id': `${site.url}/#organization` },
         isPartOf: { '@id': `${site.url}/articles#blog` },
         about: { '@id': `${site.url}/#organization` },
-        // The version that ran first, so a crawler can see the two are the same
-        // piece rather than reading one as a copy of the other.
         sameAs: [article.source.url],
         discussionUrl: article.kind === 'discussion' ? article.source.url : undefined
     }

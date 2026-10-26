@@ -1,12 +1,4 @@
 ---
-/**
- * Renders an article's body blocks. The block vocabulary is documented at the
- * top of src/data/articles.js.
- *
- * The blocks exist so the posts stay data rather than markup: the same entry
- * feeds the row on /articles, the reading time, and the JSON-LD, and none of
- * that works if the body is an opaque string of HTML.
- */
 import RichText from './RichText.astro';
 import Notice from './openvue/Notice.vue';
 import { headingId } from '../data/articles.js';
@@ -39,8 +31,6 @@ const { blocks } = Astro.props;
         }
 
         if (block.t === 'code') {
-            // A diff is marked up line by line so the accent can carry the
-            // sign, rather than leaving the reader to spot a - against a +.
             if (block.lang === 'diff') {
                 return (
                     <pre class="code-diff"><code>{block.code.split('\n').map((line, i) => (
@@ -63,9 +53,6 @@ const { blocks } = Astro.props;
         }
 
         if (block.t === 'figure') {
-            // `width`/`height` are the file's own pixel dimensions, not a
-            // display size: they give the browser the aspect ratio so the
-            // paragraph under the image does not jump when it loads.
             const picture = (
                 <img
                     src={block.src}

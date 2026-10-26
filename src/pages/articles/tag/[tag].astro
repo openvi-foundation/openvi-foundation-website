@@ -12,9 +12,6 @@ const { tag } = Astro.props;
 const count = tag.articles.length;
 ---
 
-{/* A filtered view of /articles, so it stays out of the index: the articles
-    themselves are what should rank, and a page per tag would only compete
-    with them. Crawlers still follow the links. */}
 <Base
     title={`Articles about ${tag.name}`}
     description={`${count} ${count === 1 ? 'article' : 'articles'} from the OpenVi Foundation tagged ${tag.name}.`}

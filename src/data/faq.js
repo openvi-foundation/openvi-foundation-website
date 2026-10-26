@@ -1,18 +1,3 @@
-/**
- * The questions people ask about the foundation, answered on the home page and
- * mirrored into FAQPage structured data so the answers can surface directly in
- * a result.
- *
- * These are about the foundation as a whole. Questions about one project, such
- * as migrating a PrimeVue codebase, belong on that project's own pages; one is
- * kept here because it is the reason most people find the foundation at all.
- *
- * Answers are plain text on purpose: FAQPage markup is matched against the
- * visible answer, so anything here has to read as a complete sentence both on
- * the page and out of context in a search result. Keep them short, keep them
- * factual, and keep them in step with the rest of the site — an answer that
- * contradicts the page it sits on is worse than no answer.
- */
 export const faq = [
     {
         q: 'What is the OpenVi Foundation?',

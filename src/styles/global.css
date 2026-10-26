@@ -1,25 +1,4 @@
-/* OpenVi Foundation.
-
-   The site is set as a technical document rather than a landing page: the
-   structure is carried by ruled lines, a numbered margin and a monospaced
-   metadata layer, not by cards floating on a white ground. Nothing here draws a
-   box around anything.
-
-   System fonts, no webfonts. The structural voice is carried by size, weight
-   and letter-spacing instead of by a second typeface: small tracked-out
-   uppercase labels name the regions, and a wide range of sizes separates a
-   heading from the metadata beside it.
-
-   This file styles the shell. The components inside it are OpenVue, styled by
-   src/styles/openvue.generated.css, which is compiled from the theme at build
-   time. The OpenVue section at the bottom retunes that theme's tokens so its
-   components join the document instead of sitting on top of it. */
-
-/* ---------- Tokens ---------- */
-
 :root {
-    /* Light is the default and the only scheme we fall back to: the theme is a
-       user choice stored in localStorage, never inherited from the OS. */
     color-scheme: light;
 
     --bg: #ffffff;
@@ -29,14 +8,9 @@
     --text-muted: #5b636d;
     --text-faint: #8b939d;
 
-    /* Two weights of rule: hairlines divide rows, the strong one closes a
-       section or underlines a heading. */
     --rule: #e4e8ec;
     --rule-strong: #c8d0d8;
 
-    /* Green is not decoration here: it means maintained. Rust means archived.
-       The whole site is an argument about those two states, so they are the
-       only two hues it uses. */
     --accent: #12784d;
     --accent-hover: #0d5c3a;
     --accent-soft: #e8f4ee;
@@ -45,24 +19,17 @@
 
     --font-sans:
         -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    /* Code only. Nothing in the shell is set in it. */
     --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
-    /* Prose stays at a comfortable measure; the document itself runs wide,
-       because the registry needs the columns. */
     --measure: 40rem;
     --wide: 76rem;
     --gutter: 1.5rem;
 
-    /* The margin column that carries section numbers. */
     --label-col: 9rem;
     --label-gap: 3rem;
 
     --header-h: 3.75rem;
 
-    /* Card surfaces. Depth comes from tone, not shadow: a filled panel sits on
-       the page because it is a different value, and the corners stay square
-       like everything else here. */
     --surface: #f4f6f8;
     --surface-hover: #eceff3;
 }
@@ -86,8 +53,6 @@
     --archived: #d3866b;
     --archived-soft: #261914;
 
-    /* Dark raises the surface above the page instead of lowering it: on a dark
-       ground, lighter reads as nearer. */
     --surface: #191d22;
     --surface-hover: #1f242a;
 }
@@ -129,17 +94,12 @@ body {
     }
 }
 
-/* ---------- Layout ---------- */
-
 .wrap {
     max-width: var(--wide);
     margin: 0 auto;
     padding: 0 var(--gutter);
 }
 
-/* A band is one horizontal division of the document. The rule spans the full
-   viewport while the content inside stays on the measure, so the page reads as
-   a ruled sheet rather than a stack of panels. */
 .band {
     border-top: 1px solid var(--rule);
     padding: clamp(3.5rem, 2rem + 3.5vw, 5.5rem) 0;
@@ -153,8 +113,6 @@ body {
     padding: 2.25rem 0;
 }
 
-/* Prose pages set their body beside a margin column carrying the page's own
-   contents. Below the breakpoint the column collapses and the list goes away. */
 .band-grid {
     display: grid;
     grid-template-columns: var(--label-col) minmax(0, 1fr);
@@ -177,8 +135,6 @@ body {
     max-width: var(--measure);
 }
 
-/* ---------- Header ---------- */
-
 .site-header {
     position: sticky;
     top: 0;
@@ -188,9 +144,6 @@ body {
     backdrop-filter: saturate(1.4) blur(10px);
 }
 
-/* The translucent bar relies on the blur behind it to stay readable. Where
-   backdrop-filter is unavailable the tint alone is not enough, so the bar takes
-   a solid ground instead of letting the document show through it. */
 @supports not (backdrop-filter: blur(1px)) {
     .site-header {
         background: var(--bg);
@@ -204,8 +157,6 @@ body {
     min-height: var(--header-h);
 }
 
-/* The wrapper only exists to group the nav for the mobile panel; on desktop it
-   dissolves so links and icons participate in the header's own flex row. */
 .primary-nav {
     display: contents;
 }
@@ -226,7 +177,6 @@ body {
     color: var(--accent);
 }
 
-/* Sized off the line box so the mark tracks the wordmark at every breakpoint. */
 .logo {
     align-self: center;
     display: block;
@@ -256,9 +206,6 @@ body {
     gap: 0.125rem;
 }
 
-/* Docs is the one link in the bar that leaves the site, so it is the one
-   control in it that looks like a button. It sits after the icons, at the end
-   of the row, with a little air in front of it. */
 .nav-cta {
     margin-left: 0.5rem;
     font-size: 0.8125rem;
@@ -270,8 +217,6 @@ body {
     width: 0.8em;
     height: 0.8em;
 }
-
-/* Hamburger. Hidden on desktop, where the nav is always visible. */
 
 .nav-toggle-input {
     position: absolute;
@@ -315,7 +260,6 @@ body {
     top: 5px;
 }
 
-/* Bars fold into a cross while the panel is open. */
 .nav-toggle-input:checked + .nav-toggle .nav-toggle-bars {
     background: transparent;
 }
@@ -329,9 +273,6 @@ body {
 }
 
 @media (max-width: 52rem) {
-    /* The open menu is part of the header, so a translucent header lets page
-       content show through the panel and sit behind the links. Opaque on
-       mobile, where the panel exists. */
     .site-header {
         background: var(--bg);
         backdrop-filter: none;
@@ -345,7 +286,6 @@ body {
         margin-right: auto;
     }
 
-    /* A touch target, so it is sized like one. */
     .nav-toggle {
         display: inline-grid;
         place-items: center;
@@ -362,13 +302,6 @@ body {
         outline-offset: 2px;
     }
 
-    /* The open menu is a sheet over the page rather than a flap hanging off
-       the bar: below the header there is not enough room for the panel and the
-       document both, and a panel that stops halfway leaves page content sitting
-       under the links. It fills everything below the bar instead.
-
-       The header drops its backdrop-filter at this width, so nothing here
-       establishes a containing block and the panel pins to the viewport. */
     .primary-nav {
         display: none;
         position: fixed;
@@ -380,8 +313,6 @@ body {
         gap: 0;
         padding: 0.5rem var(--gutter) calc(1.25rem + env(safe-area-inset-bottom));
         background: var(--bg);
-        /* Long menus scroll inside the sheet, and the scroll stops there
-           rather than carrying on into the page underneath. */
         overflow-y: auto;
         overscroll-behavior: contain;
     }
@@ -390,7 +321,6 @@ body {
         display: flex;
     }
 
-    /* Nothing moves behind the open sheet. */
     html:has(.nav-toggle-input:checked) {
         overflow: hidden;
     }
@@ -402,8 +332,6 @@ body {
         margin: 0;
     }
 
-    /* Each entry is a full-width row on a hairline, sized for a thumb rather
-       than a cursor. */
     .nav-links .p-button {
         justify-content: flex-start;
         min-height: 3.25rem;
@@ -413,8 +341,6 @@ body {
         border-bottom: 1px solid var(--rule);
     }
 
-    /* The actions sit at the foot of the sheet, not directly under the last
-       link, so the two groups cannot be mistaken for one list. */
     .nav-actions {
         gap: 0.25rem;
         margin-top: auto;
@@ -426,11 +352,6 @@ body {
     }
 }
 
-/* ---------- Typography ---------- */
-
-/* Headings are monospaced. At display sizes Plex Mono's even rhythm gives the
-   page the cadence of a specification rather than a marketing headline, which
-   is the register the content is actually written in. */
 h1,
 h2,
 h3 {
@@ -525,8 +446,6 @@ code {
     padding: 0.1em 0.3em;
 }
 
-/* Code blocks are ruled on one edge only. A full border would put a box back on
-   the page, which is exactly what the design is avoiding. */
 pre {
     font-family: var(--font-mono);
     font-size: 0.8125rem;
@@ -550,8 +469,6 @@ hr {
     margin: 2.5rem 0;
 }
 
-/* A small monospaced label. Used above sections, over table groups and
-   anywhere the document needs to name a region without a heading. */
 .label {
     display: block;
     font-size: 0.6875rem;
@@ -580,21 +497,6 @@ hr {
     margin-top: 0.75rem;
 }
 
-/* ---------- Hero ---------- */
-
-/* The masthead and the footer are dark panels in both themes: the document is
-   a white sheet held between them, and on the home page the header sits on the
-   top panel rather than on a sheet of its own. The glow the page opens on only
-   exists against a dark ground — on white the same effect is a grey smear — so
-   rather than weaken it, the band carries its own sheet and the document
-   resumes on white underneath.
-
-   Both surfaces take the same palette. The document's own tokens are enough for
-   everything this file styles, but OpenVue's are not: its `--p-*` values are
-   declared on :root as `var(--text)` and friends, and a custom property
-   resolves its own var()s where it is declared, so redeclaring --text here
-   never reaches them. The handful the masthead actually uses are therefore
-   restated with literal values. */
 .hero,
 .site-footer,
 .site-header-over:not(.is-scrolled):not(:has(.nav-toggle-input:checked)) {
@@ -620,8 +522,6 @@ hr {
     --p-text-muted-color: #b3bdc7;
     --p-content-hover-background: rgba(255, 255, 255, 0.07);
 
-    /* The leaf tokens, not just --p-primary-*: OpenVue's own :root resolves
-       those into the button's before this rule is ever consulted. */
     --p-button-primary-background: #45c48c;
     --p-button-primary-border-color: #45c48c;
     --p-button-primary-color: #06231a;
@@ -654,18 +554,12 @@ hr {
     color: var(--text);
 }
 
-/* Over the panel the header has no ground of its own; it takes one back the
-   moment the panel is scrolled past — or the moment the mobile menu opens,
-   since the sheet below it carries the document's own palette and the bar has
-   to match it. */
 .site-header-over:not(.is-scrolled):not(:has(.nav-toggle-input:checked)) {
     background: transparent;
     backdrop-filter: none;
     border-bottom-color: transparent;
 }
 
-/* Once the page has moved, the bar is opaque rather than tinted: the document
-   scrolling under it must not read through it at all. */
 .site-header-over.is-scrolled {
     background: var(--bg);
 }
@@ -676,15 +570,11 @@ hr {
     overflow: hidden;
     background: var(--bg);
     border-bottom: 1px solid var(--rule);
-    /* Pulled up under the sticky header so the panel runs to the top of the
-       window; the padding puts it back, so the copy still clears the nav. */
     margin-top: calc((var(--header-h) + 1px) * -1);
     padding: calc(var(--header-h) + 1px + clamp(3rem, 1rem + 7vw, 5.5rem)) 0
         clamp(3.5rem, 1rem + 6vw, 5.5rem);
 }
 
-/* A static wash under the canvas, so the panel already reads right in the first
-   frame — and still reads right if the canvas never arrives. */
 .hero::after {
     content: '';
     position: absolute;
@@ -703,8 +593,6 @@ hr {
         );
 }
 
-/* Inner pages get a shorter masthead than the home page: a title, a lede and
-   whatever controls belong to the page, closed by the first band rule. */
 .hero-doc {
     padding: calc(var(--header-h) + 1px + clamp(2.5rem, 1rem + 4vw, 4.5rem)) 0
         clamp(2.5rem, 1rem + 3vw, 3.75rem);
@@ -720,15 +608,11 @@ hr {
     color: var(--text-muted);
 }
 
-/* The masthead headline runs larger than any other h1 on the site, and is held
-   to a measure that breaks it across two lines at every width. */
 .hero h1 {
     font-size: clamp(2.125rem, 1.1rem + 4.4vw, 4rem);
     max-width: 14ch;
 }
 
-/* The rule under the headline is the document's first line, and the only one
-   that carries the accent. */
 .hero-rule {
     height: 2px;
     background: var(--accent);
@@ -741,10 +625,6 @@ hr {
     color: var(--text-muted);
 }
 
-/* The pixel field. It covers the panel and is masked back before the copy, so
-   the copy sits on clear ground, and it is sized in CSS so nothing reflows
-   when it hydrates. The static wash above stays underneath: it is what the
-   panel looks like in the first frame, and if WebGL never arrives. */
 .hero-field {
     position: absolute;
     inset: 0;
@@ -772,10 +652,6 @@ hr {
     margin-top: 2rem;
 }
 
-/* ---------- Document pages ---------- */
-
-/* The long prose pages put their own contents in the margin column, which is
-   what the column is for on a document: knowing where you are in it. */
 .doc-toc {
     position: sticky;
     top: calc(var(--header-h) + 1.5rem);
@@ -819,17 +695,11 @@ hr {
 }
 
 @media (max-width: 60rem) {
-    /* Stacked above the prose the list is just a duplicate of the headings
-       directly below it, so it goes away rather than folding. */
     .doc-toc {
         display: none;
     }
 }
 
-/* ---------- Specification tables ---------- */
-
-/* Key/value rows for a single project. Ruled, not boxed: no outer border, no
-   fill, just the lines that separate one fact from the next. */
 .spec {
     width: 100%;
     border-collapse: collapse;
@@ -878,8 +748,6 @@ hr {
     margin: 1.5rem 0;
 }
 
-/* An install line sits in a spec row, where the block's own margins would
-   break the row's rhythm. */
 .spec td pre {
     margin: 0;
 }
@@ -888,11 +756,6 @@ hr {
     white-space: nowrap;
 }
 
-/* ---------- Cards ---------- */
-
-/* A grid of bordered panels for short, parallel items: guides, highlights,
-   tools, articles, roadmap entries. A card that leads somewhere is linked as a
-   whole and takes the same hover as a project tile. */
 .card-grid {
     list-style: none;
     display: grid;
@@ -977,7 +840,6 @@ hr {
     text-decoration: underline;
 }
 
-/* The whole card is the link to wherever its title goes. */
 .card-linked .card-title a::after {
     content: '';
     position: absolute;
@@ -1012,7 +874,6 @@ hr {
     transform: translateX(3px);
 }
 
-/* Article cards: a line of metadata over a larger title. */
 .article-card-meta {
     display: flex;
     flex-wrap: wrap;
@@ -1037,21 +898,11 @@ hr {
     justify-content: space-between;
 }
 
-/* On a tinted band the cards keep the page's own ground. */
 .band-subtle {
     background: var(--bg-subtle);
 }
 
-/* ---------- Home ---------- */
-
-/* The home page is the one place the document is allowed to be a front page:
-   wider rhythm, larger section heads, and content laid out across the width
-   instead of down a single ruled column. The palette and the square corners
-   are the same as everywhere else. */
-
 .hero-home {
-    /* The masthead palette has no archived hue of its own; the light one is
-       too dark to read on this ground. */
     --archived: #d3866b;
 
     padding-bottom: 0;
@@ -1076,9 +927,6 @@ hr {
     margin: 1.5rem 0 0;
 }
 
-/* The succession board: one panel, one row per upstream project. Status is
-   written out rather than colour-coded: the upstreams are not all in the same
-   state, and a word says which one without a legend. */
 .board {
     border: 1px solid var(--rule-strong);
     background: color-mix(in srgb, var(--bg) 72%, transparent);
@@ -1204,7 +1052,6 @@ hr {
     height: 0.8rem;
 }
 
-/* A shell command with a copy button. */
 .cmd {
     display: flex;
     align-items: center;
@@ -1263,12 +1110,10 @@ hr {
     color: var(--accent);
 }
 
-/* An arrow reads as "go", so it follows the label rather than leading it. */
 .p-button > .icon-trail {
     order: 1;
 }
 
-/* The numbers close the masthead: a row of cells on its bottom edge. */
 .hero-stats {
     list-style: none;
     display: grid;
@@ -1345,7 +1190,6 @@ hr {
     }
 }
 
-/* Inner pages that carry a panel beside the title, like a project page. */
 .hero-grid-doc {
     align-items: start;
 }
@@ -1362,7 +1206,6 @@ hr {
     margin-top: 0.25rem;
 }
 
-/* Label and value rows inside a board. */
 .facts {
     margin: 0;
 }
@@ -1406,7 +1249,6 @@ hr {
     letter-spacing: -0.03em;
 }
 
-/* Sections below the masthead. */
 .home-band {
     border-top: 0;
     padding: clamp(4rem, 2rem + 5vw, 6.5rem) 0;
@@ -1427,8 +1269,6 @@ hr {
     margin-bottom: clamp(2rem, 1rem + 2vw, 3rem);
 }
 
-/* Projects: a two-by-two slab of tiles, divided by the page showing through a
-   1px gap. */
 .project-grid {
     list-style: none;
     display: grid;
@@ -1478,7 +1318,6 @@ hr {
     text-decoration: none;
 }
 
-/* The whole tile is the link to the project. */
 .project-tile-name a::after {
     content: '';
     position: absolute;
@@ -1498,8 +1337,6 @@ hr {
     color: var(--text-muted);
 }
 
-/* Sits above the stretched link, so the command can be selected and copied
-   without opening the project. */
 .project-tile-install {
     position: relative;
     z-index: 1;
@@ -1538,7 +1375,6 @@ hr {
     line-height: 1.65;
 }
 
-/* Outbound links sit above the tile's own link, like the command. */
 .project-tile-links {
     position: relative;
     z-index: 1;
@@ -1595,8 +1431,6 @@ hr {
     }
 }
 
-/* Reasons: three panels, each one showing the thing its point is about
-   above the point itself, so the argument has evidence next to it. */
 .reasons {
     list-style: none;
     display: grid;
@@ -1642,7 +1476,6 @@ hr {
     text-wrap: pretty;
 }
 
-/* Package rows: the name in code on the left, what it is on the right. */
 .figure-rows {
     list-style: none;
     display: flex;
@@ -1695,7 +1528,6 @@ hr {
     font-weight: 500;
 }
 
-/* The license head, fading out where the text carries on. */
 .figure-license {
     height: 100%;
     margin: 0;
@@ -1707,8 +1539,6 @@ hr {
     color: var(--text-muted);
     white-space: pre;
     overflow: hidden;
-    /* Lines run on under the edge rather than wrapping mid-phrase, so the
-       right side fades as well as the foot. */
     -webkit-mask-image:
         linear-gradient(to bottom, #000 55%, transparent),
         linear-gradient(to right, #000 85%, transparent);
@@ -1730,8 +1560,6 @@ hr {
     }
 }
 
-/* Questions: the heading holds a sticky column on the left, the answers run
-   down the right. */
 .faq-layout {
     display: grid;
     grid-template-columns: minmax(0, 20rem) minmax(0, 1fr);
@@ -1766,8 +1594,6 @@ hr {
     }
 }
 
-/* The answer always sits under its question: a question and its answer are
-   one thing read in sequence, not two columns compared. */
 .faq {
     margin: 0;
     border-top: 1px solid var(--rule-strong);
@@ -1792,7 +1618,6 @@ hr {
     font-size: 0.9375rem;
 }
 
-/* Closing call to action, the last thing above the footer. */
 .home-cta {
     border-top: 0;
     padding: 0 0 clamp(3rem, 2rem + 3vw, 4.5rem);
@@ -1836,11 +1661,6 @@ hr {
     color: var(--text-faint);
 }
 
-/* ---------- Footer ---------- */
-
-/* The closing panel. It takes the masthead's palette, so the page ends on the
-   same ground it opened on and the document reads as a sheet between the two.
-   No top rule: the change of ground is the division. */
 .site-footer {
     background: var(--bg);
     padding: 3.5rem 0 2rem;
@@ -1937,10 +1757,6 @@ hr {
     }
 }
 
-/* ---------- Articles ---------- */
-
-/* Date, byline and reading time under the lede. Separated by middots rather
-   than rules, because this is one line of metadata, not three fields. */
 .dateline {
     display: flex;
     flex-wrap: wrap;
@@ -1956,8 +1772,6 @@ hr {
     color: var(--text-muted);
 }
 
-/* The margin column on an article carries the publication facts, then the
-   contents if the piece has headings. `.doc-toc` owns the column itself. */
 .article-aside .label + .article-fact {
     margin: 0.35rem 0 1.5rem;
 }
@@ -1985,17 +1799,8 @@ hr {
     color: var(--text-muted);
 }
 
-/* A screenshot in the body. Ruled rather than shadowed, like every other
-   surface on the site, and allowed past the prose measure: a dashboard
-   screenshot at 66 characters wide is a thumbnail of a thing you cannot read.
-   The intrinsic width/height on the img reserve the space before it loads. */
 .article-figure {
     margin: 2rem 0;
-    /* Wider than the prose measure, up to whatever the body column actually
-       has: the page is 76rem with a 9rem margin column beside the article, so
-       there is room to the right of a 40rem line of text, and a dashboard
-       screenshot needs it. The calc is that column, and the 1rem is slack for
-       a scrollbar so the page never scrolls sideways to reach the figure. */
     width: min(
         52rem,
         calc(100vw - 2 * var(--gutter) - var(--label-col) - var(--label-gap) - 1rem)
@@ -2026,23 +1831,16 @@ hr {
     line-height: 1.6;
 }
 
-/* The disclaimer at the foot of a piece, set as a Message so it reads as an
-   aside rather than as the last paragraph of the argument. */
 .article-note {
     margin: 2rem 0;
 }
 
-/* The line that says where the piece first ran. Ruled off, because it is the
-   page talking about the article rather than the article itself. */
 .article-origin {
     margin-top: 2.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid var(--rule);
 }
 
-/* A diff is the one code block where colour carries meaning, so the added and
-   removed lines are marked up and tinted instead of leaving the reader to spot
-   a leading + against a leading -. */
 .code-diff code {
     display: block;
 }
@@ -2064,10 +1862,6 @@ hr {
     color: var(--archived);
 }
 
-/* ---------- Tag filter ---------- */
-
-/* Topic links over the article list, as a row of small bordered buttons: each
-   one is a static page, so they work without JavaScript and can be shared. */
 .tag-filter {
     display: flex;
     flex-wrap: wrap;
@@ -2110,8 +1904,6 @@ hr {
     color: inherit;
 }
 
-/* ---------- Roadmap ---------- */
-
 .roadmap-summary {
     margin: 0.75rem 0 0;
     color: var(--text-muted);
@@ -2121,8 +1913,6 @@ hr {
     display: block;
     color: var(--text-faint);
 }
-
-/* ---------- Utilities ---------- */
 
 .visually-hidden {
     position: absolute;
@@ -2170,23 +1960,8 @@ hr {
     margin: 1.75rem 0 0;
 }
 
-/* ---------- OpenVue ---------- */
-
-/* The components stay; their theme is retuned to this document. Corners are
-   square, surfaces are the page itself, and the borders and shadows that make a
-   component library look like a component library are removed. Everything below
-   sets OpenVue's own tokens rather than overriding its rules, so the components
-   keep owning their behaviour. */
-
-/* Both selectors, deliberately. OpenVue emits its dark tokens under
-   `:root[data-theme="dark"]`, which outranks a plain `:root`, so overriding
-   only the latter would leave every one of these reverting in dark mode. The
-   values all resolve through this file's own variables, which already flip with
-   the theme, so one block covers both. */
 :root,
 :root[data-theme='dark'] {
-    /* Primary is the accent, so a primary button means the same thing a green
-       status marker does. */
     --p-primary-color: var(--accent);
     --p-primary-hover-color: var(--accent-hover);
     --p-primary-active-color: var(--accent-hover);
@@ -2205,8 +1980,6 @@ hr {
     --p-border-radius-lg: 0;
     --p-border-radius-xl: 0;
 
-    /* Card: no surface, no shadow, no padding. It becomes a layout container
-       and the row rules around it do the dividing. */
     --p-card-background: transparent;
     --p-card-color: var(--text);
     --p-card-shadow: none;
@@ -2218,7 +1991,6 @@ hr {
     --p-card-title-font-weight: 600;
     --p-card-subtitle-color: var(--text-muted);
 
-    /* Panel: same treatment, with a single rule at the top instead of a frame. */
     --p-panel-background: transparent;
     --p-panel-color: var(--text);
     --p-panel-border-color: transparent;
@@ -2232,7 +2004,6 @@ hr {
     --p-panel-content-padding: 0;
     --p-panel-footer-padding: 1rem 0 0;
 
-    /* Tag: a square monospaced marker, not a pill. */
     --p-tag-border-radius: 0;
     --p-tag-rounded-border-radius: 0;
     --p-tag-font-size: 0.6875rem;
@@ -2247,15 +2018,12 @@ hr {
     --p-tag-secondary-background: var(--bg-subtle);
     --p-tag-secondary-color: var(--text-muted);
 
-    /* Chip: reduced to a line of text on a rule. */
     --p-chip-background: transparent;
     --p-chip-color: var(--text-muted);
     --p-chip-border-radius: 0;
     --p-chip-padding-x: 0;
     --p-chip-padding-y: 0;
 
-    /* Button: square, monospaced, sized like a control on an instrument rather
-       than a call to action. */
     --p-button-border-radius: 0;
     --p-button-padding-x: 0.85rem;
     --p-button-padding-y: 0.5rem;
@@ -2281,7 +2049,6 @@ hr {
     --p-button-text-secondary-hover-background: var(--bg-subtle);
     --p-button-text-secondary-hover-color: var(--text);
 
-    /* Message: a ruled note, consistent with pre. */
     --p-message-warn-background: transparent;
     --p-message-warn-border-color: var(--archived);
     --p-message-warn-color: var(--text);
@@ -2290,10 +2057,6 @@ hr {
     --p-message-info-color: var(--text);
     --p-message-border-radius: 0;
 }
-
-/* The site's own element styling would otherwise leak into the components: `a`
-   sets a colour and underline, `h2`/`h3` set sizes and rules. These reset that
-   inside OpenVue, which owns its own look. */
 
 .p-button {
     font-size: 0.8125rem;
@@ -2307,7 +2070,6 @@ hr {
     text-decoration: none;
 }
 
-/* Icons passed into a Button via the default slot. */
 .p-button > svg {
     width: 0.9375rem;
     height: 0.9375rem;
@@ -2319,7 +2081,6 @@ hr {
     height: 1rem;
 }
 
-/* One toggle button, two glyphs: whichever matches the active theme is shown. */
 .theme-toggle .icon-moon {
     display: none;
 }
@@ -2332,7 +2093,6 @@ hr {
     display: block;
 }
 
-/* The nav renders Buttons; the current page is marked on the anchor itself. */
 .nav-links .p-button[aria-current='page'] {
     color: var(--text);
     box-shadow: inset 0 -1px 0 var(--accent);
@@ -2356,7 +2116,6 @@ hr {
     font-size: 0.9375rem;
 }
 
-/* Panels used as callouts. */
 .callout .p-panel-header {
     display: block;
 }
@@ -2376,8 +2135,6 @@ hr {
     background: var(--bg-subtle);
 }
 
-/* In the stacked mobile panel the nav buttons run full width, so their labels
-   align with the rest of the panel instead of centring. */
 @media (max-width: 52rem) {
     .nav-links .p-button {
         justify-content: flex-start;

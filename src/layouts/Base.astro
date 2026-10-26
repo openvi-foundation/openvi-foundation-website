@@ -1,6 +1,4 @@
 ---
-// OpenVue first: global.css owns the shell and overrides component styling
-// where the two meet.
 import '../styles/openvue.generated.css';
 import '../styles/global.css';
 import { site, nav } from '../data/site.js';
@@ -10,37 +8,26 @@ import ThemeToggle from '../components/ThemeToggle.astro';
 import IconLinkButton from '../components/openvue/IconLinkButton.vue';
 import LinkButton from '../components/openvue/LinkButton.vue';
 import Analytics from '@vercel/analytics/astro';
+import { statSources } from '../data/stats.js';
 
 const {
     title,
     description = site.description,
-    /** Extra JSON-LD objects to embed alongside the sitewide Organization graph. */
     schema = [],
-    /** Social card image, root-relative. Pages without their own fall back to the sitewide one. */
     image = '/og.png',
-    /** Keeps thin or duplicate pages (404) out of the index without hiding them from crawlers. */
     noindex = false,
-    /**
-     * Trail for this page, excluding Home, as `{ name, path }`. Rendered as
-     * BreadcrumbList so results show a readable path instead of a bare URL.
-     */
     breadcrumbs = [],
-    /** Narrows the WebPage node: AboutPage, ContactPage, CollectionPage, FAQPage. */
     pageType = 'WebPage'
 } = Astro.props;
 
 const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.seoTagline}`;
 
-// `build.format: 'file'` emits about.html, so pathname carries a .html suffix at
-// build time. Strip it (and any index) so canonical URLs match the sitemap and
-// the extensionless links used throughout the site.
 const path =
     Astro.url.pathname
         .replace(/\.html$/, '')
         .replace(/\/index$/, '')
         .replace(/\/$/, '') || '/';
 const canonical = new URL(path, site.url).href;
-// Crawlers reject relative image paths, so og:image is always absolute.
 const ogImage = new URL(image, site.url).href;
 
 const organization = {
@@ -58,9 +45,6 @@ const organization = {
         url: new URL('/logo.svg', site.url).href,
         caption: site.name
     },
-    // The subject areas the foundation is an authority on. These are the terms
-    // the site is actually about, so they are worth stating explicitly rather
-    // than leaving a crawler to infer them from prose.
     knowsAbout: [
         'PrimeVue',
         'Vue.js component libraries',
@@ -78,7 +62,6 @@ const organization = {
     sameAs: [site.github, site.npm, site.discord]
 };
 
-// Declares the preferred site name for the SERP breadcrumb line.
 const website = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -91,9 +74,6 @@ const website = {
     publisher: { '@id': `${site.url}/#organization` }
 };
 
-// Ties this page to the site and organization graph, and carries the trail.
-// Every page emits one, so a crawler always has a typed node for the URL it is
-// looking at rather than only the sitewide nodes.
 const webPage = {
     '@context': 'https://schema.org',
     '@type': pageType,
@@ -107,7 +87,6 @@ const webPage = {
     primaryImageOfPage: { '@type': 'ImageObject', url: ogImage }
 };
 
-// Home needs no trail; everywhere else gets Home plus whatever the page names.
 const trail = [{ name: 'Home', path: '/' }, ...breadcrumbs];
 const breadcrumbList =
     breadcrumbs.length > 0
@@ -125,7 +104,6 @@ const breadcrumbList =
         : null;
 
 const year = new Date().getFullYear();
-
 ---
 
 <html lang="en" data-theme="light">
@@ -166,8 +144,6 @@ const year = new Date().getFullYear();
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
 
-        {/* Runs before first paint so a stored dark choice never flashes light.
-            Nothing is read from the OS: unset means light. */}
         <script is:inline>
             try {
                 var stored = localStorage.getItem('theme');
@@ -177,12 +153,6 @@ const year = new Date().getFullYear();
             }
         </script>
 
-        {/* The header starts transparent on the dark home panel and takes a
-            ground the moment the page moves. Emitted on every page and a no-op
-            where that header is absent: inside an `is:inline` script the
-            children are written out verbatim, so a wrapping expression would
-            put its own braces and backticks into the page and the body would
-            never run. */}
         <script is:inline>
             (function () {
                 function sync() {
@@ -212,9 +182,6 @@ const year = new Date().getFullYear();
     </head>
 
     <body>
-        {/* Every page opens on a dark masthead panel that runs up behind the
-            header, so the header starts transparent and takes the panel's
-            palette until the page moves. */}
         <header class="site-header site-header-over">
             <div class="wrap">
                 <a class="brand" href="/">
@@ -222,8 +189,6 @@ const year = new Date().getFullYear();
                     <span class="brand-name">OpenVi Foundation</span>
                 </a>
 
-                {/* CSS-only disclosure, so the mobile menu works even if the
-                    theme script is the only JavaScript that ever runs. */}
                 <input
                     class="nav-toggle-input"
                     type="checkbox"
@@ -263,8 +228,6 @@ const year = new Date().getFullYear();
                         </IconLinkButton>
                         <ThemeToggle />
 
-                        {/* The only call to action in the bar: everything else
-                            here is navigation within the site, this leaves it. */}
                         <LinkButton
                             class="nav-cta"
                             href={site.docs}
@@ -340,9 +303,31 @@ const year = new Date().getFullYear();
 
         <Analytics />
 
+        <script type="application/json" id="stat-sources" set:html={JSON.stringify(statSources)} />
         <script>
-            // Marks the section being read in a page's contents column. The
-            // last heading above the top third of the viewport is current.
+            import { fetchStats } from '../data/stats-fetch.js';
+
+            const statEls = document.querySelectorAll<HTMLElement>('[data-stat]');
+            const sources = document.getElementById('stat-sources')?.textContent;
+            if (statEls.length > 0 && sources) {
+                fetchStats(JSON.parse(sources))
+                    .then((stats: any) => {
+                        const format = new Intl.NumberFormat('en-US');
+                        for (const el of statEls) {
+                            const key = el.dataset.stat ?? '';
+                            const dot = key.indexOf('.');
+                            const value =
+                                dot === -1
+                                    ? stats[key]
+                                    : stats[key.slice(0, dot)]?.[key.slice(dot + 1)];
+                            if (typeof value === 'number') el.textContent = format.format(value);
+                        }
+                    })
+                    .catch(() => {});
+            }
+        </script>
+
+        <script>
             const toc = document.querySelector('.doc-toc');
             const links = toc
                 ? [...toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')]

@@ -14,8 +14,6 @@ const description =
     'The OpenVi Foundation maintains open source UI libraries for the web: OpenVue, OpenVolt, OpenIcons and OpenUXKit. Community run and permanently MIT licensed.';
 
 const schema = [
-    // The questions are on the page and in the markup. Google matches one
-    // against the other, so the two must not drift apart.
     {
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
@@ -40,25 +38,25 @@ const schema = [
     }
 ];
 
-// Proof the projects are alive, fetched at build time and counted across the
-// whole foundation rather than any one project. Any figure that could not be
-// fetched is dropped rather than shown as a stale or invented number.
 const stats = await getStats();
 
 const figures = [
     { value: String(projects.length), label: 'maintained libraries', href: '/projects' },
     stats.totalStars != null && {
         value: formatCount(stats.totalStars),
+        stat: 'totalStars',
         label: 'GitHub stars',
         href: site.github
     },
     stats.totalDownloads != null && {
         value: formatCount(stats.totalDownloads),
+        stat: 'totalDownloads',
         label: 'npm downloads last week',
         href: site.npm
     },
     stats.contributors != null && {
         value: formatCount(stats.contributors),
+        stat: 'contributors',
         label: 'contributors since the forks',
         href: '/contribute'
     }
@@ -66,7 +64,6 @@ const figures = [
 
 const migrateCommand = 'npx @openvue/migrate';
 
-// The reasons the foundation exists, set side by side as three short points.
 const openvue = projects.find((p) => p.slug === 'openvue');
 
 const rationale = [
@@ -87,8 +84,6 @@ const rationale = [
     }
 ];
 
-// What each reason points at, shown above it: the release lines, the packages
-// that make up the stack, and the head of the license itself.
 const versionLines = [
     { pkg: 'primevue', version: '4.5.5', note: 'MIT, security fixes only', tone: 'archived' },
     { pkg: 'primevue', version: '5.x', note: 'PrimeUI License', tone: 'muted' },
@@ -103,8 +98,6 @@ const stackPackages = [
     { pkg: 'openvolt-vue', role: 'Tailwind components' }
 ];
 
-// The opening of the OpenVue LICENSE.md, as published: both copyright lines,
-// because the upstream one is the point.
 const licenseHead = [
     'The MIT License (MIT)',
     '',
@@ -121,8 +114,6 @@ const licenseHead = [
 
 <Base title={null} description={description} schema={schema}>
     <section class="band hero hero-home">
-        {/* Decoration and nothing else: it carries no text, it is hydrated
-            late, and the masthead reads the same without it. */}
         <div class="hero-field" aria-hidden="true">
             <PixelBlast
                 client:idle
@@ -171,8 +162,6 @@ const licenseHead = [
                     </div>
                 </div>
 
-                {/* The thesis as a figure: where each upstream stands now, and
-                    what carries it on. Every row is a link to the continuation. */}
                 <section class="board" aria-labelledby="board-heading">
                     <h2 id="board-heading" class="board-title">What we picked up</h2>
                     <ul class="board-list">
@@ -217,7 +206,9 @@ const licenseHead = [
                                     href={f.href}
                                     rel={f.href.startsWith('http') ? 'noopener' : undefined}
                                 >
-                                    <span class="hero-stats-value">{f.value}</span>
+                                    <span class="hero-stats-value" data-stat={f.stat}>
+                                        {f.value}
+                                    </span>
                                     <span class="hero-stats-label">{f.label}</span>
                                 </a>
                             </li>
@@ -295,9 +286,6 @@ const licenseHead = [
                 </p>
             </div>
 
-            {/* Plain headings and paragraphs rather than a disclosure widget:
-                the answers are the reason the page ranks for these questions,
-                so they are on the page rather than hidden behind a control. */}
             <dl class="faq">
                 {
                     faq.map((item) => (

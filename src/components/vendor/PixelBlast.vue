@@ -3,19 +3,7 @@
 </template>
 
 <script setup lang="ts">
-/**
- * PixelBlast, from Vue Bits (https://vue-bits.dev, MIT). The shader and the
- * three.js setup are the upstream ones. Four things are ours:
- *
- *   - the template, which arrived carrying Tailwind utility classes this
- *     project has no Tailwind to resolve;
- *   - `autoPauseOffscreen`, which upstream reads but never sets: the observer
- *     that actually turns it off is wired below;
- *   - reduced motion, which holds the field on a single frame rather than
- *     animating it;
- *   - the decorative aria-label, removed. The wrapper in the page hides the
- *     whole layer from the accessibility tree instead.
- */
+// Adapted from Vue Bits (https://vue-bits.dev), MIT licensed.
 import { Effect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
 import * as THREE from 'three';
 import { onBeforeUnmount, onMounted, ref, useTemplateRef, watch, type CSSProperties } from 'vue';
@@ -554,7 +542,6 @@ const setup = () => {
       noisePass.renderToScreen = true;
       if (composer && composer.passes.length > 0)
         composer.passes.forEach(p => {
-          // EffectPass has renderToScreen; ensure we turn it off before adding a new final pass
           if ('renderToScreen' in p) (p as { renderToScreen?: boolean }).renderToScreen = false;
         });
       composer.addPass(noisePass);

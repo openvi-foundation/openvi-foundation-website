@@ -1,11 +1,4 @@
 ---
-/**
- * A shell command with a copy button. Without JavaScript the button does
- * nothing and the command is still there to select.
- *
- * `label` names what is being copied for screen readers, e.g. "install command
- * for OpenVue"; it defaults to "command".
- */
 import Icon from './Icon.astro';
 
 const { command, label = 'command', class: className } = Astro.props;
@@ -27,7 +20,6 @@ const { command, label = 'command', class: className } = Astro.props;
                 box.classList.add('is-copied');
                 setTimeout(() => box.classList.remove('is-copied'), 1600);
             } catch {
-                // Clipboard blocked: leave the command for manual selection.
             }
         });
     }

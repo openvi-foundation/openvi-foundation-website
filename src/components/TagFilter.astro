@@ -1,12 +1,4 @@
 ---
-/**
- * The topic bar over the article list. Plain links to static tag pages rather
- * than a client-side filter: it works without JavaScript, every filtered view
- * has a URL you can share, and the list underneath is the same server-rendered
- * registry either way.
- *
- * `current` is the active tag's slug, or nothing on the unfiltered list.
- */
 import { tags, articles } from '../data/articles.js';
 
 const { current } = Astro.props;

@@ -1,15 +1,3 @@
-/**
- * Renders the social card images in public/og/ plus the sitewide public/og.png.
- *
- * Cards are laid out as HTML and screenshotted with headless Chrome, so there is
- * no image dependency in the project. Run it after changing a project's name or
- * tagline; the images deliberately carry no version number, so releases do not
- * invalidate them.
- *
- *   node scripts/generate-og.mjs
- *
- * Set CHROME to point at a browser binary on non-macOS machines.
- */
 import { execFile } from 'node:child_process';
 import { mkdir, mkdtemp, rm, writeFile, rename } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -26,7 +14,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const chrome =
     process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 
-/** Follows the site: a ruled white sheet, ink type, one accent. No gradient. */
 const card = ({ eyebrow, title, tagline, footer }) => `<!doctype html>
 <html><head><meta charset="utf-8"><style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,8 +30,6 @@ const card = ({ eyebrow, title, tagline, footer }) => `<!doctype html>
   }
   .rule { width: 72px; height: 3px; background: #12784d; margin: 28px 0 32px; }
   h1 {
-    /* Three steps, so a project name and an article headline can share the
-       template without the long one running off the bottom of the card. */
     font-size: ${title.length > 46 ? 60 : title.length > 22 ? 88 : 112}px; font-weight: 700;
     letter-spacing: -0.035em; line-height: 1.02;
   }
@@ -74,7 +59,6 @@ async function shoot(html, out) {
     const dir = await mkdtemp(path.join(tmpdir(), 'og-'));
     const page = path.join(dir, 'card.html');
     await writeFile(page, html);
-    // Chrome writes the capture as screenshot.png into its working directory.
     await run(chrome, [
         '--headless',
         '--disable-gpu',
@@ -109,8 +93,6 @@ const cards = [
             footer: `openvi.dev/projects/${p.slug}`
         })
     })),
-    // An article card leads with its title, so the eyebrow carries the register
-    // instead: whether the reader is opening a piece or a thread.
     ...articles.map((a) => ({
         out: path.join(root, `public/og/articles/${a.slug}.png`),
         html: card({
@@ -173,7 +155,6 @@ const cards = [
         out: path.join(root, `public/og/${page.slug}.png`),
         html: card({
             ...page,
-            // Project guides live under the project's own path.
             footer: `openvi.dev/${page.slug.includes('/') ? `projects/${page.slug}` : page.slug}`
         })
     }))

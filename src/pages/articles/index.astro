@@ -1,12 +1,15 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ArticleList from '../../components/ArticleList.astro';
-import TagFilter from '../../components/TagFilter.astro';
-import { articlesByDate } from '../../data/articles.js';
+import Icon from '../../components/Icon.astro';
+import { articlesByDate, coverOf, formatDate, kindLabels, readingTime } from '../../data/articles.js';
 import { site } from '../../data/site.js';
 
 const description =
     'Everything the OpenVi Foundation has published about the PrimeVue fork: release notes, migration guidance, and the posts that opened the discussion.';
+
+const [latest, ...earlier] = articlesByDate;
+const cover = coverOf(latest);
 
 const schema = [
     {
@@ -44,16 +47,49 @@ const schema = [
             <h1>Articles</h1>
             <p class="lede">
                 Release notes, migration guidance, and the posts that opened the discussion.
-                Everything here was written by the foundation and published elsewhere first; each
-                page links back to the original thread.
             </p>
         </div>
     </section>
 
     <section class="band">
         <div class="wrap">
-                <TagFilter />
-                <ArticleList items={articlesByDate} />
+            <article class:list={['featured', !cover && 'featured-solo']}>
+                <div class="featured-text">
+                    <p class="article-card-meta">
+                        <span>{kindLabels[latest.kind].label}</span>
+                        <span aria-hidden="true">·</span>
+                        <time datetime={latest.date}>{formatDate(latest.date)}</time>
+                        <span aria-hidden="true">·</span>
+                        <span>{readingTime(latest)} min read</span>
+                    </p>
+                    <h2 class="featured-title">
+                        <a href={`/articles/${latest.slug}`}>{latest.title}</a>
+                    </h2>
+                    <p class="featured-lede">{latest.lede ?? latest.summary}</p>
+                    <span class="card-more" aria-hidden="true">
+                        Read the article <Icon name="arrow-right" />
+                    </span>
+                </div>
+                {
+                    cover && (
+                        <figure class="featured-media">
+                            <img
+                                src={cover.src}
+                                alt={cover.alt}
+                                width={cover.width}
+                                height={cover.height}
+                                fetchpriority="high"
+                                decoding="async"
+                            />
+                        </figure>
+                    )
+                }
+            </article>
+
+            <div class="section-head">
+                <h2>Earlier</h2>
+            </div>
+            <ArticleList items={earlier} heading="h3" />
         </div>
     </section>
 </Base>

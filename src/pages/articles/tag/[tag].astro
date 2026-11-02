@@ -1,7 +1,6 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import ArticleList from '../../../components/ArticleList.astro';
-import TagFilter from '../../../components/TagFilter.astro';
 import { tags } from '../../../data/articles.js';
 
 export function getStaticPaths() {
@@ -35,8 +34,7 @@ const count = tag.articles.length;
 
     <section class="band">
         <div class="wrap">
-                <TagFilter current={tag.slug} />
-                <ArticleList items={tag.articles} />
+            <ArticleList items={tag.articles} />
         </div>
     </section>
 </Base>

@@ -85,6 +85,7 @@ export const articles = [
             {
                 t: 'figure',
                 src: '/articles/nide-vs-aura-density.png',
+                cover: true,
                 alt: 'The same form in Aura and in Nide: a name field, a role select, checkboxes, radio buttons, a toggle switch and two buttons. The Nide form is shorter, with smaller text and controls and a near-black primary.',
                 width: 2296,
                 height: 988,
@@ -677,3 +678,8 @@ export const formatDate = (iso) =>
         year: 'numeric',
         timeZone: 'UTC'
     });
+
+export const coverOf = (article) => {
+    const figures = article.body.filter((block) => block.t === 'figure');
+    return figures.find((block) => block.cover) ?? figures[0];
+};

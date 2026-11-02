@@ -6,7 +6,8 @@ import LinkButton from '../components/openvue/LinkButton.vue';
 import ProjectList from '../components/ProjectList.astro';
 import CopyCommand from '../components/CopyCommand.astro';
 import { projects } from '../data/projects.js';
-import { faq } from '../data/faq.js';
+import { faq, plainText } from '../data/faq.js';
+import RichText from '../components/RichText.astro';
 import { site } from '../data/site.js';
 import { getStats, formatCount } from '../data/stats.js';
 
@@ -21,7 +22,7 @@ const schema = [
         mainEntity: faq.map((item) => ({
             '@type': 'Question',
             name: item.q,
-            acceptedAnswer: { '@type': 'Answer', text: item.a }
+            acceptedAnswer: { '@type': 'Answer', text: plainText(item.a) }
         }))
     },
     {
@@ -291,7 +292,9 @@ const licenseHead = [
                     faq.map((item) => (
                         <div>
                             <dt>{item.q}</dt>
-                            <dd>{item.a}</dd>
+                            <dd>
+                                <RichText text={item.a} />
+                            </dd>
                         </div>
                     ))
                 }

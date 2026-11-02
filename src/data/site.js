@@ -12,6 +12,14 @@ export const site = {
     discord: 'https://discord.gg/cMVy8jAe6'
 };
 
+export const sites = [
+    { href: 'https://openvue.dev', label: 'openvue.dev' },
+    { href: 'https://openvolt.openvue.dev', label: 'openvolt.openvue.dev' },
+    { href: 'https://openicons.openvue.dev', label: 'openicons.openvue.dev' },
+    { href: 'https://openvue.dev/theme', label: 'Theme Builder' },
+    { href: 'https://deni.openvue.dev', label: 'deni.openvue.dev' }
+];
+
 export const nav = [
     { href: '/projects', label: 'Projects' },
     { href: '/articles', label: 'Articles' },

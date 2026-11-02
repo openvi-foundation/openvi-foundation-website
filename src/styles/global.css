@@ -1670,7 +1670,7 @@ hr {
 
 .footer-top {
     display: grid;
-    grid-template-columns: minmax(0, 1.6fr) repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
     gap: 2.5rem;
     padding-bottom: 2.5rem;
 }
@@ -1720,6 +1720,7 @@ hr {
     color: var(--text-muted);
     text-decoration: none;
     font-size: 0.8125rem;
+    overflow-wrap: anywhere;
 }
 
 .footer-col a:hover {

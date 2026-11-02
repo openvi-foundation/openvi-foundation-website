@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import InlineCode from '../../components/InlineCode.astro';
+import RichText from '../../components/RichText.astro';
 import ProjectList from '../../components/ProjectList.astro';
 import CopyCommand from '../../components/CopyCommand.astro';
 import Icon from '../../components/Icon.astro';
@@ -86,7 +86,7 @@ const schema = [
                     {project.docs && (
                         <LinkButton
                             href={project.docs}
-                            label="Documentation"
+                            label={new URL(project.docs).host}
                             severity="secondary"
                             outlined
                             rel="noopener"
@@ -207,7 +207,7 @@ const schema = [
                             <article class="card">
                                 <h3 class="card-title">{h.title}</h3>
                                 <p class="card-body">
-                                    <InlineCode text={h.body} />
+                                    <RichText text={h.body} />
                                 </p>
                             </article>
                         </li>
@@ -223,7 +223,7 @@ const schema = [
                 <h2 id="why-heading" class="section-title">Why this project exists</h2>
                 {project.why.map((para) => (
                     <p>
-                        <InlineCode text={para} />
+                        <RichText text={para} />
                     </p>
                 ))}
             </div>

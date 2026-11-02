@@ -10,7 +10,7 @@ const Heading = heading;
 const linksFor = (p) =>
     [
         { label: 'Source', href: p.repo },
-        { label: 'Docs', href: p.docs },
+        { label: p.docs && new URL(p.docs).host, href: p.docs },
         { label: 'npm', href: p.npm }
     ].filter((link) => link.href);
 ---

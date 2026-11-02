@@ -1,7 +1,7 @@
 ---
 import '../styles/openvue.generated.css';
 import '../styles/global.css';
-import { site, nav } from '../data/site.js';
+import { site, nav, sites } from '../data/site.js';
 import Icon from '../components/Icon.astro';
 import Logo from '../components/Logo.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
@@ -278,7 +278,15 @@ const year = new Date().getFullYear();
                             <li><a href="/projects/openicons">OpenIcons</a></li>
                             <li><a href="/projects#tools-heading">Templates and tools</a></li>
                             <li><a href="/projects">All projects</a></li>
-                            <li><a href={site.docs} rel="noopener">openvue.dev</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h2>Sites</h2>
+                        <ul>
+                            {sites.map((s) => (
+                                <li><a href={s.href} rel="noopener">{s.label}</a></li>
+                            ))}
                         </ul>
                     </div>
 

@@ -5,7 +5,7 @@ export const faq = [
     },
     {
         q: 'Which projects does the foundation maintain?',
-        a: 'Four libraries: OpenVue, the Vue component library that continues PrimeVue; OpenVolt, Tailwind CSS components for OpenVue that continue Volt; OpenIcons, which continues PrimeIcons; and OpenUXKit, the theming engine that continues PrimeUIX. It also publishes templates and starters such as the Deni admin dashboard.'
+        a: 'Four libraries: [OpenVue](https://openvue.dev), the Vue component library that continues PrimeVue; [OpenVolt](https://openvolt.openvue.dev), Tailwind CSS components for OpenVue that continue Volt; [OpenIcons](https://openicons.openvue.dev), which continues PrimeIcons; and [OpenUXKit](/projects/openux), the theming engine that continues PrimeUIX. It also publishes templates and starters such as the [Deni](https://deni.openvue.dev) admin dashboard.'
     },
     {
         q: 'Are the projects free to use commercially?',
@@ -17,14 +17,16 @@ export const faq = [
     },
     {
         q: 'How can I contribute?',
-        a: 'Pick an issue on any of the project repositories, report a bug with a reproduction, improve the documentation, or test components with assistive technology. Each project lists where help is needed most on the contribute page, and conversation happens on Discord.'
+        a: 'Pick an issue on any of the project repositories, report a bug with a reproduction, improve the documentation, or test components with assistive technology. Each project lists where help is needed most on the [contribute page](/contribute), and conversation happens on [Discord](https://discord.gg/cMVy8jAe6).'
     },
     {
         q: 'I use PrimeVue. Where do I start?',
-        a: 'With OpenVue, which keeps the PrimeVue 4 component API. Running npx @openvue/migrate in a PrimeVue 4 project renames the packages and rewrites the imports in one reviewable diff, and the OpenVue migration guide covers icons, Volt and older versions.'
+        a: 'With [OpenVue](https://openvue.dev), which keeps the PrimeVue 4 component API. Running `npx @openvue/migrate` in a PrimeVue 4 project renames the packages and rewrites the imports in one reviewable diff, and the [OpenVue migration guide](/projects/openvue/migrate) covers icons, Volt and older versions.'
     },
     {
         q: 'Is the foundation affiliated with PrimeTek?',
         a: 'No. The OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek Informatics or PrimeUI. The projects continue upstream work under its original MIT license, with attribution.'
     }
 ];
+
+export const plainText = (text) => text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/`([^`]+)`/g, '$1');

@@ -43,7 +43,7 @@ export const roadmap = [
             {
                 status: 'active',
                 title: 'Work through the backlog',
-                text: 'Open issues, accessibility and performance come before new surface area. What has landed since 1.0.0 is under Unreleased in the [changelog](/projects/openvue/changelog).'
+                text: 'Open issues, accessibility and performance come before new surface area. What has landed since the latest release is under Unreleased in the [changelog](/projects/openvue/changelog).'
             },
             {
                 status: 'done',
@@ -52,9 +52,10 @@ export const roadmap = [
                 text: '[OpenVolt](/projects/openvolt) is live: `npx openvolt-vue` copies Tailwind-native components into your own codebase.'
             },
             {
-                status: 'planned',
+                status: 'done',
+                date: '2026-10-29',
                 title: 'Ship a new theme',
-                text: 'A preset of our own, so OpenVue has its own visual identity alongside Aura, Lara, Material and Nora.'
+                text: '[Nide](https://openvue.dev/theming/styled) ships beside Aura, Lara, Material and Nora in 1.1.0, and the [Theme Builder](https://openvue.dev/theme) builds a theme from any of them. [Release notes](/projects/openvue/changelog#v1-1-0).'
             },
             {
                 status: 'planned',

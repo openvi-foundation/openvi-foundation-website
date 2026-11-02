@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import DocPage from '../components/DocPage.astro';
-import InlineCode from '../components/InlineCode.astro';
+import RichText from '../components/RichText.astro';
 import { projects, tools } from '../data/projects.js';
 import { site } from '../data/site.js';
 
@@ -70,7 +70,7 @@ const contents = [
                     <ul>
                         {project.contribute.help.map((item) => (
                             <li>
-                                <InlineCode text={item} />
+                                <RichText text={item} />
                             </li>
                         ))}
                     </ul>

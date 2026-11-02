@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ProjectList from '../../components/ProjectList.astro';
-import InlineCode from '../../components/InlineCode.astro';
+import RichText from '../../components/RichText.astro';
 import { projects, tools } from '../../data/projects.js';
 import { site } from '../../data/site.js';
 
@@ -107,7 +107,7 @@ const layers = [
                                 <p class="card-kind">{tool.kind}</p>
                                 <h3 class="card-title">{tool.name}</h3>
                                 <p class="card-body">
-                                    <InlineCode text={tool.summary} />
+                                    <RichText text={tool.summary} />
                                 </p>
                                 <p class="card-foot">
                                     <a href={tool.repo} rel="noopener">Source</a>

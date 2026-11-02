@@ -4,7 +4,7 @@ export const projects = [
         name: 'OpenVue',
         tagline: 'The Vue UI component library, continued.',
         status: 'stable',
-        version: '1.0.0',
+        version: '1.1.0',
         repo: 'https://github.com/openvi-foundation/openvue',
         githubRepo: 'openvi-foundation/openvue',
         npmPackage: 'openvue',
@@ -48,7 +48,7 @@ export const projects = [
         highlights: [
             {
                 title: 'One-command migration',
-                body: '`npx @openvue/migrate` moves a PrimeVue v4 project across. It shows the plan first, renames dependencies, rewrites imports, lists any PrimeVue reference it could not rewrite, and leaves a single reviewable diff.'
+                body: '[`npx @openvue/migrate`](/projects/openvue/migrate) moves a PrimeVue v4 project across. It shows the plan first, renames dependencies, rewrites imports, lists any PrimeVue reference it could not rewrite, and leaves a single reviewable diff.'
             },
             {
                 title: 'Drop-in API compatibility',
@@ -56,7 +56,7 @@ export const projects = [
             },
             {
                 title: 'Full documentation site',
-                body: 'openvue.dev carries the complete docs with interactive demos, four theme presets (Aura, Lara, Material, Nora) and RTL support.'
+                body: '[openvue.dev](https://openvue.dev) carries the complete docs with interactive demos, five theme presets (Aura, Lara, Material, Nora, Nide), the [Theme Builder](https://openvue.dev/theme) and [Theme Designer](https://openvue.dev/designer), and RTL support.'
             },
             {
                 title: 'Accessibility and TypeScript',
@@ -70,7 +70,7 @@ export const projects = [
                 'Reproducing, triaging and fixing issues inherited from PrimeVue.',
                 'Migration reports: anything `npx @openvue/migrate` misses in a real codebase.',
                 'Accessibility testing with real screen readers, reported against specific versions.',
-                'Documentation gaps on openvue.dev, especially theming and unstyled mode.'
+                'Documentation gaps on [openvue.dev](https://openvue.dev), especially theming and unstyled mode.'
             ]
         },
         packages: [
@@ -90,11 +90,11 @@ export const projects = [
         name: 'OpenIcons',
         tagline: 'The icon library for OpenVue, continued.',
         status: 'stable',
-        version: '1.0.0',
+        version: '1.1.0',
         repo: 'https://github.com/openvi-foundation/openicons',
         githubRepo: 'openvi-foundation/openicons',
         npmPackage: '@openvue/openicons',
-        docs: null,
+        docs: 'https://openicons.openvue.dev',
         npm: 'https://www.npmjs.com/package/@openvue/openicons',
         install: 'npm install @openvue/openicons',
         language: 'CSS',
@@ -102,9 +102,9 @@ export const projects = [
         continues: 'PrimeIcons',
         upstreamStatus: 'Archived',
         summary:
-            'A community-maintained continuation of PrimeIcons, the icon font used by PrimeVue and the wider Prime ecosystem. 323 icons, shipped as a dependency-free webfont and as tree-shakeable Vue 3 components.',
+            'A community-maintained continuation of PrimeIcons, the icon font used by PrimeVue and the wider Prime ecosystem. 329 icons, shipped as a dependency-free webfont and as tree-shakeable Vue 3 components.',
         metaDescription:
-            'OpenIcons is the maintained continuation of PrimeIcons: 323 icons as a dependency-free webfont or tree-shakeable Vue components. MIT licensed.',
+            'OpenIcons is the maintained continuation of PrimeIcons: 329 icons as a dependency-free webfont or tree-shakeable Vue components. MIT licensed.',
         why: [
             'The MIT-licensed PrimeIcons repository was archived, so every application using the `pi pi-*` classes needed a maintained replacement.',
             'OpenIcons ships a compatibility stylesheet. Existing `pi-` class names keep rendering while a codebase moves to `oi-` at its own pace.',
@@ -112,8 +112,8 @@ export const projects = [
         ],
         highlights: [
             {
-                title: '323 icons',
-                body: 'The complete PrimeIcons set carried forward under an unchanged MIT license, plus ten icons drawn since the fork.'
+                title: '329 icons',
+                body: 'The complete PrimeIcons set carried forward under an unchanged MIT license, plus sixteen icons drawn since the fork. Search them all at [openicons.openvue.dev](https://openicons.openvue.dev).'
             },
             {
                 title: 'Webfont or Vue components',
@@ -147,7 +147,7 @@ export const projects = [
         name: 'OpenUXKit',
         tagline: 'The framework-agnostic UI foundation behind OpenVue.',
         status: 'stable',
-        version: '1.1.0',
+        version: '1.2.0',
         repo: 'https://github.com/openvi-foundation/openux',
         githubRepo: 'openvi-foundation/openux',
         npmPackage: '@openuxkit/themes',
@@ -173,8 +173,8 @@ export const projects = [
                 body: '`@openuxkit/styled` is the runtime that turns design tokens into scoped component styles.'
             },
             {
-                title: 'Four theme presets',
-                body: 'Aura, Lara, Material and Nora ship in `@openuxkit/themes` along with the theming API.'
+                title: 'Five theme presets',
+                body: 'Aura, Lara, Material, Nora and Nide ship in `@openuxkit/themes` along with the theming API. Try any of them in the [Theme Builder](https://openvue.dev/theme).'
             },
             {
                 title: 'Nine focused packages',
@@ -207,7 +207,7 @@ export const projects = [
         name: 'OpenVolt',
         tagline: 'Tailwind CSS components for OpenVue, continued.',
         status: 'stable',
-        version: '1.0.1',
+        version: '1.1.0',
         repo: 'https://github.com/openvi-foundation/openvue/tree/master/packages/volt-cli',
         githubRepo: 'openvi-foundation/openvue',
         npmPackage: 'openvolt-vue',
@@ -231,7 +231,7 @@ export const projects = [
         highlights: [
             {
                 title: 'You own the code',
-                body: '`npx openvolt-vue add Button` writes the component into `src/volt` as a regular `.vue` file. The styling is Tailwind classes you can read and change; keyboard support and accessibility still come from OpenVue underneath.'
+                body: '`npx openvolt-vue add Button` writes the component into `src/volt` as a regular `.vue` file. The styling is Tailwind classes you can read and change; keyboard support and accessibility still come from OpenVue underneath. Every component is previewed at [openvolt.openvue.dev](https://openvolt.openvue.dev).'
             },
             {
                 title: 'Tested on every pull request',
@@ -251,7 +251,7 @@ export const projects = [
             setup: 'git clone https://github.com/openvi-foundation/openvue.git\ncd openvue\npnpm install\n# the CLI and its components: packages/volt-cli',
             help: [
                 'Components that break or look wrong after `npx openvolt-vue add`, with the Tailwind and OpenVue versions you are on.',
-                'Gaps in the Vite and Nuxt setup guides on openvolt.openvue.dev.',
+                'Gaps in the Vite and Nuxt setup guides on [openvolt.openvue.dev](https://openvolt.openvue.dev).',
                 'Projects moving from PrimeVue Volt: what the switch did not cover.'
             ]
         },
@@ -264,9 +264,10 @@ export const tools = [
         name: 'Deni',
         kind: 'Template',
         summary:
-            'A full admin dashboard template built with OpenVue, Vue 3, TypeScript and Vite: dashboard, CRUD tables, detail pages, forms with validation, auth and error pages. Clone it and build on it.',
+            'A full admin dashboard template built with OpenVue, Vue 3, TypeScript and Vite: dashboard, CRUD tables, detail pages, forms with validation, auth and error pages. See it running at [deni.openvue.dev](https://deni.openvue.dev), then clone it and build on it.',
         repo: 'https://github.com/openvi-foundation/deni',
-        demo: 'https://deni-taupe.vercel.app',
+        demo: 'https://deni.openvue.dev',
+        demoLabel: 'deni.openvue.dev',
         article: '/articles/deni-free-mit-admin-dashboard-template'
     },
     {

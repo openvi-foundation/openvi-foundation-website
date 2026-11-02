@@ -5,7 +5,7 @@ import { site } from '../data/site.js';
 import { projects, statusLabels } from '../data/projects.js';
 
 const description =
-    'Who the OpenVi Foundation is and why it exists: an independent, community-run group that keeps widely used front-end libraries working after upstream stops.';
+    'Who the OpenVi Foundation is and why it exists: an independent, community-run group that maintains MIT-licensed forks of widely used front-end libraries.';
 
 const contents = [
     { id: 'what-we-do', text: 'What we do' },
@@ -42,16 +42,16 @@ const contents = [
 
         <h2 id="how-we-got-here">How we got here</h2>
         <p>
-            The foundation formed around PrimeVue after its original maintainers archived it. The
-            repository has since reopened for security fixes only, and new development moved to a
-            license that is no longer MIT. It is one of the most widely adopted component libraries
-            in the Vue ecosystem, and a very large number of applications were left without an MIT
-            maintenance path.
+            The foundation formed around a fork of PrimeVue 4.5.5, the last PrimeVue release under
+            the MIT license. PrimeVue 4 now receives security fixes only, and new development moved
+            to PrimeVue 5 under a license that is not MIT. PrimeVue is one of the most widely adopted
+            component libraries in the Vue ecosystem, and a very large number of applications on the
+            MIT 4.x line had no MIT path for further development.
         </p>
         <p>
             When a dependency that central stops being maintained you have three options: freeze it
-            and accumulate risk, rewrite your UI layer, or pick up maintenance. We went with the
-            third, in the open rather than in a private fork. The same reasoning applies to anything
+            and accumulate risk, rewrite your UI layer, or fork it and maintain the fork. We went
+            with the third, in the open rather than in a private fork. The same reasoning applies to anything
             else we take on.
         </p>
 
@@ -68,8 +68,8 @@ const contents = [
         <h2 id="how-we-approach-it">How we approach it</h2>
         <ul>
             <li>
-                <strong>Compatibility over novelty.</strong> A continuation keeps the API of the
-                project it continues. Moving to it should be a dependency swap, not a rewrite.
+                <strong>Compatibility over novelty.</strong> A fork keeps the API of the project it
+                was forked from. Moving to it should be a dependency swap, not a rewrite.
             </li>
             <li>
                 <strong>Stability first, growth second.</strong> Backlog and dependency currency
@@ -99,7 +99,7 @@ const contents = [
                 projects.map((p) => (
                     <li>
                         <a href={`/projects/${p.slug}`}>{p.name}</a> <code>{p.version}</code>,{' '}
-                        {statusLabels[p.status].label.toLowerCase()}. Continues {p.continues}.
+                        {statusLabels[p.status].label.toLowerCase()}. Forked from {p.forkedFrom}.
                     </li>
                 ))
             }
@@ -124,7 +124,9 @@ const contents = [
 
         <p class="small muted">
             OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek
-            Informatics or PrimeUI. All upstream work is attributed under its original MIT license.
+            Informatics. Every fork keeps PrimeTek's copyright notice under the MIT license the
+            original code was released with. PrimeVue, PrimeIcons, PrimeUIX and Volt are names of
+            their respective owners, used here only to describe where the code came from.
         </p>
     </DocPage>
 </Base>

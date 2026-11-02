@@ -2,9 +2,9 @@ export const site = {
     name: 'OpenVi Foundation',
     url: 'https://openvi.dev',
     tagline: 'We maintain open source UI libraries for the web.',
-    seoTagline: 'The home of OpenVue, PrimeVue continued',
+    seoTagline: 'The home of OpenVue, the MIT fork of PrimeVue',
     description:
-        'The OpenVi Foundation maintains open source UI libraries for the web: OpenVue, OpenUXKit and OpenIcons. Community run and permanently MIT licensed.',
+        'The OpenVi Foundation maintains open source UI libraries for the web: OpenVue, OpenVolt, OpenUXKit and OpenIcons. Community run and permanently MIT licensed.',
     email: 'contact@openvi.dev',
     github: 'https://github.com/openvi-foundation',
     docs: 'https://openvue.dev',

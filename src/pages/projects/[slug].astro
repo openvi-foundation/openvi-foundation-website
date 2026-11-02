@@ -41,19 +41,18 @@ const schema = [
         softwareVersion: project.version,
         license: 'https://opensource.org/licenses/MIT',
         url,
-        isBasedOn: { '@type': 'SoftwareSourceCode', name: project.continues },
+        isBasedOn: { '@type': 'SoftwareSourceCode', name: project.forkedFrom },
         maintainer: { '@id': `${site.url}/#organization` },
         author: { '@id': `${site.url}/#organization` },
         publisher: { '@id': `${site.url}/#organization` },
         isPartOf: { '@id': `${site.url}/#website` },
-        keywords: [project.name, project.continues, `${project.continues} alternative`,
-            `${project.continues} fork`, project.language]
+        keywords: [project.name, `${project.forkedFrom} fork`, project.language]
     }
 ];
 ---
 
 <Base
-    title={`${project.name}: ${project.continues} continued`}
+    title={`${project.name}: MIT fork of ${project.forkedFrom}`}
     description={project.metaDescription}
     image={`/og/${project.slug}.png`}
     schema={schema}
@@ -112,9 +111,9 @@ const schema = [
                         <dd>{status.label}, v{project.version}</dd>
                     </div>
                     <div>
-                        <dt>Continues</dt>
+                        <dt>Forked from</dt>
                         <dd>
-                            {project.continues}
+                            {project.forkedFrom}
                             {(project.upstreamNote || project.upstreamStatus) && (
                                 <span class="facts-note">
                                     {project.upstreamNote ?? `${project.upstreamStatus.toLowerCase()} upstream`}

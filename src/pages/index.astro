@@ -164,14 +164,14 @@ const licenseHead = [
                 </div>
 
                 <section class="board" aria-labelledby="board-heading">
-                    <h2 id="board-heading" class="board-title">What we picked up</h2>
+                    <h2 id="board-heading" class="board-title">What we forked</h2>
                     <ul class="board-list">
                         {
                             projects.map((p) => (
                                 <li>
                                     <a href={`/projects/${p.slug}`}>
                                         <span class="board-side">
-                                            <span class="board-name board-from">{p.continues}</span>
+                                            <span class="board-name board-from">{p.forkedFrom}</span>
                                             <span class="board-meta board-meta-upstream">
                                                 {p.upstreamStatus}
                                             </span>
@@ -329,7 +329,8 @@ const licenseHead = [
             </div>
             <p class="home-cta-note">
                 OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek
-                Informatics or PrimeUI.
+                Informatics. PrimeVue, PrimeIcons, PrimeUIX and Volt are names of their respective
+                owners, used here only to describe where our forks came from.
             </p>
         </div>
     </section>

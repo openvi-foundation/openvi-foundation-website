@@ -87,7 +87,7 @@ const cards = [
     ...projects.map((p) => ({
         out: path.join(root, `public/og/${p.slug}.png`),
         html: card({
-            eyebrow: `${p.continues} continued`,
+            eyebrow: `MIT fork of ${p.forkedFrom}`,
             title: p.name,
             tagline: p.tagline,
             footer: `openvi.dev/projects/${p.slug}`
@@ -113,7 +113,7 @@ const cards = [
             slug: 'projects',
             eyebrow: 'Projects',
             title: 'Four libraries',
-            tagline: 'Each one a maintained continuation of an upstream project that stopped moving. All MIT licensed.'
+            tagline: 'Each one an MIT-licensed fork, maintained by the community and published on its own.'
         },
         {
             slug: 'openvue/migrate',
@@ -137,7 +137,7 @@ const cards = [
             slug: 'about',
             eyebrow: 'About',
             title: 'Maintenance is the product',
-            tagline: 'An independent, community-run foundation that keeps widely used front-end libraries working after upstream archives them.'
+            tagline: 'An independent, community-run foundation that maintains MIT-licensed forks of widely used front-end libraries.'
         },
         {
             slug: 'governance',

@@ -1324,7 +1324,7 @@ hr {
     inset: 0;
 }
 
-.project-tile-continues {
+.project-tile-origin {
     margin: 0.3rem 0 0;
     font-size: 0.8125rem;
     color: var(--text-faint);

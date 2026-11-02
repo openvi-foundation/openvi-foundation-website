@@ -32,7 +32,7 @@ const linksFor = (p) =>
                             note={status.note}
                         />
                     </div>
-                    <p class="project-tile-continues">continues {p.continues}</p>
+                    <p class="project-tile-origin">forked from {p.forkedFrom}</p>
                     <p class:list={['project-tile-tagline', detailed && 'is-summary']}>
                         {detailed ? p.summary : p.tagline}
                     </p>

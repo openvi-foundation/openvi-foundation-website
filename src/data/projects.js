@@ -2,7 +2,7 @@ export const projects = [
     {
         slug: 'openvue',
         name: 'OpenVue',
-        tagline: 'The Vue UI component library, continued.',
+        tagline: 'Accessible Vue UI components, MIT licensed and community maintained.',
         status: 'stable',
         version: '1.1.0',
         repo: 'https://github.com/openvi-foundation/openvue',
@@ -13,9 +13,9 @@ export const projects = [
         install: 'npm install openvue @openvue/themes',
         language: 'Vue',
         license: 'MIT',
-        continues: 'PrimeVue',
-        upstreamStatus: 'Security fixes only',
-        upstreamNote: 'security fixes only upstream, new development no longer MIT',
+        forkedFrom: 'PrimeVue',
+        upstreamStatus: 'v4: security fixes only',
+        upstreamNote: 'PrimeVue 4 gets security fixes only, PrimeVue 5 is not MIT',
         guides: [
             {
                 href: '/projects/openvue/migrate',
@@ -37,12 +37,12 @@ export const projects = [
             }
         ],
         summary:
-            'A community-maintained continuation of PrimeVue, one of the most widely adopted Vue.js component libraries, picked up after its MIT-licensed 4.x line stopped moving. 80+ accessible, themeable components for Vue and Nuxt.',
+            'A community-maintained fork of PrimeVue 4.5.5, the last PrimeVue release under the MIT license, developed independently by the OpenVi Foundation. 80+ accessible, themeable components for Vue and Nuxt.',
         metaDescription:
-            'OpenVue is the maintained continuation of PrimeVue: 80+ accessible Vue and Nuxt components, an unchanged API, MIT licensed. Migrate with one command.',
+            'OpenVue is an MIT-licensed fork of PrimeVue 4.5.5: 80+ accessible Vue and Nuxt components with a compatible API. Migrate with one command.',
         why: [
-            'PrimeVue 4 was archived, then reopened for security fixes only. New development moved to PrimeVue 5 under a license that is no longer MIT, while a lot of production applications still depend on the MIT 4.x line. Teams running it were left choosing between freezing the dependency, accepting a new license and rewriting their UI layer.',
-            'OpenVue keeps the same component API, so existing code keeps working. The MIT license is unchanged and stays that way.',
+            'PrimeVue 4 now receives security fixes only, and new development moved to PrimeVue 5 under a license that is not MIT, while a lot of production applications still depend on the MIT 4.x line. Teams running it were left choosing between freezing the dependency, accepting a new license and rewriting their UI layer.',
+            'OpenVue keeps the same component API, so existing code keeps working. The MIT license that PrimeVue 4.5.5 was released under permits the fork, PrimeTek\'s copyright notice is kept in every package, and OpenVue stays MIT.',
             'We forked the whole toolchain rather than just the components. The theming engine and the icon set are maintained here too, so nothing critical resolves at runtime from a scope we do not control.'
         ],
         highlights: [
@@ -67,7 +67,7 @@ export const projects = [
             guide: 'https://github.com/openvi-foundation/openvue/blob/master/CONTRIBUTING.md',
             setup: 'git clone https://github.com/openvi-foundation/openvue.git\ncd openvue\npnpm install\npnpm run dev',
             help: [
-                'Reproducing, triaging and fixing issues inherited from PrimeVue.',
+                'Reproducing, triaging and fixing issues that predate the fork.',
                 'Migration reports: anything `npx @openvue/migrate` misses in a real codebase.',
                 'Accessibility testing with real screen readers, reported against specific versions.',
                 'Documentation gaps on [openvue.dev](https://openvue.dev), especially theming and unstyled mode.'
@@ -88,7 +88,7 @@ export const projects = [
     {
         slug: 'openicons',
         name: 'OpenIcons',
-        tagline: 'The icon library for OpenVue, continued.',
+        tagline: 'An MIT-licensed icon set for OpenVue and the web.',
         status: 'stable',
         version: '1.1.0',
         repo: 'https://github.com/openvi-foundation/openicons',
@@ -99,21 +99,21 @@ export const projects = [
         install: 'npm install @openvue/openicons',
         language: 'CSS',
         license: 'MIT',
-        continues: 'PrimeIcons',
-        upstreamStatus: 'Archived',
+        forkedFrom: 'PrimeIcons',
+        upstreamStatus: 'MIT repository archived',
         summary:
-            'A community-maintained continuation of PrimeIcons, the icon font used by PrimeVue and the wider Prime ecosystem. 329 icons, shipped as a dependency-free webfont and as tree-shakeable Vue 3 components.',
+            'A community-maintained fork of PrimeIcons, the icon font used by PrimeVue. 329 icons, shipped as a dependency-free webfont and as tree-shakeable Vue 3 components.',
         metaDescription:
-            'OpenIcons is the maintained continuation of PrimeIcons: 329 icons as a dependency-free webfont or tree-shakeable Vue components. MIT licensed.',
+            'OpenIcons is an MIT-licensed fork of PrimeIcons: 329 icons as a dependency-free webfont or tree-shakeable Vue components. MIT licensed.',
         why: [
-            'The MIT-licensed PrimeIcons repository was archived, so every application using the `pi pi-*` classes needed a maintained replacement.',
+            'The MIT-licensed PrimeIcons repository was archived, so applications using the `pi pi-*` classes had no actively maintained MIT source to depend on.',
             'OpenIcons ships a compatibility stylesheet. Existing `pi-` class names keep rendering while a codebase moves to `oi-` at its own pace.',
             'The webfont has no dependencies, no build step and no runtime: it is a font and a stylesheet. Projects that would rather ship only the icons they use can import the Vue components instead.'
         ],
         highlights: [
             {
                 title: '329 icons',
-                body: 'The complete PrimeIcons set carried forward under an unchanged MIT license, plus sixteen icons drawn since the fork. Search them all at [openicons.openvue.dev](https://openicons.openvue.dev).'
+                body: 'Every icon from the PrimeIcons fork under the same MIT license, plus sixteen icons drawn since the fork. Search them all at [openicons.openvue.dev](https://openicons.openvue.dev).'
             },
             {
                 title: 'Webfont or Vue components',
@@ -156,15 +156,15 @@ export const projects = [
         install: 'npm install @openuxkit/themes',
         language: 'TypeScript',
         license: 'MIT',
-        continues: 'PrimeUIX',
-        upstreamStatus: 'Archived',
+        forkedFrom: 'PrimeUIX',
+        upstreamStatus: 'MIT repository archived',
         summary:
             'The styling and theming engine underneath OpenVue, forked from the last MIT-licensed PrimeUIX source and maintained independently. Framework-agnostic.',
         metaDescription:
-            'OpenUXKit is the maintained continuation of PrimeUIX: the framework-agnostic CSS-in-JS theming engine and design tokens behind OpenVue. MIT licensed.',
+            'OpenUXKit is an MIT-licensed fork of PrimeUIX: the framework-agnostic CSS-in-JS theming engine and design tokens behind OpenVue. MIT licensed.',
         why: [
-            'OpenVue used to resolve its theming engine at runtime from a package scope we do not control. That put the styling layer at the mercy of somebody else\'s licensing decisions.',
-            'OpenUXKit was taken from the last MIT-licensed PrimeUIX source, so the styling layer cannot be relicensed out from under the projects that depend on it.',
+            'OpenVue used to resolve its theming engine at runtime from a package scope we do not control, so a licensing change there would have reached every OpenVue project.',
+            'OpenUXKit was forked from the last MIT-licensed PrimeUIX source, so the styling layer cannot be relicensed out from under the projects that depend on it.',
             'It is framework-agnostic, so the same theming engine and design tokens can back component libraries outside Vue.'
         ],
         highlights: [
@@ -205,7 +205,7 @@ export const projects = [
     {
         slug: 'openvolt',
         name: 'OpenVolt',
-        tagline: 'Tailwind CSS components for OpenVue, continued.',
+        tagline: 'Tailwind CSS components for OpenVue that you copy and own.',
         status: 'stable',
         version: '1.1.0',
         repo: 'https://github.com/openvi-foundation/openvue/tree/master/packages/volt-cli',
@@ -216,16 +216,16 @@ export const projects = [
         install: 'npx openvolt-vue add Button',
         language: 'Vue',
         license: 'MIT',
-        continues: 'PrimeVue Volt',
-        upstreamStatus: 'Security fixes only',
-        upstreamNote: 'built on PrimeVue v4, now security-only upstream',
+        forkedFrom: 'PrimeVue Volt',
+        upstreamStatus: 'Built on PrimeVue 4',
+        upstreamNote: 'built on PrimeVue 4, which gets security fixes only',
         summary:
-            'A maintained continuation of Volt, the Tailwind CSS components built on unstyled PrimeVue. 69 components you copy into your project as plain .vue files and own from then on, built on OpenVue and released with it.',
+            'A community-maintained fork of Volt, the MIT-licensed Tailwind CSS components built on unstyled PrimeVue. 69 components you copy into your project as plain .vue files and own from then on, built on OpenVue and released with it.',
         metaDescription:
-            'OpenVolt continues PrimeVue Volt: 69 Tailwind CSS components for OpenVue that you copy into your project and own. Tested in CI, MIT licensed.',
+            'OpenVolt is an MIT-licensed fork of PrimeVue Volt: 69 Tailwind CSS components for OpenVue that you copy into your project and own. Tested in CI, MIT licensed.',
         why: [
-            'Volt depends on PrimeVue v4, which has moved to security-only maintenance with a read-only issue tracker. Projects built on Volt had nowhere to report a broken component.',
-            'OpenVolt is the same 69 components and the same design, rebuilt on `openvue` instead of `primevue`. It lives in the OpenVue repository and ships with every OpenVue release, so the components and the library underneath them cannot drift apart.',
+            'Volt depends on PrimeVue 4, which now receives security fixes only, so projects built on Volt had no actively developed MIT line underneath them.',
+            'OpenVolt is the same 69 components and the same design under the same MIT license, rebuilt on `openvue` instead of `primevue`. It lives in the OpenVue repository and ships with every OpenVue release, so the components and the library underneath them cannot drift apart.',
             'The upstream CLI cloned the repository and copied whatever was on the main branch at that moment. The OpenVolt CLI carries its components inside the published package, so an install always gives you files from a release, matched to your OpenVue version.'
         ],
         highlights: [

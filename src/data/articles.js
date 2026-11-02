@@ -8,7 +8,7 @@ const sources = {
 export const articles = [
     {
         slug: 'primevue-v4-stopped-active-dev-openvue-takes-over',
-        title: 'PrimeVue v4 stopped active development. OpenVue takes over, on MIT.',
+        title: 'PrimeVue v4 moved to security-only maintenance. OpenVue forks it, on MIT.',
         kind: 'article',
         date: '2026-08-29',
         author: 'Nikola Jevrić',
@@ -21,7 +21,7 @@ export const articles = [
         summary:
             'What security-only maintenance means for teams running PrimeVue v4 in production, and why the foundation forked 4.5.5 rather than let the MIT line stop there.',
         metaDescription:
-            'PrimeVue v4 moved to security-only maintenance. OpenVue continues 4.5.5 under MIT, with the same API and a one-command migration.',
+            'PrimeVue v4 moved to security-only maintenance. OpenVue is an MIT fork of 4.5.5, with the same API and a one-command migration.',
         body: [
             {
                 t: 'p',
@@ -38,7 +38,7 @@ export const articles = [
             { t: 'p', text: 'To address this gap, we launched [OpenVue](https://openvue.dev/).' },
             {
                 t: 'p',
-                text: 'OpenVue is an independent, community-driven continuation of PrimeVue 4.5.5, the final release under open-source governance. Maintained under the [OpenVi Foundation](https://openvi.dev), it operates as a fully open-source, MIT-licensed ecosystem free from commercial gating or paywalled functionality. It maintains total architectural fidelity across 80+ core components, preserving full parity with existing props, slots, events, and theming systems, while unifying icon sets and design tooling under a single ecosystem.'
+                text: 'OpenVue is an independent, community-driven fork of PrimeVue 4.5.5, the last PrimeVue release under the MIT license. Maintained under the [OpenVi Foundation](https://openvi.dev), it operates as a fully open-source, MIT-licensed ecosystem. It maintains total architectural fidelity across 80+ core components, preserving full parity with existing props, slots, events, and theming systems, while unifying icon sets and design tooling under a single ecosystem.'
             },
             {
                 t: 'p',
@@ -46,7 +46,7 @@ export const articles = [
             },
             {
                 t: 'p',
-                text: 'You can run the official CLI migration utility to update your project automatically:'
+                text: 'You can run the OpenVue migration CLI to update your project automatically:'
             },
             { t: 'code', lang: 'shell', code: 'npx @openvue/migrate' },
             {
@@ -56,7 +56,7 @@ export const articles = [
             {
                 t: 'code',
                 lang: 'diff',
-                code: "- import Button from 'primevue/button'\n+ import Button from '@openvue/button'"
+                code: "- import Button from 'primevue/button'\n+ import Button from 'openvue/button'"
             },
             {
                 t: 'p',
@@ -68,7 +68,7 @@ export const articles = [
             },
             {
                 t: 'note',
-                text: 'OpenVue is an independent, community-maintained MIT project based on the PrimeVue 4.5.5 release and is not affiliated with PrimeTek.'
+                text: 'OpenVue is an independent, community-maintained MIT fork of the PrimeVue 4.5.5 release and is not affiliated with, sponsored by, or endorsed by PrimeTek. PrimeVue is a name of its respective owner.'
             }
         ]
     },
@@ -257,11 +257,11 @@ export const articles = [
             { t: 'p', text: 'Hey Vue community!' },
             {
                 t: 'p',
-                text: "We're long-time PrimeVue users who believe a good UI library should stay free and community driven. When the license changed and PrimeVue moved away from open source, we decided to take action rather than just watch."
+                text: "We're long-time PrimeVue users who believe a good UI library should stay free and community driven. When new PrimeVue development moved to a license that is not MIT, we decided to fork the last MIT release rather than just watch."
             },
             {
                 t: 'p',
-                text: 'OpenVue picks up right from 4.5.5, the last MIT release. It keeps the exact same API, so your existing code keeps working without rewrite headaches.'
+                text: 'OpenVue is forked from 4.5.5, the last MIT release. It keeps the exact same API, so your existing code keeps working without rewrite headaches.'
             },
             {
                 t: 'p',
@@ -273,7 +273,7 @@ export const articles = [
             },
             {
                 t: 'p',
-                text: 'OpenVi Foundation is an independent community organization, not affiliated with PrimeTek.'
+                text: 'OpenVi Foundation is an independent community organization, not affiliated with or endorsed by PrimeTek.'
             },
             { t: 'p', text: 'OpenVue is and will always be 100% free and open source.' },
             {
@@ -387,7 +387,7 @@ export const articles = [
             },
             {
                 t: 'p',
-                text: 'When we forked PrimeVue 4.5.5 as [OpenVue](https://openvue.dev/), the goal was to keep the whole MIT ecosystem alive, not only the component library. Volt was the piece still missing, and with OpenVolt it is back: maintained, tested and released together with OpenVue.'
+                text: 'When we forked PrimeVue 4.5.5 as [OpenVue](https://openvue.dev/), the goal was to keep the whole MIT ecosystem alive, not only the component library. Volt was the piece still missing, and OpenVolt is our MIT fork of it: maintained, tested and released together with OpenVue.'
             },
             { t: 'h2', text: 'What is Volt?' },
             {
@@ -405,7 +405,7 @@ export const articles = [
             },
             {
                 t: 'p',
-                text: 'PrimeVue Volt depends on PrimeVue v4, which has moved to security-only maintenance with read-only issue tracking. OpenVolt lives in the OpenVue repository, ships with every OpenVue release, and has an open issue tracker if something needs fixing.'
+                text: 'PrimeVue Volt depends on PrimeVue v4, which has moved to security-only maintenance. OpenVolt lives in the OpenVue repository, ships with every OpenVue release, and has an open issue tracker if something needs fixing.'
             },
             { t: 'h2', text: 'Why OpenVolt' },
             {
@@ -481,7 +481,7 @@ export const articles = [
             },
             {
                 t: 'note',
-                text: 'OpenVue and OpenVolt are independent, community-maintained MIT projects and are not affiliated with PrimeTek or PrimeUI. Volt was created by PrimeTek; OpenVolt continues it under the same MIT license.'
+                text: 'OpenVue and OpenVolt are independent, community-maintained MIT projects and are not affiliated with, sponsored by, or endorsed by PrimeTek. Volt was created by PrimeTek; OpenVolt is a fork of it under the same MIT license, with PrimeTek\'s copyright notice kept.'
             }
         ]
     }

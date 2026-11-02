@@ -1,11 +1,11 @@
 export const faq = [
     {
         q: 'What is the OpenVi Foundation?',
-        a: 'An independent, community-run organization that maintains open source UI libraries for the web. It picks up widely used front-end libraries after their original maintainers stop, and keeps them released, documented and MIT licensed.'
+        a: 'An independent, community-run organization that maintains open source UI libraries for the web. It forks widely used MIT-licensed front-end libraries when their MIT line stops being developed, and keeps those forks released, documented and MIT licensed.'
     },
     {
         q: 'Which projects does the foundation maintain?',
-        a: 'Four libraries: [OpenVue](https://openvue.dev), the Vue component library that continues PrimeVue; [OpenVolt](https://openvolt.openvue.dev), Tailwind CSS components for OpenVue that continue Volt; [OpenIcons](https://openicons.openvue.dev), which continues PrimeIcons; and [OpenUXKit](/projects/openux), the theming engine that continues PrimeUIX. It also publishes templates and starters such as the [Deni](https://deni.openvue.dev) admin dashboard.'
+        a: 'Four libraries, each an MIT-licensed fork: [OpenVue](https://openvue.dev), the Vue component library forked from PrimeVue 4.5.5; [OpenVolt](https://openvolt.openvue.dev), Tailwind CSS components forked from Volt; [OpenIcons](https://openicons.openvue.dev), forked from PrimeIcons; and [OpenUXKit](/projects/openux), the theming engine forked from PrimeUIX. It also publishes templates and starters such as the [Deni](https://deni.openvue.dev) admin dashboard.'
     },
     {
         q: 'Are the projects free to use commercially?',
@@ -25,7 +25,7 @@ export const faq = [
     },
     {
         q: 'Is the foundation affiliated with PrimeTek?',
-        a: 'No. The OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek Informatics or PrimeUI. The projects continue upstream work under its original MIT license, with attribution.'
+        a: 'No. The OpenVi Foundation is not affiliated with, sponsored by, or endorsed by PrimeTek Informatics or PrimeUI. The projects are forks made under the MIT license the original code was released with, and they keep PrimeTek\'s copyright notice. PrimeVue, PrimeIcons, PrimeUIX, Volt and PrimeTek are names of their respective owners, used here only to describe where the code came from.'
     }
 ];
 

@@ -48,7 +48,7 @@ export const roadmap = [
             {
                 status: 'done',
                 date: '2026-10-21',
-                title: 'Bring Volt back',
+                title: 'Fork Volt as OpenVolt',
                 text: '[OpenVolt](/projects/openvolt) is live: `npx openvolt-vue` copies Tailwind-native components into your own codebase.'
             },
             {

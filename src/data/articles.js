@@ -40,6 +40,13 @@ export const articles = [
                 t: 'p',
                 text: 'This is the most important decision in the theme. In most interfaces colour is doing two jobs at once: decorating the components and telling the user something. When every primary button is bright blue, a blue info message has to compete with it, and a red error has to fight for attention against a screen that is already colourful. With a neutral primary, colour is free to carry meaning again. Red means something went wrong, green means it worked, amber means look closer. And when you add your own brand colour, it is the only accent on the page, so it actually stands out.'
             },
+            {
+                t: 'figure',
+                src: '/articles/nide-vs-aura-colour.png',
+                alt: 'The same buttons, messages and tags in Aura and in Nide. Aura uses a green primary on buttons and tinted backgrounds on messages; Nide uses a near-black primary, white messages with coloured text, and solid status tags.',
+                width: 2296,
+                height: 728
+            },
             { t: 'h2', text: 'Structure without noise' },
             {
                 t: 'p',
@@ -58,6 +65,14 @@ export const articles = [
                 t: 'p',
                 text: 'Tabs and SelectButton are segmented: the options sit together inside one container, and the selected one is lifted out of it. A row of separate buttons does not tell you whether you can pick one option or several. A segmented control does, because it looks like a single choice between parts of the same thing.'
             },
+            {
+                t: 'figure',
+                src: '/articles/nide-vs-aura-segmented.png',
+                alt: 'Tabs and SelectButton in Aura and in Nide. Aura draws tabs as text with a green underline; Nide puts the tabs in one grey container with the selected tab lifted out in white, like the SelectButton below it.',
+                width: 2296,
+                height: 658,
+                caption: 'Tabs and SelectButton. Nide draws tabs as one segmented control.'
+            },
             { t: 'h2', text: 'Built for long sessions' },
             {
                 t: 'p',
@@ -66,6 +81,14 @@ export const articles = [
             {
                 t: 'p',
                 text: 'This is a deliberate choice for the kind of software people spend hours in: dashboards, admin panels, internal tools, anything with a lot of forms and tables. Density there is a feature. More rows fit on screen, related fields stay close together, and the eye travels less between the things that belong together. The controls are still comfortably large enough to hit with a mouse, and if your app needs more room, raising the root font size scales everything with it.'
+            },
+            {
+                t: 'figure',
+                src: '/articles/nide-vs-aura-density.png',
+                alt: 'The same form in Aura and in Nide: a name field, a role select, checkboxes, radio buttons, a toggle switch and two buttons. The Nide form is shorter, with smaller text and controls and a near-black primary.',
+                width: 2296,
+                height: 988,
+                caption: 'One form, both presets, at the default 16px root size. The Nide version is more compact.'
             },
             { t: 'h2', text: 'Focus you can see' },
             {
